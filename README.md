@@ -4,36 +4,62 @@
 
 A Quizlet app for Google Assistant.
 
-## Resources:
+---
+
+# Resources
 
 Basic App Deployment   - https://developers.google.com/actions/apiai/
 
 Node.js Client Library - https://developers.google.com/actions/reference/nodejs/AssistantApp
 
-## Notes:
+---
 
-- Messages and speech are all handled through fulfillment functions
+# General Notes
+
+- Messages and speech are all handled through fulfillment functions.
 
 - Don't worry about making a fulfillment server, write some code first and deploy it slowly. Focus on a good conversational flow.
 
 - Checking consistency between API.AI and our functions will be a pain in the ass.
 
-## Input / Output Flow:
+---
 
-Input - an intent is triggered through an input context (only event that will trigger an intent as seen in the number genie example is GOOGLE_ASSISTANT_WELCOME)
+# App Flow
 
-Input contexts are set by functions using ApiAiApp.setContext(context). In the case of the example, the context is a string (used in API.AI) that is linked to a constant (used in functions). Contexts can be used for multiple intents (in the case of yes/no questions for example, both the yes intent and no intent have the same context, but different keywords to trigger different actions).
+Google Assistant apps operate on a cycle between a function (fullfillment) and an intent (agent).
 
-Intent is basically when the Assistant waits for the user to respond.
+Intents/Agent --> (through Actions) --> Functions/Fullfullment --> (through Contexts) --> Intents/Agent
 
-Output - Intents trigger actions, which in API.AI console are strings. These strings are assigned to constants in the example, which are then used as keys to a map called the actionMap. The actionMap links actions (strings) to functions.
+Intents are basically when the app waits for the user to respond. Functions handle all the logic behind the app.
 
-Functions set contexts to trigger other intents.
+## Notes
 
-## Intents Needed:
+- Using the Number Genie example set by Google:
+
+- All intents are triggered through contexts (except for the beginning intent, which is triggered by an event called GOOGLE_ASSISTANT_WELCOME)
+
+- Input contexts are set by functions using ApiAiApp.setContext(context). The context is a string (used in API.AI). Contexts can be used for multiple intents (in the case of yes/no questions for example, both the yes intent and no intent have the same context, but different keywords to trigger different actions).
+
+- Intents trigger actions, which in the API.AI console are strings. These strings are assigned to constants in the example, which are then used as keys to a map called the actionMap. The actionMap links actions (strings) to functions.
+
+---
+
+# Plan
+
+## Intents Needed
 
 - ask for Quizlet user and set
 
 - ask for answer to read flash card
 
 - basic yes/no (potentially more than two intents needed for different contexts)
+
+## Functions Needed
+
+- find user and set
+
+- find flash card and read it
+
+- check answer (optional)
+
+- determine if user wants to play again
