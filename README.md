@@ -22,7 +22,7 @@ Node.js Client Library - https://developers.google.com/actions/reference/nodejs/
 
 Input - an intent is triggered through an input context (only event that will trigger an intent as seen in the number genie example is GOOGLE_ASSISTANT_WELCOME)
 
-Input contexts are set by functions using ApiAiApp.setContext(context). In the case of the example, the context is a string (used in API.AI) that is linked to a constant (used in functions). One context can only trigger one intent I believe.
+Input contexts are set by functions using ApiAiApp.setContext(context). In the case of the example, the context is a string (used in API.AI) that is linked to a constant (used in functions). Contexts can be used for multiple intents (in the case of yes/no questions for example, both the yes intent and no intent have the same context, but different keywords to trigger different actions).
 
 Intent is basically when the Assistant waits for the user to respond.
 
@@ -36,4 +36,4 @@ Functions set contexts to trigger other intents.
 
 - ask for answer to read flash card
 
-- basic yes/no (potentially more than one intent needed for different contexts)
+- basic yes/no (potentially more than two intents needed for different contexts)
