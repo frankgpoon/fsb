@@ -1,5 +1,7 @@
 # flashcards
 
+"Okay Google, talk to Flash Cards"
+
 A Quizlet app for Google Assistant.
 
 ## Resources:
@@ -28,3 +30,10 @@ Output - Intents trigger actions, which in API.AI console are strings. These str
 
 Functions set contexts to trigger other intents.
 
+## Intents Needed:
+
+- ask for Quizlet user and set
+
+- ask for answer to read flash card
+
+- basic yes/no (potentially more than one intent needed for different contexts)
