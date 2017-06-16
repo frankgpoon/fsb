@@ -46,6 +46,10 @@ Intents are basically when the app waits for the user to respond. Functions hand
 
 # Plan
 
+## Notes
+
+- Using ApiAiApp to link with API.AI
+
 ## Intents Needed
 
 - ask for Quizlet user and set
