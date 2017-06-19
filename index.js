@@ -4,6 +4,8 @@
 
 // Starting the app
 
+var http = require('http');
+
 process.env.DEBUG = 'actions-on-google:*';
 let ApiAiApp = require('actions-on-google').ApiAiApp;
 let sprintf = require('sprintf-js').sprintf;
@@ -35,26 +37,40 @@ exports.flashcards = function (request, response) {
     }
 
     function signInHandler(app) {
-        if (app.getSignInStatus() === app.SignInStatus.OK) {
-            let accessToken = app.getUser().accessToken;
-            // access account data with the token
-        } else {
+        if (app.getSignInStatus() !== app.SignInStatus.OK) {
             app.tell('You need to sign-in before using the app.');
         }
     }
 
     function findUserSet(app) {
         // get user arg and string arg from intent
-        let set = app.getArgument(SET_ARGUMENT);
-        let user = app.getArgument(USER_ARGUMENT);
+        var set = app.getArgument(SET_ARGUMENT);
+        var user = app.getArgument(USER_ARGUMENT);
         /* check if user is null - default to current user if true - ADD LATER BC OAUTH IS STUPID
         if (!user) {
             user = 'user_id'; // check if it works with quizlet!
         }
         */
-
-
-
+       // parameters for get request
+        var requestOptions = {
+            host: 'api.quizlet.com',
+            path: '/2.0/users/' + user + '/sets',
+            headers: {'Authorization': 'Bearer ' + app.getUser.accessToken}
+        };
+        // callback - aka what to do with the response
+        requestCallback = function (response) {
+            var rawData = '';
+            response.on('data', function (chunk) {
+                rawData += chunk; // data arrives chunk by chunk so we put all processing stuff at the end
+            });
+            // once response data stops coming the request ends and we parse the JSON
+            response.on('end', function () {
+                var userAllSets =
+                app.data.currentSet = parsedSet;
+            })
+        }
+        // get data and end
+        http.get(requestOptions, requestCallback);
     }
 
 
