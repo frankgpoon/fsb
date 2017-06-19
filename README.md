@@ -32,6 +32,9 @@ Intents/Agent --> (through Actions) --> Functions/Fullfullment --> (through Cont
 
 Intents are basically when the app waits for the user to respond. Functions handle all the logic behind the app.
 
+Data is stored between intents as ApiAiApp.data.* which is useful for storing sets.
+
+
 ## Notes
 
 - Using the Number Genie example set by Google:
@@ -49,6 +52,10 @@ Intents are basically when the app waits for the user to respond. Functions hand
 ## Notes
 
 - Using ApiAiApp to link with API.AI
+
+- An object is needed to store set data, but how much metadata should we store?
+
+- Roadblock - No way to get user id. (Quizlet sends the user id with the access token in JSON format, but that is completely handled by Google. We need to find a loophole in the API to retrieve the current user id)
 
 ## Intents Needed
 
