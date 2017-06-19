@@ -1,0 +1,632 @@
+[
+    {
+        "id": 214535594,
+        "url": "/214535594/computer-science-flash-cards/",
+        "title": "Computer Science",
+        "created_by": "frankpoon",
+        "term_count": 4,
+        "created_date": 1497832392,
+        "modified_date": 1497832404,
+        "published_date": 1497832403,
+        "has_images": false,
+        "subjects": [],
+        "visibility": "public",
+        "editable": "only_me",
+        "has_access": true,
+        "can_edit": true,
+        "description": "",
+        "lang_terms": "en",
+        "lang_definitions": "zh-CN",
+        "password_use": 0,
+        "password_edit": 0,
+        "access_type": 2,
+        "creator_id": 62218514,
+        "creator": {
+            "username": "frankpoon",
+            "account_type": "free",
+            "profile_image": "https://gimg.quizlet.com/-LvytNeZn8bo/AAAAAAAAAAI/AAAAAAAAJDA/if_mpWfKSZo/photo.jpg?sz=256",
+            "id": 62218514
+        },
+        "class_ids": [],
+        "terms": [
+            {
+                "id": 7062867210,
+                "term": "filler",
+                "definition": "a",
+                "image": null,
+                "rank": 0
+            },
+            {
+                "id": 7062867211,
+                "term": "fil",
+                "definition": "b",
+                "image": null,
+                "rank": 1
+            },
+            {
+                "id": 7062867212,
+                "term": "fil3",
+                "definition": "c",
+                "image": null,
+                "rank": 2
+            },
+            {
+                "id": 7062867213,
+                "term": "fil4",
+                "definition": "d",
+                "image": null,
+                "rank": 3
+            }
+        ],
+        "display_timestamp": "Today"
+    },
+    {
+        "id": 214243491,
+        "url": "/214243491/computer-science-flash-cards/",
+        "title": "Computer Science",
+        "created_by": "frankpoon",
+        "term_count": 61,
+        "created_date": 1497508444,
+        "modified_date": 1497508448,
+        "published_date": 1497508448,
+        "has_images": true,
+        "subjects": [],
+        "visibility": "public",
+        "editable": "only_me",
+        "has_access": true,
+        "can_edit": true,
+        "description": "Algorithm A special method for solving a specific kind of problem\nAntiglare Screen A filter put over the screen of a computer monitor to reduce glare\nApplication Software Software that performs a specific data=processing function\nBackup Copying or saving data to a secure location to prevent loss of data in the event of a disaster\nBluetooth A technical industry standard that facilitates communication between wireless devices such as personal digital assistants, handheld computers, and wireless enabled laptop computers or desktop computers\nBooting Everything that happens between the time the computer is turned on, performs the operations necessary to get all components functioning, and the operating system loaded\nCentral Processing Unit (CPU) Brain of the computer that performs instructions defined by software\nCompact Disk (CD) AKA: Optical disk; Portible and tranferable read-write or read-only data storage device. Sometimes called a CD-ROM, CD-RW, or compact disk. Capacity is 1-8 gigabytes of data. Optical drive unit is required to read-write data from the disk\nCyberspace Reference to the nonphysical space of binary computer communication\nData Storage Device Device capable of permanently or temporarily storing digital data\nData Storage Memory Permanent memory not part of the motherboard. Uses any suitable data storage device. Can be read-only or read-write type of memory\nDefragmentation Reorganization of information of a hard disk to store files as continuous units rather than as small packets. A computer with little fragmentation of files operate at a higher speed\nDigital Video/Versatile Disk (DVD) An optical disk that holds 4.7 to 9.0 gigabytes of data depending on the format\nDocumentation Written material that accompanies purchased software containing the information neccesary for using the software appropriately; sometimes known as the manual\nDriver Computer program designed to convert data output from one device to a format compatible with another device\nElectronic Health Record (EHR) A patient's electronic medical records from multiplesources combined into one master database\nElectronic Medical Record (EMR) Patient medical record from a single medical practice, hospital, or pharmacy\nErgonomics Scientific study of work and space, including factors that influence worker productivity and that affect workers' health\nEthernet References the networking of computers using metallic conductors or hard wires\nFirewall Hardware device or software program designed to prevent unauthorized access to a computer system\nFlash Drive Solid-state data storage device\nHard Drive Nonvolatile storage device that stores digitally encoded data on rapidly rotating rigid disks with magnetic surfaces. The capacity is approximately 100 GB. The device is either permanently installed within the computer case or can be portable\nHardware Physical equipment used by the computer system to prcess data\nHard-Wired Network Networks connected by metallic conductors or cables\nInput Device A device used to input data into a computer\nInternet The Internet is a global system of interconnected computer networks that use the standard Internet Protocol Suite (TCP/IP) to serve billions of users worldwide. It is a network of networks that consists of millions of private, public, academic, business, and government networks, of local to global scope, that are linked by a broad array of electronic, wireless and optical networking technologies\nLicense Permission statement authorizing the use of copyrighted computer software\nLocal Area Network (LAN) Network of computers usually in one office or building\nMagnetic Disk Drives Memory storage device that uses the magnetic state of ferrous coating to record data\nMainframe Computer Large computer system capable of processing massive volumes of data\nMemory Refers to storage of computer data. Can be volatile (lost when computer is turned off) or nonvolatile (permanently written to storage device)\nMicrocomputer Personal or desktop computer\nMinicomputer One of the four categories of computers based on size; larger than a microcomputeer and smaller than a mainframe\nMotherboard Printed circuit board on which the CPU, ROM, and RAM chips and other electronic circuit elements of a digital computer are frequently located\nNetwork Interface Software, servers, and cable connections used to link computers\nNetworking Connecting two or more computers together to share files and hardware\nOperating System (OS) Software used to control the computer and its peripheral equipment\nOutput Device A device used to output data from a computer. Includes printers, faxes, data storage drivers, screens, and plotters\nPatch Modification to software to fix deficiencies in the software. Frequently downloaded from the software supplier's Web site or from floppy disks provided by the supplier\nPersonal Computer (PC) Any computer whose price, size, and capabilities make it useful for individuals to use with no intervening computer operator\nPersonal Digital Assistant (PDA) An electronic tool for organizing data, a handheld computerized personal organizer device\nPhishing To try to obtain financial or other confidential information from Internet users, typically by sending an e-mail that looks as if it is from a legitimate organization, usually a financial institution, but contains a link to a fake Web site that replicates the real one.\nRandom Access Memory (RAM) A type of computer memory that can be written to and read from. RAM usually pertains to the internal memory of a computer. RAM is usually a fast, temporary memory area where data and programs reside until saved or until the power is turned off\nRead-Only Memory Permanently stored computer data that cannot be overwritten without special devices. Store instructions required to start uo the computer. Located on the motherboard\nRedundant Array of Independent Disks (RAID) A data storage scheme that uses multiple hard drives to share or replicate data among the drives\nServer Computer with massive hard drive capacity that is used to link other computers together so that data can be shared by multiple users. A computer system in an ambulatory care facility is likely linked or networked with a central server\nSoftware Equivalent of a computer program or programs\nSupercomputer Fastest, largest, and most expensive of the four classes of computers currently being manufactured\nSurge Protection Protection of the fragile electronics from spikes in electrical voltage that occur on electric distribution lines\nSystem Software Software used to control the computer and its peripheral equipment\nTape Drive Data storage device that uses magnetic tape as the storage media\nTotal Practice Management System (TPMS) A category of software that deals with all the day-to-day operations of a medical practice\nUniversal Serial Bus (USB) Port A type of data entry portal or bus for computer data\nWide Area Network (WAN) Connecting together of computers on a large area for the purpose of sharing data\nWiFi Connections Connection via a universal wireless network standard that uses radio waves\nWireless Local Area Connection (WLAN) A type of local area network that uses high-frequency radio waves rather than wires to communicate between nodes\nWireless Network Any type of computer network that is not connected by cables of any kind",
+        "lang_terms": "en",
+        "lang_definitions": "en",
+        "password_use": 0,
+        "password_edit": 0,
+        "access_type": 2,
+        "creator_id": 62218514,
+        "creator": {
+            "username": "frankpoon",
+            "account_type": "free",
+            "profile_image": "https://gimg.quizlet.com/-LvytNeZn8bo/AAAAAAAAAAI/AAAAAAAAJDA/if_mpWfKSZo/photo.jpg?sz=256",
+            "id": 62218514
+        },
+        "class_ids": [],
+        "terms": [
+            {
+                "id": 7050137328,
+                "term": "Central Processing Unit (CPU)",
+                "definition": "Brain of the computer that performs instructions defined by software",
+                "image": {
+                    "url": "https://o.quizlet.com/FaNWKN2NP9GdVykMCWOg0Q_m.jpg",
+                    "width": 240,
+                    "height": 202
+                },
+                "rank": 0
+            },
+            {
+                "id": 7050137329,
+                "term": "Hard Drive",
+                "definition": "Storage device that stores digitally encoded data on rapidly rotating rigid disks with magnetic surfaces. The device is either permanently installed within the computer case or can be portable",
+                "image": {
+                    "url": "https://o.quizlet.com/TQ.DkqDAS33Dzyugl0kZrQ_m.png",
+                    "width": 240,
+                    "height": 160
+                },
+                "rank": 1
+            },
+            {
+                "id": 7050137330,
+                "term": "Motherboard",
+                "definition": "Printed circuit board on which the CPU, RAM chips and other electronic circuit elements of a digital computer are frequently located.",
+                "image": {
+                    "url": "https://o.quizlet.com/Q-Hu4IlLyqN0fBhf68iGAg_m.jpg",
+                    "width": 240,
+                    "height": 203
+                },
+                "rank": 2
+            },
+            {
+                "id": 7050137331,
+                "term": "RAM",
+                "definition": "Random Access Memory - temporary place to store material that works quickly. erased when computer turns off. Volatile.",
+                "image": {
+                    "url": "https://o.quizlet.com/IFVLrHYz.Z3jn9MWBjSosQ_m.jpg",
+                    "width": 240,
+                    "height": 135
+                },
+                "rank": 3
+            },
+            {
+                "id": 7050137332,
+                "term": "Software",
+                "definition": "Set of instructions that tells the hardware what to do. It is what guides the hardware and tells it how to accomplish each task.",
+                "image": {
+                    "url": "https://o.quizlet.com/GLRfOBuCva4v31ZMqsgvVw_m.jpg",
+                    "width": 240,
+                    "height": 166
+                },
+                "rank": 4
+            },
+            {
+                "id": 7050137333,
+                "term": "Wireless Network",
+                "definition": "Any type of computer network that is not connected by cables of any kind.",
+                "image": {
+                    "url": "https://o.quizlet.com/3zcR3eV.MZAUaR.kN8WqtA_m.jpg",
+                    "width": 240,
+                    "height": 206
+                },
+                "rank": 5
+            },
+            {
+                "id": 7050137334,
+                "term": "Operating System (OS)",
+                "definition": "Software used to control the computer and its peripheral equipment.",
+                "image": {
+                    "url": "https://o.quizlet.com/0GSGoAXAZv48alW0ZhX9lg_m.png",
+                    "width": 240,
+                    "height": 240
+                },
+                "rank": 6
+            },
+            {
+                "id": 7050137335,
+                "term": "Power Supply",
+                "definition": "A device that provides power to a computer.",
+                "image": {
+                    "url": "https://o.quizlet.com/OytGv.miqhQTGcmCDTyjUA_m.jpg",
+                    "width": 240,
+                    "height": 180
+                },
+                "rank": 7
+            },
+            {
+                "id": 7050137336,
+                "term": "Input",
+                "definition": "device used to insert data into a computer or other device (ex: keyboard, mouse, microphone, scanner, voice recognition)",
+                "image": null,
+                "rank": 8
+            },
+            {
+                "id": 7050137337,
+                "term": "Output",
+                "definition": "device that projects images, gives sound, and basically gives out the info from the computer so the user can obtain it (ex: monitor, printer, projector, speakers)",
+                "image": null,
+                "rank": 9
+            },
+            {
+                "id": 7050137338,
+                "term": "Binary Code",
+                "definition": "Groupings of 1's and 0's that makes information that a computer can understand.",
+                "image": null,
+                "rank": 10
+            },
+            {
+                "id": 7050137339,
+                "term": "ROM",
+                "definition": "Read Only Memory- Permanent instructions that cannot be changed. It makes the BIOS function. Checks your OS.",
+                "image": null,
+                "rank": 11
+            },
+            {
+                "id": 7050137340,
+                "term": "User Friendly",
+                "definition": "Something anyone can operate",
+                "image": null,
+                "rank": 12
+            },
+            {
+                "id": 7050137341,
+                "term": "Order of bytes from least to greatest",
+                "definition": "bits, byte, kilobyte, megabyte, gigabyte, terabyte.",
+                "image": null,
+                "rank": 13
+            },
+            {
+                "id": 7050137342,
+                "term": "Auxiliary Storage Devices",
+                "definition": "ex: network drive, hard drive, flash drive, google drive.",
+                "image": null,
+                "rank": 14
+            },
+            {
+                "id": 7050137343,
+                "term": "operating system software",
+                "definition": "Programs that make the computer work. ex: Windows 8, vista, GUI, Linux.",
+                "image": null,
+                "rank": 15
+            },
+            {
+                "id": 7050137344,
+                "term": "Application Software",
+                "definition": "ex: Word, Excel, Photoshop, WordPerfect...",
+                "image": null,
+                "rank": 16
+            },
+            {
+                "id": 7050137345,
+                "term": "Boot Process",
+                "definition": "starting up a computer from a halted or powered down condition.",
+                "image": null,
+                "rank": 17
+            },
+            {
+                "id": 7050137346,
+                "term": "Word",
+                "definition": "use mainly for writing documents",
+                "image": null,
+                "rank": 18
+            },
+            {
+                "id": 7050137347,
+                "term": "Excel",
+                "definition": "used mainly for formulas and organizing data",
+                "image": null,
+                "rank": 19
+            },
+            {
+                "id": 7050137348,
+                "term": "PowerPoint",
+                "definition": "used for presentations",
+                "image": null,
+                "rank": 20
+            },
+            {
+                "id": 7050137349,
+                "term": "GUI",
+                "definition": "graphical user interface",
+                "image": null,
+                "rank": 21
+            },
+            {
+                "id": 7050137350,
+                "term": "Hardware",
+                "definition": "computer machinery and equipment",
+                "image": null,
+                "rank": 22
+            },
+            {
+                "id": 7050137351,
+                "term": "Web Browser",
+                "definition": "A program that allows a user to view and interact with web pages",
+                "image": null,
+                "rank": 23
+            },
+            {
+                "id": 7050137352,
+                "term": "Network",
+                "definition": "a set of computers which are connected to each other and operate as part of the same system, able to exchange information and messages",
+                "image": null,
+                "rank": 24
+            },
+            {
+                "id": 7050137353,
+                "term": "Client",
+                "definition": "a desktop computer capable of obtaining info and applications",
+                "image": null,
+                "rank": 25
+            },
+            {
+                "id": 7050137354,
+                "term": "Server",
+                "definition": "software capable of accepting requests",
+                "image": null,
+                "rank": 26
+            },
+            {
+                "id": 7050137355,
+                "term": "Dialog Box",
+                "definition": "temporary window an application created to retrieve user inpur",
+                "image": null,
+                "rank": 27
+            },
+            {
+                "id": 7050137356,
+                "term": "Paint",
+                "definition": "to create graphic art",
+                "image": null,
+                "rank": 28
+            },
+            {
+                "id": 7050137357,
+                "term": "Quick launch icon/ pinning and arranging",
+                "definition": "section where user can launch programs",
+                "image": null,
+                "rank": 29
+            },
+            {
+                "id": 7050137358,
+                "term": "Notification Area",
+                "definition": "system tray where time and other applications can be accessed",
+                "image": null,
+                "rank": 30
+            },
+            {
+                "id": 7050137359,
+                "term": "Show Desktop Button",
+                "definition": "minimizes and maximizes all windows",
+                "image": null,
+                "rank": 31
+            },
+            {
+                "id": 7050137360,
+                "term": "Status Bar",
+                "definition": "bottom partition of internet browsers that display state of page",
+                "image": null,
+                "rank": 32
+            },
+            {
+                "id": 7050137361,
+                "term": "Quick Access Toolbar",
+                "definition": "quick access to commonly used features",
+                "image": null,
+                "rank": 33
+            },
+            {
+                "id": 7050137362,
+                "term": "Customize Quick Access Toolbar",
+                "definition": "add or remove features",
+                "image": null,
+                "rank": 34
+            },
+            {
+                "id": 7050137363,
+                "term": "Windows Explorer",
+                "definition": "The main tool for finding, viewing, and managing the contents of your computer by showing the location and contents of every drive, folder, and file.",
+                "image": null,
+                "rank": 35
+            },
+            {
+                "id": 7050137364,
+                "term": "Jump List",
+                "definition": "view recent documents in program pinned to taskbar",
+                "image": null,
+                "rank": 36
+            },
+            {
+                "id": 7050137365,
+                "term": "Gadgets",
+                "definition": "Windows component can be used to display information such as weather forecasts, time, and news headlines on the desktop",
+                "image": null,
+                "rank": 37
+            },
+            {
+                "id": 7050137366,
+                "term": "Shake Title Bar",
+                "definition": "Shake title bar to close window",
+                "image": null,
+                "rank": 38
+            },
+            {
+                "id": 7050137367,
+                "term": "BASIC",
+                "definition": "beginners all purpose symbolic instruction code",
+                "image": null,
+                "rank": 39
+            },
+            {
+                "id": 7050137368,
+                "term": "Program",
+                "definition": "A set of step-by-step instructions to a computer. Some are burned directly into chips, while others are stored as program files. Programs are written in languages such as BASIC and C++.",
+                "image": null,
+                "rank": 40
+            },
+            {
+                "id": 7050137369,
+                "term": "Memory/Storage Units",
+                "definition": "part of computer where data is stored for later use",
+                "image": null,
+                "rank": 41
+            },
+            {
+                "id": 7050137370,
+                "term": "Multitasking",
+                "definition": "an operating system feature that allows more than one application to run at a time",
+                "image": null,
+                "rank": 42
+            },
+            {
+                "id": 7050137371,
+                "term": "Ellipsis",
+                "definition": "Indicated by a series of three periods, the __ indicates that some material has been omitted from a given text.",
+                "image": null,
+                "rank": 43
+            },
+            {
+                "id": 7050137372,
+                "term": "File/ Folder",
+                "definition": "Common storage unit/method for organizing files",
+                "image": null,
+                "rank": 44
+            },
+            {
+                "id": 7050137373,
+                "term": "Address Bar",
+                "definition": "Contains address of the current page and is where you enter the location for the webpage you want to visit.",
+                "image": null,
+                "rank": 45
+            },
+            {
+                "id": 7050137374,
+                "term": "Search Engine",
+                "definition": "A software program you can use to find Web sites, Web pages, and Internet files.",
+                "image": null,
+                "rank": 46
+            },
+            {
+                "id": 7050137375,
+                "term": "Bug",
+                "definition": "Unexpected problem with hardware or software",
+                "image": null,
+                "rank": 47
+            },
+            {
+                "id": 7050137376,
+                "term": "Copy/Move",
+                "definition": "duplicating text, data, files, or disks and putting it into another location",
+                "image": null,
+                "rank": 48
+            },
+            {
+                "id": 7050137377,
+                "term": "Menu/Submenu",
+                "definition": "List of commands or choices offered to user.",
+                "image": null,
+                "rank": 49
+            },
+            {
+                "id": 7050137378,
+                "term": "Enhanced Screen Tip",
+                "definition": "an on-screen note that provides the name of the command, available keyboard shortcuts, a description of the command, and sometimes instructions for how to obtain help about the command",
+                "image": null,
+                "rank": 50
+            },
+            {
+                "id": 7050137379,
+                "term": "Collapse a folder",
+                "definition": "Close a folder and close access to documents inside",
+                "image": null,
+                "rank": 51
+            },
+            {
+                "id": 7050137380,
+                "term": "Expand a folder",
+                "definition": "To open a folder to access its contents",
+                "image": null,
+                "rank": 52
+            },
+            {
+                "id": 7050137381,
+                "term": "File Extension",
+                "definition": "A tag of three or four letters, preceded by a period, which identifies a data file's format or the application used to create the file.",
+                "image": null,
+                "rank": 53
+            },
+            {
+                "id": 7050137382,
+                "term": "Pixel",
+                "definition": "Smallest portion of a display or image",
+                "image": null,
+                "rank": 54
+            },
+            {
+                "id": 7050137383,
+                "term": "Adjacent Files",
+                "definition": "A file not broken apart",
+                "image": null,
+                "rank": 55
+            },
+            {
+                "id": 7050137384,
+                "term": "Non- Adjacent Files",
+                "definition": "A broken up file",
+                "image": null,
+                "rank": 56
+            },
+            {
+                "id": 7050137385,
+                "term": "Calculator",
+                "definition": "something used for making mathematical calculations, in particular a small electronic device with a keyboard and a visual display",
+                "image": null,
+                "rank": 57
+            },
+            {
+                "id": 7050137386,
+                "term": "Taskbar",
+                "definition": "A bar normally located at the bottom of the Windows desktop, displaying information about open programs and providing quick access to others.",
+                "image": null,
+                "rank": 58
+            },
+            {
+                "id": 7050137387,
+                "term": "Desktop",
+                "definition": "(computer science) the area of the screen in graphical user interfaces against which icons and windows appear",
+                "image": null,
+                "rank": 59
+            },
+            {
+                "id": 7050137388,
+                "term": "Accessories",
+                "definition": "things that attach onto the computer/ add onto the computers functional capabilities",
+                "image": null,
+                "rank": 60
+            }
+        ],
+        "display_timestamp": "This week"
+    },
+    {
+        "id": 214241846,
+        "url": "/214241846/cse-terms-flash-cards/",
+        "title": "CSE terms",
+        "created_by": "frankpoon",
+        "term_count": 6,
+        "created_date": 1497506204,
+        "modified_date": 1497506547,
+        "published_date": 1497506547,
+        "has_images": false,
+        "subjects": [],
+        "visibility": "public",
+        "editable": "only_me",
+        "has_access": true,
+        "can_edit": true,
+        "description": "",
+        "lang_terms": "en",
+        "lang_definitions": "es",
+        "password_use": 0,
+        "password_edit": 0,
+        "access_type": 2,
+        "creator_id": 62218514,
+        "creator": {
+            "username": "frankpoon",
+            "account_type": "free",
+            "profile_image": "https://gimg.quizlet.com/-LvytNeZn8bo/AAAAAAAAAAI/AAAAAAAAJDA/if_mpWfKSZo/photo.jpg?sz=256",
+            "id": 62218514
+        },
+        "class_ids": [
+            4758845
+        ],
+        "terms": [
+            {
+                "id": 7050073775,
+                "term": "Hash Table",
+                "definition": "Data is matched to a hash, can retrieve instantaneously",
+                "image": null,
+                "rank": 0
+            },
+            {
+                "id": 7050074410,
+                "term": "Binary Tree",
+                "definition": "Each node has a left and a right linking to another node each, forming a tree with two children",
+                "image": null,
+                "rank": 1
+            },
+            {
+                "id": 7050076003,
+                "term": "Linked List",
+                "definition": "Each nodes has a next linking to another node, forming a linear list. Fast write times, slow read times.",
+                "image": null,
+                "rank": 2
+            },
+            {
+                "id": 7050080679,
+                "term": "Array List",
+                "definition": "A dynamically sized data structure using an array that is resized behind the scenes. Fast read times, slow ride times.",
+                "image": null,
+                "rank": 3
+            },
+            {
+                "id": 7050083393,
+                "term": "Set",
+                "definition": "A data structure without a particular order; data is not repeated and every object in the set is unique.",
+                "image": null,
+                "rank": 4
+            },
+            {
+                "id": 7050084039,
+                "term": "Map",
+                "definition": "Has a key that is connected to corresponding data; a key may be assigned to multiple data in the case of the data being a structure.",
+                "image": null,
+                "rank": 5
+            }
+        ],
+        "display_timestamp": false
+    }
+]

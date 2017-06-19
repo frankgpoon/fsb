@@ -65,7 +65,10 @@ exports.flashcards = function (request, response) {
             });
             // once response data stops coming the request ends and we parse the JSON
             response.on('end', function () {
-                var userAllSets =
+                var userAllSets = JSON.parse(rawData); // all sets by user here into a JS object
+
+
+
                 app.data.currentSet = parsedSet;
             })
         }
