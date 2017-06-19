@@ -47,10 +47,12 @@ exports.flashcards = function (request, response) {
         // get user arg and string arg from intent
         let set = app.getArgument(SET_ARGUMENT);
         let user = app.getArgument(USER_ARGUMENT);
-        // check if user is null - default to current user if true
+        /* check if user is null - default to current user if true - ADD LATER BC OAUTH IS STUPID
         if (!user) {
             user = 'user_id'; // check if it works with quizlet!
         }
+        */
+
 
 
     }
