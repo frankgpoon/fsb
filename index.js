@@ -59,7 +59,7 @@ exports.flashcards = function (request, response) {
         };
         // callback - aka what to do with the response
         requestCallback = function (response) {
-            var rawData = '';
+            var rawData = ''; // JSON
             response.on('data', function (chunk) {
                 rawData += chunk; // data arrives chunk by chunk so we put all processing stuff at the end
             });
@@ -74,8 +74,21 @@ exports.flashcards = function (request, response) {
     }
 
 
+    // Revive Function to filter JSON parsing
+    JSON.parse(text, (key, value) =>
+        if (key == 'terms' && value == 'term') {
+            return value;
+        } else if (key == 'terms' && value == 'definition') {
+            return value;
+        } else if (key == '') {
+            
+        }
+
+
+
 
     const actionMap = new Map();
     //map functions to actions
+    action.set(find_user_set, findUserSet);
     app.handleRequest(actionMap);
 }
