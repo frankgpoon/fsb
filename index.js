@@ -72,8 +72,8 @@ exports.flashcards = function (request, response) {
                 // processing through objects
                 var set;
                 for (i in userSets) {
-                    if (s.title === setName) {
-                        set = s;
+                    if (i.title === setName) {
+                        set = i;
                     }
                 }
                 // TODO: handle set not found
@@ -83,28 +83,19 @@ exports.flashcards = function (request, response) {
                 for (var i in set) {
                     if (i !== 'title' && i !== 'created_by' &&
                     i !== 'term_count' && i !== 'terms') {
-                        propsToDelete.push(i);
+                        delete set[i];
                     }
-                }
-                //delete undesired properties
-                for (var i in propsToDelete) {
-                    delete set[i];
                 }
                 // find undesired properties again, this time in terms
                 propsToDelete = [];
                 for (var i = 0; i < set.terms.length; i++) {
                     for (var j in set.terms[i]) {
                         if (j !== 'term' && j !== 'definition') {
-                            propsToDelete.push(j);
+                            delete set.terms[i][j];
                         }
                     }
                 }
-                for (var i = 0; i < set.terms.length; i++) {
-                    for (var j in propsToDelete) {
-                        delete set.terms[i][j];
-                    }
-                }
-                
+
                 app.data.currentSet = parsedSet;
             })
         }
