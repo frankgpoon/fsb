@@ -79,7 +79,6 @@ exports.flashcards = function (request, response) {
                 // TODO: handle set not found
 
                 // find undesired properties and add them to array
-                var propsToDelete = [];
                 for (var i in set) {
                     if (i !== 'title' && i !== 'created_by' &&
                     i !== 'term_count' && i !== 'terms') {
@@ -87,7 +86,6 @@ exports.flashcards = function (request, response) {
                     }
                 }
                 // find undesired properties again, this time in terms
-                propsToDelete = [];
                 for (var i = 0; i < set.terms.length; i++) {
                     for (var j in set.terms[i]) {
                         if (j !== 'term' && j !== 'definition') {
