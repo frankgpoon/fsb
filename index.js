@@ -55,6 +55,7 @@ exports.flashcards = function (request, response) {
         var requestOptions = {
             host: 'api.quizlet.com',
             path: '/2.0/users/' + userName + '/sets',
+            client_id: 'yfX2Tq7BtT', // need some way to protect this?
             headers: {'Authorization': 'Bearer ' + app.getUser.accessToken}
         };
 
@@ -98,14 +99,14 @@ exports.flashcards = function (request, response) {
             })
         }
         // get data and end
-        http.get(requestOptions, requestCallback);
+        http.get(requestOptions, requestCallback).end();
     }
 
 
 
 
     const actionMap = new Map();
-    //map functions to actions
+    //map functions to actions - .set(INTENT, FUNCTION)
     action.set(find_user_set, findUserSet);
     app.handleRequest(actionMap);
 }
