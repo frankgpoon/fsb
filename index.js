@@ -7,8 +7,8 @@
 var http = require('http');
 
 process.env.DEBUG = 'actions-on-google:*';
-let ApiAiApp = require('actions-on-google').ApiAiApp;
-let sprintf = require('sprintf-js').sprintf;
+const ApiAiApp = require('actions-on-google').ApiAiApp;
+// const sprintf = require('sprintf-js').sprintf;
 
 /* Consts (for actions, contexts, lines) */
 
@@ -32,6 +32,10 @@ exports.flashcards = function (request, response) {
 
     const app = new ApiAiApp({request, response});
 
+    function welcomeMessage(app) {
+        app.ask('Hi, welcome to FlashCard tester. What Quizlet set would you like to be tested on?');
+    }
+
     function signIn(app) {
         app.askForSignIn();
     }
@@ -40,6 +44,12 @@ exports.flashcards = function (request, response) {
         if (app.getSignInStatus() !== app.SignInStatus.OK) {
             app.tell('You need to sign-in before using the app.');
         }
+    }
+
+    function welcomeTest(app) {
+        let setName = app.getArgument(SET_ARGUMENT);
+        let userName = app.getArgument(USER_ARGUMENT);
+        app.tell("You said " + setName + " by " + userName);
     }
 
     function findUserSet(app) {
@@ -107,6 +117,7 @@ exports.flashcards = function (request, response) {
 
     const actionMap = new Map();
     //map functions to actions - .set(INTENT, FUNCTION)
-    action.set(find_user_set, findUserSet);
+    actionMap.set(find_user_set, findUserSet);
+    actionMap.set(start_flashcards, welcomeTest);
     app.handleRequest(actionMap);
 }
