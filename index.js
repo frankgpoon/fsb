@@ -118,6 +118,6 @@ exports.flashcards = function (request, response) {
     const actionMap = new Map();
     //map functions to actions - .set(INTENT, FUNCTION)
     actionMap.set(find_user_set, findUserSet);
-    actionMap.set(start_flashcards, welcomeTest);
+    actionMap.set(start_flashcards, welcomeMessage);
     app.handleRequest(actionMap);
 }
