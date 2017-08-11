@@ -10,7 +10,6 @@ http.createServer(function (req, res) {
     var set = JSON.parse(rawData); // a set file is parsed
 
     // find undesired properties and add them to array
-    var propsToDelete = [];
     for (var i in set) {
         if (i !== 'title' && i !== 'created_by' &&
         i !== 'term_count' && i !== 'terms') {
@@ -18,7 +17,6 @@ http.createServer(function (req, res) {
         }
     }
     // find undesired properties again, this time in terms
-    propsToDelete = [];
     for (var i = 0; i < set.terms.length; i++) {
         for (var j in set.terms[i]) {
             if (j !== 'term' && j !== 'definition') {
@@ -40,7 +38,7 @@ http.createServer(function (req, res) {
     	}
     	output += "\n";
     }
-    
+
 
 
     res.end(output);
@@ -49,5 +47,3 @@ http.createServer(function (req, res) {
 
 // To run just type node jsontest.js in CL
 // then go to localhost:8080
-
-

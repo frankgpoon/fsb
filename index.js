@@ -71,9 +71,10 @@ exports.flashcards = function (request, response) {
                 var userSets = JSON.parse(rawData); // all sets by user here into a JS object
                 // processing through objects
                 var set;
-                for (i in userSets) {
+                for (var i in userSets) {
                     if (i.title === setName) {
                         set = i;
+                        break;
                     }
                 }
                 // TODO: handle set not found
