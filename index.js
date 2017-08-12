@@ -31,10 +31,13 @@ const USER_ARGUMENT = 'user';
 /* Main Function - includes all fulfillment for actions */
 // Express handling the POST endpoint
 restService.post('/', function(request, result) {
+        console.log('headers: ' + JSON.stringify(request.headers));
+        console.log('body: ' + JSON.stringify(request.body));
 
         console.log('HI this is inside the post function');
 
         const app = new App({request: request, result: result});
+        console.log('this is after app declaration');
 
         function welcomeMessage(app) {
             console.log('Hi this is the welcome message function');
@@ -114,7 +117,7 @@ restService.post('/', function(request, result) {
     const actionMap = new Map();
     //map functions to actions - .set(ACTION, FUNCTION)
     actionMap.set(FIND_USER_SET_ACTION, welcomeTest);
-    actionMap.set(WELCOME_ACTION, welcomeMessage)
+    actionMap.set(WELCOME_ACTION, welcomeMessage);
     app.handleRequest(actionMap);
 });
 
