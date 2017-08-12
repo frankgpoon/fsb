@@ -6,7 +6,6 @@
 
 var http = require('http');
 
-process.env.DEBUG = 'actions-on-google:*';
 const ApiAiApp = require('actions-on-google').ApiAiApp;
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -114,4 +113,8 @@ restService.post('/hook', function(request, response) {
     actionMap.set(FIND_USER_SET_ACTION, welcomeTest);
     actionMap.set(WELCOME_INTENT, welcomeMessage)
     app.handleRequest(actionMap);
+});
+
+restService.listen((process.env.PORT || 5000), function () {
+    console.log("Server listening");
 });
