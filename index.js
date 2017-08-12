@@ -14,7 +14,7 @@ const ApiAiApp = require('actions-on-google').ApiAiApp;
 
 // Actions
 const FIND_USER_SET_ACTION = 'find_user_set';
-
+const WELCOME_INTENT = 'input.welcome'
 // Arguments
 const SET_ARGUMENT = 'set';
 const USER_ARGUMENT = 'user';
@@ -120,5 +120,6 @@ exports.flashcards = function (request, response) {
     //map functions to actions - .set(INTENT, FUNCTION)
     actionMap.set(find_user_set, findUserSet);
     actionMap.set(start_flashcards, welcomeMessage);
+    actionMap.set(WELCOME_INTENT, welcomeMessage)
     app.handleRequest(actionMap);
 }
