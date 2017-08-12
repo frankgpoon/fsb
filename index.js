@@ -30,7 +30,7 @@ const USER_ARGUMENT = 'user';
 /* Helper Functions */
 
 /* Main Function - includes all fulfillment for actions */
-restSERVICE.post('/hook', function(request, response) {
+restService.post('/hook', function(request, response) {
         console.log('headers: ' + JSON.stringify(request.headers));
         console.log('body: ' + JSON.stringify(request.body));
 
