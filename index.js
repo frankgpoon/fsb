@@ -6,7 +6,7 @@
 
 var http = require('http');
 
-const ApiAiApp = require('actions-on-google').ApiAiApp;
+const App = require('actions-on-google').ApiAiApp;
 const express = require('express');
 const bodyParser = require('body-parser');
 const restService = express();
@@ -34,7 +34,7 @@ restService.post('/', function(request, result) {
 
         console.log('HI this is inside the post function');
 
-        const app = new ApiAiApp({request: request, result: result});
+        const app = new App({request: request, result: result});
 
         function welcomeMessage(app) {
             console.log('Hi this is the welcome message function');
