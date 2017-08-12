@@ -8,7 +8,7 @@ var http = require('http');
 
 process.env.DEBUG = 'actions-on-google:*';
 const ApiAiApp = require('actions-on-google').ApiAiApp;
-// const sprintf = require('sprintf-js').sprintf;
+const sprintf = require('sprintf-js').sprintf;
 
 /* Consts (for actions, contexts, lines) */
 
