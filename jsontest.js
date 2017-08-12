@@ -1,12 +1,13 @@
 var http = require('http');
 var fs = require ("fs")
+var file = 'sampleUserSets.json';
 
 
 // creates local server with all the code
 http.createServer(function (req, res) {
     res.writeHead(200, {'Content-Type': 'text/html'});
 
-    var rawData = fs.readFileSync("text.txt"); // reads a JSON file which is a 'set'
+    var rawData = fs.readFileSync(file); // reads a JSON file which is a 'set'
     var set = JSON.parse(rawData); // a set file is parsed
 
     // find undesired properties and add them to array
@@ -16,6 +17,7 @@ http.createServer(function (req, res) {
             delete set[i];
         }
     }
+
     // find undesired properties again, this time in terms
     for (var i = 0; i < set.terms.length; i++) {
         for (var j in set.terms[i]) {
@@ -39,9 +41,8 @@ http.createServer(function (req, res) {
     	output += "\n";
     }
 
-
-
     res.end(output);
+
 }).listen(8080);
 
 
