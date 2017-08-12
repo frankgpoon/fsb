@@ -39,14 +39,7 @@ restService.post('/', function(request, response) {
 
     function welcomeMessage(app) {
         console.log('Hi this is the welcome message function');
-        app.ask('Hi, welcome to FlashCard tester. What Quizlet set would you like to be tested on?');
-    }
-
-    function welcomeTest(app) {
-        console.log('Hi this is the welcome test function');
-        let setName = app.getArgument(SET_ARGUMENT);
-        let userName = app.getArgument(USER_ARGUMENT);
-        app.tell('You said ' + setName + ' by ' + userName);
+        app.ask('Hi, welcome to Flash Cards. What Quizlet set would you like to be tested on?');
     }
 
     /*
@@ -56,27 +49,27 @@ restService.post('/', function(request, response) {
     function findUserSet(app) {
         // get user arg and string arg from intent
         var setName = app.getArgument(SET_ARGUMENT);
-        var userName = app.getArgument(USER_ARGUMENT);
+        var userName = app.getArgument(USER_ARGUMENT).trim(); // remove whitespace from voice recognized words
         app.tell('You said ' + setName + ' by ' + userName);
         console.log('Finding ' + setName + ' by ' + userName);
-
+        /*
         // parameters for get request
         var options = {
             host: 'api.quizlet.com',
             path: '/2.0/users/' + userName + '/sets',
             client_id: 'yfX2Tq7BtT', // need some way to protect this?
-            headers: {'Authorization': 'Bearer ' + app.getUser.accessToken}
+            headers: {'Authorization': 'Bearer ' + app.getUser().accessToken}
         };
 
         // TODO: Handle 404 errors with user
         // callback - aka what to do with the response
          http.get(options, (res) => {
             var rawData = ''; // empty JSON
-            response.on('data', function (chunk) {
+            response.on('data', (chunk) => {
                 rawData += chunk; // data arrives chunk by chunk so we put all processing stuff at the end
             });
             // once response data stops coming the request ends and we parse the JSON
-            response.on('end', function () {
+            response.on('end', () => {
                 var user = JSON.parse(rawData); // all sets by user here into a JS object
                 // processing through objects
                 var set;
@@ -95,12 +88,16 @@ restService.post('/', function(request, response) {
                 // saves the found set as current set
                 app.data.currentSet = set;
             })
+        }).on('error', (e) => {
+            app.tell('Unable to find set because of ' + e.message);
+            console.log('Error: ' + e.message);
         });
+        */
     }
 
     const actionMap = new Map();
     //map functions to actions - .set(ACTION, FUNCTION)
-    actionMap.set(FIND_USER_SET_ACTION, welcomeTest);
+    actionMap.set(FIND_USER_SET_ACTION, findUserSet);
     actionMap.set(WELCOME_ACTION, welcomeMessage);
 
     app.handleRequest(actionMap);
