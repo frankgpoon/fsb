@@ -8,14 +8,17 @@ var http = require('http');
 
 process.env.DEBUG = 'actions-on-google:*';
 const ApiAiApp = require('actions-on-google').ApiAiApp;
-// const sprintf = require('sprintf-js').sprintf;
+const express = require('express');
+const bodyParser = require('body-parser');
+const restService = express();
+restService.use(bodyParser.json());
 // const express = require('express');
 
 /* Consts (for actions, contexts, lines) */
 
 // Actions
 const FIND_USER_SET_ACTION = 'find_user_set';
-const WELCOME_ACTION = 'input.welcome'
+const WELCOME_ACTION = 'input.welcome';
 // Arguments
 const SET_ARGUMENT = 'set';
 const USER_ARGUMENT = 'user';
@@ -27,31 +30,23 @@ const USER_ARGUMENT = 'user';
 /* Helper Functions */
 
 /* Main Function - includes all fulfillment for actions */
-exports.flashcards = function (request, response) {
-    console.log('headers: ' + JSON.stringify(request.headers));
-    console.log('body: ' + JSON.stringify(request.body));
+restSERVICE.post('/hook', function(request, response) {
+        console.log('headers: ' + JSON.stringify(request.headers));
+        console.log('body: ' + JSON.stringify(request.body));
 
-    const app = new ApiAiApp({request, response});
+        const app = new ApiAiApp({request, response});
 
-    function welcomeMessage(app) {
-        app.ask('Hi, welcome to FlashCard tester. What Quizlet set would you like to be tested on?');
-    }
-
-    function signIn(app) {
-        app.askForSignIn();
-    }
-
-    function signInHandler(app) {
-        if (app.getSignInStatus() !== app.SignInStatus.OK) {
-            app.tell('You need to sign-in before using the app.');
+        function welcomeMessage(app) {
+            app.ask('Hi, welcome to FlashCard tester. What Quizlet set would you like to be tested on?');
         }
-    }
 
-    function welcomeTest(app) {
-        let setName = app.getArgument(SET_ARGUMENT);
-        let userName = app.getArgument(USER_ARGUMENT);
-        app.tell("You said " + setName + " by " + userName);
-    }
+        function welcomeTest(app) {
+            let setName = app.getArgument(SET_ARGUMENT);
+            let userName = app.getArgument(USER_ARGUMENT);
+            app.tell("You said " + setName + " by " + userName);
+        }
+
+    /* 
 
     function findUserSet(app) {
         // get user arg and string arg from intent
@@ -61,7 +56,6 @@ exports.flashcards = function (request, response) {
         if (!user) {
             user = 'user_id'; // check if it works with quizlet!
         }
-        */
        // parameters for get request
         var requestOptions = {
             host: 'api.quizlet.com',
@@ -112,9 +106,7 @@ exports.flashcards = function (request, response) {
         }
         // get data and end
         http.get(requestOptions, requestCallback).end();
-    }
-
-
+    } */
 
 
     const actionMap = new Map();
@@ -122,4 +114,4 @@ exports.flashcards = function (request, response) {
     actionMap.set(FIND_USER_SET_ACTION, welcomeTest);
     actionMap.set(WELCOME_INTENT, welcomeMessage)
     app.handleRequest(actionMap);
-}
+});
