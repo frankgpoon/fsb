@@ -36,10 +36,12 @@ restService.post('/hook', function(request, response) {
         const app = new ApiAiApp({request, response});
 
         function welcomeMessage(app) {
+            console.log('Hi this is the welcome message function');
             app.ask('Hi, welcome to FlashCard tester. What Quizlet set would you like to be tested on?');
         }
 
         function welcomeTest(app) {
+            console.log('Hi this is the welcome test function');
             let setName = app.getArgument(SET_ARGUMENT);
             let userName = app.getArgument(USER_ARGUMENT);
             app.tell("You said " + setName + " by " + userName);
@@ -109,7 +111,7 @@ restService.post('/hook', function(request, response) {
 
 
     const actionMap = new Map();
-    //map functions to actions - .set(INTENT, FUNCTION)
+    //map functions to actions - .set(ACTION, FUNCTION)
     actionMap.set(FIND_USER_SET_ACTION, welcomeTest);
     actionMap.set(WELCOME_INTENT, welcomeMessage)
     app.handleRequest(actionMap);
