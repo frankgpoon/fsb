@@ -37,6 +37,7 @@ restService.post('/', function(request, result) {
         console.log('HI this is inside the post function');
 
         const app = new App({request: request, result: result});
+        app.ask('Hi');
         console.log('this is after app declaration');
 
         function welcomeMessage(app) {
@@ -118,7 +119,7 @@ restService.post('/', function(request, result) {
     //map functions to actions - .set(ACTION, FUNCTION)
     actionMap.set(FIND_USER_SET_ACTION, welcomeTest);
     actionMap.set(WELCOME_ACTION, welcomeMessage);
-    
+
     app.handleRequest(actionMap);
 });
 
