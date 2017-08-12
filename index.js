@@ -32,6 +32,7 @@ const USER_ARGUMENT = 'user';
 restService.post('/hook', function(request, response) {
         console.log('headers: ' + JSON.stringify(request.headers));
         console.log('body: ' + JSON.stringify(request.body));
+        console.log('HI this is inside the post function');
 
         const app = new ApiAiApp({request, response});
 
