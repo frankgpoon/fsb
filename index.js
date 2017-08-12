@@ -30,7 +30,7 @@ const USER_ARGUMENT = 'user';
 
 /* Main Function - includes all fulfillment for actions */
 // Express handling the POST endpoint
-restService.post('/', function(request, result) {
+restService.post('/', function(request, response) {
         console.log('headers: ' + JSON.stringify(request.headers));
         console.log('body: ' + JSON.stringify(request.body));
 
