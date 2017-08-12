@@ -37,7 +37,6 @@ restService.post('/', function(request, response) {
         console.log('HI this is inside the post function');
 
         const app = new ApiAiApp({request: request, response: response});
-        app.tell('Hi');
         console.log('this is after app declaration');
 
         function welcomeMessage(app) {
