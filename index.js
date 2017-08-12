@@ -29,11 +29,12 @@ const USER_ARGUMENT = 'user';
 /* Helper Functions */
 
 /* Main Function - includes all fulfillment for actions */
-restService.post('/', function(req, res) {
+// Express handling the POST endpoint
+restService.post('/', function(request, result) {
 
         console.log('HI this is inside the post function');
 
-        const app = new ApiAiApp({req, res});
+        const app = new ApiAiApp({request: request, result: result});
 
         function welcomeMessage(app) {
             console.log('Hi this is the welcome message function');
@@ -117,6 +118,7 @@ restService.post('/', function(req, res) {
     app.handleRequest(actionMap);
 });
 
+// express instance listening for a user request.
 restService.listen((process.env.PORT || 5000), function () {
     console.log("Server listening");
 });
