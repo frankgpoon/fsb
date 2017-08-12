@@ -29,12 +29,11 @@ const USER_ARGUMENT = 'user';
 /* Helper Functions */
 
 /* Main Function - includes all fulfillment for actions */
-restService.post('/hook', function(request, response) {
-        console.log('headers: ' + JSON.stringify(request.headers));
-        console.log('body: ' + JSON.stringify(request.body));
+restService.post('/', function(req, res) {
+
         console.log('HI this is inside the post function');
 
-        const app = new ApiAiApp({request, response});
+        const app = new ApiAiApp({req, res});
 
         function welcomeMessage(app) {
             console.log('Hi this is the welcome message function');
