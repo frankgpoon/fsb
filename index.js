@@ -90,6 +90,7 @@ restService.post('/', function(request, response) {
 
                     // saves the found set as current set
                     app.data.currentSet = set;
+                    console.log(typeof app.data.currentSet);
                 } else {
                     app.tell('I couldn\'t find the set you were looking for.')
                 }
