@@ -4,6 +4,7 @@
 
 // Starting the app
 
+const CLIENT_ID = 'yfX2Tq7BtT';
 const http = require('http');
 const ApiAiApp = require('actions-on-google').ApiAiApp;
 const express = require('express');
@@ -56,19 +57,21 @@ restService.post('/', function(request, response) {
         var options = {
             host: 'api.quizlet.com',
             path: '/2.0/users/' + user_name + '/sets',
-            client_id: 'yfX2Tq7BtT', // need some way to protect this?
+            client_id: CLIENT_ID, // need some way to protect this?
             headers: {'Authorization': 'Bearer ' + app.getUser().accessToken}
         };
-
+        console.log('request options formed');
         // TODO: Handle 404 errors with user
         // callback - aka what to do with the response
          http.get(options, (res) => {
             var raw_data = ''; // empty JSON
             response.on('data', (chunk) => {
                 raw_data += chunk; // data arrives chunk by chunk so we put all processing stuff at the end
+                console.log('data received');
             });
             // once response data stops coming the request ends and we parse the JSON
             response.on('end', () => {
+                console.log('data transfer ended');
                 var user = JSON.parse(raw_data); // all sets by user here into a JS object
                 // processing through objects
                 var set = {};
