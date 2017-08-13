@@ -49,7 +49,7 @@ restService.post('/', function(request, response) {
     function findUserSet(app) {
         // get user arg and string arg from intent
         var setName = app.getArgument(SET_ARGUMENT);
-        var userName = app.getArgument(USER_ARGUMENT).trim(); // remove whitespace from voice recognized words
+        var userName = app.getArgument(USER_ARGUMENT).replace(/\s/g,''); // remove whitespace from voice recognized words
         app.tell('You said ' + setName + ' by ' + userName);
         console.log('Finding ' + setName + ' by ' + userName);
 
@@ -92,7 +92,7 @@ restService.post('/', function(request, response) {
             app.tell('Unable to find set because of ' + e.message);
             console.log('Error: ' + e.message);
         });
-        
+
     }
 
     const actionMap = new Map();
