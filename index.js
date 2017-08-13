@@ -48,14 +48,14 @@ restService.post('/', function(request, response) {
      */
     function findUserSet(app) {
         // get user arg and string arg from intent
-        var setName = app.getArgument(SET_ARGUMENT);
-        var userName = app.getArgument(USER_ARGUMENT).replace(/\s/g,'').toLowerCase(); // remove whitespace from voice recognized words
-        console.log('Finding ' + setName + ' by ' + userName);
+        var set_name = app.getArgument(SET_ARGUMENT);
+        var user_name = app.getArgument(USER_ARGUMENT).replace(/\s/g,'').toLowerCase(); // remove whitespace from voice recognized words
+        console.log('Finding ' + set_name + ' by ' + user_name);
 
         // parameters for get request
         var options = {
             host: 'api.quizlet.com',
-            path: '/2.0/users/' + userName + '/sets',
+            path: '/2.0/users/' + user_name + '/sets',
             client_id: 'yfX2Tq7BtT', // need some way to protect this?
             headers: {'Authorization': 'Bearer ' + app.getUser().accessToken}
         };
@@ -63,18 +63,18 @@ restService.post('/', function(request, response) {
         // TODO: Handle 404 errors with user
         // callback - aka what to do with the response
          http.get(options, (res) => {
-            var rawData = ''; // empty JSON
+            var raw_data = ''; // empty JSON
             response.on('data', (chunk) => {
-                rawData += chunk; // data arrives chunk by chunk so we put all processing stuff at the end
+                raw_data += chunk; // data arrives chunk by chunk so we put all processing stuff at the end
             });
             // once response data stops coming the request ends and we parse the JSON
             response.on('end', () => {
-                var user = JSON.parse(rawData); // all sets by user here into a JS object
+                var user = JSON.parse(raw_data); // all sets by user here into a JS object
                 // processing through objects
                 var set = {};
                 for (var i in user) {
-                    if (i.title === setName) {
-                        set = i; // finds first set by userName, sets it to a var and breaks
+                    if (i.title === set_name) {
+                        set = i; // finds first set by user_name, sets it to a var and breaks
                         break;
                     }
                 }
