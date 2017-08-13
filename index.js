@@ -42,11 +42,11 @@ restService.post('/', function(request, response) {
     function welcomeMessage(app) {
         console.log('welcome function, prompt for sign in');
         if (typeof app.getUser().accessToken === 'string') {
-            console.log('account linked');
+            console.log('account linked'); // normal operation
             app.ask('Hi, welcome to Flash Cards. What Quizlet set would you like to be tested on?');
         } else {
             console.log('account not linked');
-            app.askForSignIn();
+            app.askForSignIn(); // uses phone for oauth linking
         }
     }
 
@@ -81,21 +81,21 @@ restService.post('/', function(request, response) {
                 console.log('data transfer ended');
                 var user = JSON.parse(raw_data); // all sets by user here into a JS object
                 // processing through objects
-                var set = {};
+                var set;
                 for (var i in user) {
                     if (i.title === set_name) {
-                        set = i; // finds first set by user_name, sets it to a var and breaks
+                        set = i; // finds first matching set by username, sets it to a var and breaks
                         break;
                     }
                 }
                 // TODO: handle set not found
-                if (typeof set === 'object') {
+                if (typeof set !== 'object') {
                     app.tell('I couldn\'t find the set you were looking for.')
                     console.log('Couldn\'t find set');
                 }
 
                 // verifys that the set works
-                app.tell('I found ' + set.title + ' by ' + set.created_by + '. Should I shuffle the cards?');
+                app.ask('I found ' + set.title + ' by ' + set.created_by + '. Should I shuffle the cards?');
                 console.log('Found ' + set.title + ' by ' + set.created_by);
 
                 // saves the found set as current set
