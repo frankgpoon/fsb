@@ -42,6 +42,7 @@ restService.post('/', function(request, response) {
             app.ask('Hi, welcome to Flash Cards. What Quizlet set would you like to be tested on?');
         } else {
             app.askForSignIn(dialogState); // uses phone for oauth linking
+            console.log(dialogState);
         }
     }
 
@@ -71,7 +72,6 @@ restService.post('/', function(request, response) {
             });
             // once response data stops coming the request ends and we parse the JSON
             res.on('end', () => {
-                console.log(JSON.stringify(dialogState));
                 var user = JSON.parse(raw_data); // all sets by user here into a JS object
                 // processing through objects
 
@@ -90,7 +90,7 @@ restService.post('/', function(request, response) {
 
                     // saves the found set as current set
                     app.data.currentSet = set;
-                    console.log(typeof app.data.currentSet);
+                    console.log(app.data.currentSet);
                 } else {
                     app.tell('I couldn\'t find the set you were looking for.')
                 }
