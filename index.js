@@ -54,6 +54,8 @@ restService.post('/', function(request, response) {
         // get user arg and string arg from intent
         var set_name = app.getArgument(SET_ARGUMENT).replace(/\s/g,'').toLowerCase();
         var user_name = app.getArgument(USER_ARGUMENT).replace(/\s/g,'').toLowerCase();
+        console.log('set: ' + set_name);
+        console.log('user_name: ' + user_name);
 
         // parameters for get request
         var options = {
