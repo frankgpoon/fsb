@@ -5,7 +5,7 @@
 // Starting the app
 
 const CLIENT_ID = 'yfX2Tq7BtT';
-const http = require('http');
+const https = require('https');
 const ApiAiApp = require('actions-on-google').ApiAiApp;
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -63,7 +63,7 @@ restService.post('/', function(request, response) {
         console.log('request options formed');
         // TODO: Handle 404 errors with user
         // callback - aka what to do with the response
-         http.get(options, (res) => {
+         https.get(options, (res) => {
             var raw_data = ''; // empty JSON
             response.on('data', (chunk) => {
                 raw_data += chunk; // data arrives chunk by chunk so we put all processing stuff at the end
