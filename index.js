@@ -41,6 +41,8 @@ restService.post('/', function(request, response) {
 
     function welcomeMessage(app) {
         console.log('welcome function, prompt for sign in');
+        console.log('sign in status is ' + app.getSignInStatus());
+        console.log('access token type is ' + typeof app.getUser().accessToken);
         if (app.getSignInStatus() === app.SignInStatus.OK) {
             console.log('account linked');
             app.ask('Hi, welcome to Flash Cards. What Quizlet set would you like to be tested on?');
