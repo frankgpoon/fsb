@@ -82,24 +82,26 @@ restService.post('/', function(request, response) {
                 var user = JSON.parse(raw_data); // all sets by user here into a JS object
                 // processing through objects
                 var set;
+                console.log('trying to find ' + set_name);
                 for (var i in user) {
+                    console.log(i.title);
                     if (i.title === set_name) {
                         set = i; // finds first matching set by username, sets it to a var and breaks
                         break;
                     }
                 }
                 // TODO: handle set not found
-                if (typeof set !== 'object') {
+                if (typeof set === 'object') {
+                    // verifys that the set works
+                    app.ask('I found ' + set.title + ' by ' + set.created_by + '. Should I shuffle the cards?');
+                    console.log('Found ' + set.title + ' by ' + set.created_by);
+
+                    // saves the found set as current set
+                    app.data.currentSet = set;
+                } else {
                     app.tell('I couldn\'t find the set you were looking for.')
                     console.log('Couldn\'t find set');
                 }
-
-                // verifys that the set works
-                app.ask('I found ' + set.title + ' by ' + set.created_by + '. Should I shuffle the cards?');
-                console.log('Found ' + set.title + ' by ' + set.created_by);
-
-                // saves the found set as current set
-                app.data.currentSet = set;
             })
         }).on('error', (e) => {
             app.tell('Unable to find set because of ' + e.message);
