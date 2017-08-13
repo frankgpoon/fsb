@@ -82,6 +82,7 @@ restService.post('/', function(request, response) {
                 var user = JSON.parse(raw_data); // all sets by user here into a JS object
                 // processing through objects
                 console.log('user is type ' + typeof user);
+                console.log(user);
                 var set;
                 for (var i in user) {
                     console.log('user[i] is type ' + typeof i + ', value is ' + user[i]);
