@@ -40,7 +40,14 @@ restService.post('/', function(request, response) {
 
     function welcomeMessage(app) {
         console.log('Hi this is the welcome message function');
-        app.ask('Hi, welcome to Flash Cards. What Quizlet set would you like to be tested on?');
+        if (app.getSignInStatus() === app.SignInStatus.OK) {
+            console.log('account linked');
+            app.ask('Hi, welcome to Flash Cards. What Quizlet set would you like to be tested on?');
+        } else {
+            console.log('account not linked');
+            app.tell('You need to sign in before using Flash Cards.')
+            app.askForSignIn();
+        }
     }
 
     /*
