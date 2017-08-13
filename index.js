@@ -83,15 +83,14 @@ restService.post('/', function(request, response) {
                         break;
                     }
                 }
-                // TODO: handle set not found
                 if (typeof set === 'object') {
                     // verifys that the set works
                     app.ask('I found ' + set.title + ' by ' + set.created_by + '. Should I shuffle the cards?');
-
+                    // TODO: possibly implement shuffling array of terms, and work on quizzing aspect
                     // saves the found set as current set
-                    app.data.currentSet = set;
-                    console.log(app.data.currentSet);
+                    app.data.current_set = set;
                 } else {
+                    // TODO: handle set not found with context/action that goes back to query_for_set intent
                     app.tell('I couldn\'t find the set you were looking for.')
                 }
             })
