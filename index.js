@@ -35,18 +35,12 @@ restService.post('/', function(request, response) {
     console.log('headers: ' + JSON.stringify(request.headers));
     console.log('body: ' + JSON.stringify(request.body));
 
-    console.log('HI this is inside the post function');
-
     const app = new ApiAiApp({request: request, response: response});
-    console.log('this is after app declaration');
 
     function welcomeMessage(app) {
-        console.log('welcome function, prompt for sign in');
         if (typeof app.getUser().accessToken === 'string') {
-            console.log('account linked'); // normal operation
             app.ask('Hi, welcome to Flash Cards. What Quizlet set would you like to be tested on?');
         } else {
-            console.log('account not linked');
             app.askForSignIn(dialogState); // uses phone for oauth linking
         }
     }
@@ -59,7 +53,6 @@ restService.post('/', function(request, response) {
         // get user arg and string arg from intent
         var set_name = app.getArgument(SET_ARGUMENT).replace(/\s/g,'').toLowerCase();
         var user_name = app.getArgument(USER_ARGUMENT).replace(/\s/g,'').toLowerCase();
-        console.log('Finding ' + set_name + ' by ' + user_name);
 
         // parameters for get request
         var options = {
@@ -68,7 +61,7 @@ restService.post('/', function(request, response) {
             client_id: CLIENT_ID, // need some way to protect this?
             headers: {'Authorization': 'Bearer ' + app.getUser().accessToken}
         };
-        console.log('request options formed');
+
         // TODO: Handle 404 errors with user
         // callback - aka what to do with the response
          https.get(options, (res) => {
@@ -81,8 +74,7 @@ restService.post('/', function(request, response) {
                 console.log(JSON.stringify(dialogState));
                 var user = JSON.parse(raw_data); // all sets by user here into a JS object
                 // processing through objects
-                console.log('user is type ' + typeof user);
-                console.log(user);
+
                 var set;
                 for (var i in user) {
                     var modified_title = user[i].title.replace(/\s/g,'').toLowerCase();
@@ -95,13 +87,11 @@ restService.post('/', function(request, response) {
                 if (typeof set === 'object') {
                     // verifys that the set works
                     app.ask('I found ' + set.title + ' by ' + set.created_by + '. Should I shuffle the cards?');
-                    console.log('Found ' + set.title + ' by ' + set.created_by);
 
                     // saves the found set as current set
                     app.data.currentSet = set;
                 } else {
                     app.tell('I couldn\'t find the set you were looking for.')
-                    console.log('Couldn\'t find set');
                 }
             })
         }).on('error', (e) => {
