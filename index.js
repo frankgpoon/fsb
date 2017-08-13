@@ -49,8 +49,7 @@ restService.post('/', function(request, response) {
     function findUserSet(app) {
         // get user arg and string arg from intent
         var setName = app.getArgument(SET_ARGUMENT);
-        var userName = app.getArgument(USER_ARGUMENT).replace(/\s/g,''); // remove whitespace from voice recognized words
-        app.tell('You said ' + setName + ' by ' + userName);
+        var userName = app.getArgument(USER_ARGUMENT).replace(/\s/g,'').toLowerCase(); // remove whitespace from voice recognized words
         console.log('Finding ' + setName + ' by ' + userName);
 
         // parameters for get request
@@ -72,7 +71,7 @@ restService.post('/', function(request, response) {
             response.on('end', () => {
                 var user = JSON.parse(rawData); // all sets by user here into a JS object
                 // processing through objects
-                var set;
+                var set = {};
                 for (var i in user) {
                     if (i.title === setName) {
                         set = i; // finds first set by userName, sets it to a var and breaks
@@ -80,9 +79,13 @@ restService.post('/', function(request, response) {
                     }
                 }
                 // TODO: handle set not found
+                if (typeof set === 'object') {
+                    app.tell('I couldn\'t find the set you were looking for.')
+                    console.log('Couldn\'t find set');
+                }
 
                 // verifys that the set works
-                app.tell('Found ' + set.title + ' by ' + set.created_by);
+                app.tell('I found ' + set.title + ' by ' + set.created_by + '. Should I shuffle the cards?');
                 console.log('Found ' + set.title + ' by ' + set.created_by);
 
                 // saves the found set as current set
@@ -92,7 +95,7 @@ restService.post('/', function(request, response) {
             app.tell('Unable to find set because of ' + e.message);
             console.log('Error: ' + e.message);
         });
-
+        // handle flow to various intents
     }
 
     const actionMap = new Map();
