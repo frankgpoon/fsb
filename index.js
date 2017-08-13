@@ -85,10 +85,8 @@ restService.post('/', function(request, response) {
                 // processing through objects
                 console.log('user is type ' + typeof user);
                 var set;
-                console.log('current set is type ' + typeof set);
-                console.log('trying to find ' + set_name);
                 for (var i in user) {
-                    console.log('title is type ' + typeof i.title + ', value is ' + i.title);
+                    console.log('i is type ' + typeof i);
                     if (i.title === set_name) {
                         set = i; // finds first matching set by username, sets it to a var and breaks
                         break;
