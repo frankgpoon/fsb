@@ -41,16 +41,12 @@ restService.post('/', function(request, response) {
 
     function welcomeMessage(app) {
         console.log('welcome function, prompt for sign in');
-        app.askForSignIn();
-    }
-
-    function signIn(app) {
         if (app.getSignInStatus() === app.SignInStatus.OK) {
             console.log('account linked');
             app.ask('Hi, welcome to Flash Cards. What Quizlet set would you like to be tested on?');
         } else {
             console.log('account not linked');
-            app.tell('You need to sign in before using Flash Cards.')
+            app.askForSignIn();
         }
     }
 
@@ -116,7 +112,6 @@ restService.post('/', function(request, response) {
     //map functions to actions - .set(ACTION, FUNCTION)
     actionMap.set(FIND_USER_SET_ACTION, findUserSet);
     actionMap.set(WELCOME_ACTION, welcomeMessage);
-    actionMap.set(SIGN_IN, signIn);
 
     app.handleRequest(actionMap);
 });
