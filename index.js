@@ -75,18 +75,16 @@ restService.post('/', function(request, response) {
             var raw_data = ''; // empty JSON
             res.on('data', (chunk) => {
                 raw_data += chunk; // data arrives chunk by chunk so we put all processing stuff at the end
-                console.log('data received');
             });
             // once response data stops coming the request ends and we parse the JSON
             res.on('end', () => {
-                console.log('data transfer ended');
                 console.log(JSON.stringify(dialogState));
                 var user = JSON.parse(raw_data); // all sets by user here into a JS object
                 // processing through objects
                 console.log('user is type ' + typeof user);
                 var set;
                 for (var i in user) {
-                    console.log('i is type ' + typeof i);
+                    console.log('i is type ' + typeof i + ', value is ' + i);
                     if (i.title === set_name) {
                         set = i; // finds first matching set by username, sets it to a var and breaks
                         break;
