@@ -11,6 +11,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const restService = express();
 restService.use(bodyParser.json());
+const dialogState = {};
 
 /* Consts (for actions, contexts, lines) */
 
@@ -46,7 +47,7 @@ restService.post('/', function(request, response) {
             app.ask('Hi, welcome to Flash Cards. What Quizlet set would you like to be tested on?');
         } else {
             console.log('account not linked');
-            app.askForSignIn(); // uses phone for oauth linking
+            app.askForSignIn(dialogState); // uses phone for oauth linking
         }
     }
 
@@ -79,6 +80,7 @@ restService.post('/', function(request, response) {
             // once response data stops coming the request ends and we parse the JSON
             res.on('end', () => {
                 console.log('data transfer ended');
+                console.log(JSON.stringify(dialogState));
                 var user = JSON.parse(raw_data); // all sets by user here into a JS object
                 // processing through objects
                 var set;
