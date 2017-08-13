@@ -116,7 +116,7 @@ restService.post('/', function(request, response) {
     //map functions to actions - .set(ACTION, FUNCTION)
     actionMap.set(FIND_USER_SET_ACTION, findUserSet);
     actionMap.set(WELCOME_ACTION, welcomeMessage);
-    actionMap.set(SIGN_IN, )
+    actionMap.set(SIGN_IN, signIn);
 
     app.handleRequest(actionMap);
 });
