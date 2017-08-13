@@ -17,6 +17,7 @@ restService.use(bodyParser.json());
 // Actions
 const FIND_USER_SET_ACTION = 'find_user_set';
 const WELCOME_ACTION = 'input.welcome';
+const SIGN_IN = 'sign.in';
 // Arguments
 const SET_ARGUMENT = 'set';
 const USER_ARGUMENT = 'user';
@@ -39,14 +40,17 @@ restService.post('/', function(request, response) {
     console.log('this is after app declaration');
 
     function welcomeMessage(app) {
-        console.log('Hi this is the welcome message function');
+        console.log('welcome function, prompt for sign in');
+        app.askForSignIn();
+    }
+
+    function signIn(app) {
         if (app.getSignInStatus() === app.SignInStatus.OK) {
             console.log('account linked');
             app.ask('Hi, welcome to Flash Cards. What Quizlet set would you like to be tested on?');
         } else {
             console.log('account not linked');
             app.tell('You need to sign in before using Flash Cards.')
-            app.askForSignIn();
         }
     }
 
@@ -72,12 +76,12 @@ restService.post('/', function(request, response) {
         // callback - aka what to do with the response
          https.get(options, (res) => {
             var raw_data = ''; // empty JSON
-            response.on('data', (chunk) => {
+            res.on('data', (chunk) => {
                 raw_data += chunk; // data arrives chunk by chunk so we put all processing stuff at the end
                 console.log('data received');
             });
             // once response data stops coming the request ends and we parse the JSON
-            response.on('end', () => {
+            res.on('end', () => {
                 console.log('data transfer ended');
                 var user = JSON.parse(raw_data); // all sets by user here into a JS object
                 // processing through objects
@@ -112,6 +116,7 @@ restService.post('/', function(request, response) {
     //map functions to actions - .set(ACTION, FUNCTION)
     actionMap.set(FIND_USER_SET_ACTION, findUserSet);
     actionMap.set(WELCOME_ACTION, welcomeMessage);
+    actionMap.set(SIGN_IN, )
 
     app.handleRequest(actionMap);
 });
