@@ -57,8 +57,8 @@ restService.post('/', function(request, response) {
      */
     function findUserSet(app) {
         // get user arg and string arg from intent
-        var set_name = app.getArgument(SET_ARGUMENT);
-        var user_name = app.getArgument(USER_ARGUMENT).replace(/\s/g,'').toLowerCase(); // remove whitespace from voice recognized words
+        var set_name = app.getArgument(SET_ARGUMENT).replace(/\s/g,'').toLowerCase();
+        var user_name = app.getArgument(USER_ARGUMENT).replace(/\s/g,'').toLowerCase();
         console.log('Finding ' + set_name + ' by ' + user_name);
 
         // parameters for get request
@@ -85,11 +85,9 @@ restService.post('/', function(request, response) {
                 console.log(user);
                 var set;
                 for (var i in user) {
-                    console.log();
-                    console.log(user[i]);
-                    console.log(user[i].title);
-                    if (i.title === set_name) {
-                        set = i; // finds first matching set by username, sets it to a var and breaks
+                    var modified_title = user[i].title.replace(/\s/g,'').toLowerCase();
+                    if (modified_title === set_name) {
+                        set = user[i]; // finds first matching set by username, sets it to a var and breaks
                         break;
                     }
                 }
