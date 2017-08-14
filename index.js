@@ -4,7 +4,6 @@
 
 // Starting the app
 
-const CLIENT_ID = 'yfX2Tq7BtT';
 const https = require('https');
 const ApiAiApp = require('actions-on-google').ApiAiApp;
 const express = require('express');
@@ -51,7 +50,7 @@ restService.post('/', function(request, response) {
     /*
      * GET requests for a user's sets and finds the matching set to user input via HTTP request
      * to Quizlet API. Asks user if cards in set should be shuffled. If unable to find user or set,
-     * tells user.
+     * tells user and prompts for another set.
      */
     function findUserSet(app) {
         // get user arg and string arg from intent
@@ -64,7 +63,7 @@ restService.post('/', function(request, response) {
         var options = {
             host: 'api.quizlet.com',
             path: '/2.0/users/' + user_name + '/sets',
-            client_id: CLIENT_ID, // need some way to protect this?
+            client_id: 'yfX2Tq7BtT',
             headers: {'Authorization': 'Bearer ' + app.getUser().accessToken}
         };
 
@@ -105,7 +104,6 @@ restService.post('/', function(request, response) {
                     // TODO: possibly implement shuffling array of terms, and work on quizzing aspect
                     // saves the found set as current set
                 } else {
-                    // TODO: handle set not found with context/action that goes back to query_for_set intent
                     app.ask('I couldn\'t find the set you were looking for. Could you say it again?');
                     app.setContext(ASK_FOR_SET_CONTEXT);
                 }
@@ -115,10 +113,11 @@ restService.post('/', function(request, response) {
             console.log('Error: ' + e.message);
             // possibly unused
         });
-        // handle flow to various intents
     }
 
-
+    function askQuestion(app) {
+        
+    }
 
     const actionMap = new Map();
     //map functions to actions - .set(ACTION, FUNCTION)
