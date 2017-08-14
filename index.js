@@ -106,8 +106,7 @@ restService.post('/', function(request, response) {
                     // saves the found set as current set
                 } else {
                     // TODO: handle set not found with context/action that goes back to query_for_set intent
-                    app.ask('I couldn\'t find the set you were looking for. Could you say it again?');
-                    app.ask('Try it again?');
+                    app.ask('I couldn\'t find the set you were looking for. \n Could you say it again?');
                     app.setContext(ASK_FOR_SET_CONTEXT);
                 }
             })
