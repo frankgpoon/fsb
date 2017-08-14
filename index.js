@@ -77,17 +77,24 @@ restService.post('/', function(request, response) {
             // once response data stops coming the request ends and we parse the JSON
             res.on('end', () => {
                 var user = JSON.parse(raw_data); // all sets by user here into a JS object
-                // processing through objects
-                console.log(user); //XXX: testing for 404 user
+                var user_set_found = true;
                 var set;
-                for (var i in user) {
-                    var modified_title = user[i].title.replace(/\s/g,'').toLowerCase();
-                    if (modified_title === set_name) {
-                        set = user[i]; // finds first matching set by username, sets it to a var and breaks
-                        break;
+
+                if (http_code in user) {
+                    user_set_found = false; // check user 404
+                } else {
+                    for (var i in user) {
+                        var modified_title = user[i].title.replace(/\s/g,'').toLowerCase();
+                        if (modified_title === set_name) {
+                            set = user[i]; // finds first matching set by username, sets it to a var and breaks
+                            break;
+                        }
+                    }
+                    if (typeof set !== 'object') {
+                        user_set_found = false;
                     }
                 }
-                if (typeof set === 'object') {
+                if (user_set_found) {
                     app.data.current_set = set;
                     app.data.ask_if_shuffled = false;
                     console.log('current set has ' + app.data.current_set.terms.length + ' terms');
