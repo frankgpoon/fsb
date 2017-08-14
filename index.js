@@ -78,7 +78,7 @@ restService.post('/', function(request, response) {
             res.on('end', () => {
                 var user = JSON.parse(raw_data); // all sets by user here into a JS object
                 // processing through objects
-                console.log('user is type ' + typeof user + ' (should be object if user found)'); //XXX: testing for 404 user
+                console.log(user); //XXX: testing for 404 user
                 var set;
                 for (var i in user) {
                     var modified_title = user[i].title.replace(/\s/g,'').toLowerCase();
@@ -91,7 +91,6 @@ restService.post('/', function(request, response) {
                     app.data.current_set = set;
                     app.data.ask_if_shuffled = false;
                     console.log('current set has ' + app.data.current_set.terms.length + ' terms');
-                    console.log('verifying if shuffling state works: type should be boolean - ' + typeof app.data.ask_if_shuffled);
                     // verifys that the set works
                     app.ask('I\'ll be testing you on ' + set.title + ' by ' + set.created_by + '. Should I shuffle the cards?');
                     // TODO: possibly implement shuffling array of terms, and work on quizzing aspect
