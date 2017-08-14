@@ -192,12 +192,22 @@ restService.post('/', function(request, response) {
 
     }
 
+    function finishedSet(app) {
+        var decision = app.getArgument(DECISION_ARGUMENT);
+        if (decision == 'yes') {
+            askFirstQuestion(app);
+        } else {
+            app.tell('This was a fun study session! Goodbye.');
+        }
+    }
+
     const actionMap = new Map();
     //map functions to actions - .set(ACTION, FUNCTION)
     actionMap.set(FIND_USER_SET_ACTION, findUserSet);
     actionMap.set(WELCOME_ACTION, welcomeMessage);
     actionMap.set(ASK_FIRST_QUESTION_ACTION, askFirstQuestion);
     actionMap.set(GIVE_ANSWER_ACTION, giveAnswer);
+    actionMap.set(FINISHED_SET_ACTION, finishedSet);
 
     app.handleRequest(actionMap);
 });
