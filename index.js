@@ -33,8 +33,11 @@ const QUESTION_ASKED_CONTEXT = 'question_asked';
 // Lines
 
 /* Helper Functions */
-// Knuth shuffle: https://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array
-// Uniformly shuffles the elements of an array.
+
+/*
+ * Knuth shuffle: https://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array
+ * Uniformly shuffles the elements of an array.
+*/
 function shuffle(array) {
     let counter = array.length;
 
@@ -135,6 +138,10 @@ restService.post('/', function(request, response) {
         });
     }
 
+    /*
+     * Takes the set of terms and gives an order to them to stimulate shuffling if needed.
+     * Asks the first question/reads the first term in the set.
+     */
     function askFirstQuestion(app) {
         var card_order = [];
         for (var i = 0; i < app.data.current_set.terms.length; i++) {
@@ -158,6 +165,9 @@ restService.post('/', function(request, response) {
         app.ask('The first term is: ' + term + '.');
     }
 
+    /*
+     * Takes in user answer, says the correct answer to the user, then asks the next question.
+     */
     function giveAnswer(app) {
         // take in last user answer
         // tell correct answer
