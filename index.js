@@ -9,14 +9,14 @@ const ApiAiApp = require('actions-on-google').ApiAiApp;
 const express = require('express');
 const bodyParser = require('body-parser');
 const restService = express();
+
 restService.use(bodyParser.json());
-const dialogState = {};
 
 /* Consts (for actions, contexts, lines) */
 
 // Actions
-const FIND_USER_SET_ACTION = 'find_user_set';
 const WELCOME_ACTION = 'input.welcome';
+const FIND_USER_SET_ACTION = 'find_user_set';
 const ASK_FIRST_QUESTION_ACTION = 'ask_first_question';
 const ASK_QUESTION_ACTION = 'ask_question';
 
@@ -28,10 +28,30 @@ const DECISION_ARGUMENT = 'decision';
 // Contexts
 const ASK_FOR_SET_CONTEXT = 'ask_for_set';
 const SHUFFLE_CONTEXT = 'shuffle';
+const QUESTION_ASKED_CONTEXT = 'question_asked';
 
 // Lines
 
 /* Helper Functions */
+// Knuth shuffle: https://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array
+// Uniformly shuffles the elements of an array.
+function shuffle(array) {
+    let counter = array.length;
+
+    // While there are elements in the array
+    while (counter > 0) {
+        // Pick a random index
+        let index = Math.floor(Math.random() * counter);
+
+        // Decrease counter by 1
+        counter--;
+
+        // And swap the last element with it
+        let temp = array[counter];
+        array[counter] = array[index];
+        array[index] = temp;
+    }
+}
 
 /* Main Function - includes all fulfillment for actions */
 // Express handling the POST endpoint
@@ -118,24 +138,26 @@ restService.post('/', function(request, response) {
     }
 
     function askFirstQuestion(app) {
-        // take in user input to shuffle set or not
-        // make position array with terms length
-        // randomize values if shuffle, put it in order if not
-        // say first term and set context to lead to wait for answer intent
-        app.data.position = 0;
-        console.log('current set terms length is ' + app.data.current_set.terms.length);
         var card_order = [];
-        // populates the array with 0 - length.
         for (var i = 0; i < app.data.current_set.terms.length; i++) {
             card_order.push(i);
         }
+
+        // shuffles if needed
         var need_shuffle = app.getArgument(DECISION_ARGUMENT);
-        console.log(need_shuffle);
         if (need_shuffle === 'yes') {
             shuffle(card_order);
         }
-        var term = app.data.current_set.terms[position].term;
-        app.ask('The term is: ' + term) 
+        console.log(card_order);
+
+        app.data.card_order = card_order;
+        app.data.position = 0;
+        console.log(app.data.card_order[app.data.position]);
+
+        // asks first terms and waits for answer
+        var term = app.data.current_set.terms[app.data.card_order[app.data.position]].term;
+        app.setContext(QUESTION_ASKED_CONTEXT);
+        app.ask('The first term is: ' + term + '.');
     }
 
     function askQuestion(app) {
@@ -161,24 +183,3 @@ restService.post('/', function(request, response) {
 restService.listen((process.env.PORT || 5000), function () {
     console.log('Server listening');
 });
-
-
-// Knuth shuffle: https://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array
-// Uniformly shuffles the elements of an array.
-function shuffle(array) {
-    let counter = array.length;
-
-    // While there are elements in the array
-    while (counter > 0) {
-        // Pick a random index
-        let index = Math.floor(Math.random() * counter);
-
-        // Decrease counter by 1
-        counter--;
-
-        // And swap the last element with it
-        let temp = array[counter];
-        array[counter] = array[index];
-        array[index] = temp;
-    }
-}
