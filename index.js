@@ -163,7 +163,7 @@ restService.post('/', function(request, response) {
         // asks first terms and waits for answer
         var term = app.data.current_set.terms[app.data.card_order[app.data.position]].term;
         app.setContext(QUESTION_ASKED_CONTEXT);
-        app.ask('The first term is: ' + term + '.');
+        app.ask('The first term is ' + term + '.');
     }
 
     /*
@@ -180,9 +180,10 @@ restService.post('/', function(request, response) {
             app.setContext(FINISHED_SET_CONTEXT);
             app.ask('The correct definition is + ' + correct_answer + '. We are done with the set. Would you like to be tested again?');
         } else {
-            app.ask('The correct definition is ' + correct_answer);
-
-
+            var term = app.data.current_set.terms[app.data.card_order[app.data.position]].term;
+            app.setContext(QUESTION_ASKED_CONTEXT);
+            app.ask('The correct definition is ' + correct_answer + '. The next term is ' + term + '.');
+        }
         // TODO: verify user answer and compare with Quizlet answer
 
     }
