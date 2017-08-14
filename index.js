@@ -1,5 +1,8 @@
 /*
  * Main node.js functions for Flash Cards
+ * TODO: add rich responses for phones
+ * work on fallback
+ * give flash cards personality (add more prompt/line variation)
  */
 
 // Starting the app
@@ -165,15 +168,9 @@ restService.post('/', function(request, response) {
         // asks first terms and waits for answer
         var term = app.data.current_set.terms[app.data.card_order[app.data.position]].term;
         app.setContext(QUESTION_ASKED_CONTEXT);
-        var text = {
-            speech: SSML_START + 'Awesome. I\'ll list a term, and then you can answer.'
-            + ' Afterwards, I\'ll say the correct answer for you to check. <break time="2s"/>'
-            + 'The first term is ' + term + '.' + SSML_END,
-            displayText: 'Awesome. I\'ll list a term, and then you can answer.'
-            + ' Afterwards, I\'ll say the correct answer for you to check.'
-            + '\nThe first term is ' + term + '.'
-        };
-        app.ask(text);
+        app.ask(SSML_START + 'Awesome. I\'ll list a term, and then you can answer.'
+        + ' Afterwards, I\'ll say the correct answer for you to check. <break time="2s"/>'
+        + 'The first term is ' + term + '.' + SSML_END);
     }
 
     /*
@@ -189,29 +186,17 @@ restService.post('/', function(request, response) {
             correct_answer = correct_answer + '.';
         }
 
-        var text = {
-            speech: '',
-            text: ''
-        };
         app.data.position++;
         if (app.data.position == app.data.current_set.terms.length) {
-            text.speech = SSML_START + 'The correct answer is: <break time="1s"/>' + correct_answer
-            + '<break time="2s"/> We are finished with this set. Would you like to be tested again?'
-            + SSML_END;
-            text.displayText = 'The correct answer is: ' + correct_answer
-            + '\nWe are finished with this set. Would you like to be tested again?';
-
             app.setContext(FINISHED_SET_CONTEXT);
-            app.ask(text);
+            app.ask(SSML_START + 'The correct answer is: <break time="1s"/>' + correct_answer
+            + '<break time="2s"/> We are finished with this set. Would you like to be tested again?'
+            + SSML_END);
         } else {
             var term = app.data.current_set.terms[app.data.card_order[app.data.position]].term;
-            text.speech = SSML_START + 'The correct answer is: <break time="1s"/>' + correct_answer
-            + '<break time="2s"/> The next term is ' + term + '.' + SSML_END;
-            text.displayText = 'The correct answer is: ' + correct_answer + '\nThe next term is '
-            + term + '.';
-
             app.setContext(QUESTION_ASKED_CONTEXT);
-            app.ask(text);
+            app.ask(SSML_START + 'The correct answer is: <break time="1s"/>' + correct_answer
+            + '<break time="2s"/> The next term is ' + term + '.' + SSML_END);
         }
         // TODO: verify user answer and compare with Quizlet answer
 
