@@ -80,7 +80,7 @@ restService.post('/', function(request, response) {
                 var user_set_found = true;
                 var set;
 
-                if (http_code in user) {
+                if ('http_code' in user) {
                     user_set_found = false; // check user 404
                 } else {
                     for (var i in user) {
