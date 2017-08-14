@@ -17,6 +17,7 @@ const dialogState = {};
 // Actions
 const FIND_USER_SET_ACTION = 'find_user_set';
 const WELCOME_ACTION = 'input.welcome';
+const ASK_FIRST_QUESTION_ACTION = 'ask_first_question';
 const ASK_QUESTION_ACTION = 'ask_question';
 
 // Arguments
@@ -130,7 +131,7 @@ restService.post('/', function(request, response) {
         if (need_shuffle === 'yes') {
 
         }
-
+        app.tell('Still in testing');
     }
 
     function askQuestion(app) {
@@ -146,7 +147,8 @@ restService.post('/', function(request, response) {
     //map functions to actions - .set(ACTION, FUNCTION)
     actionMap.set(FIND_USER_SET_ACTION, findUserSet);
     actionMap.set(WELCOME_ACTION, welcomeMessage);
-    actionMap.set(ASK_QUESTION_ACTION, firstQuestion);
+    actionMap.set(ASK_FIRST_QUESTION_ACTION, askFirstQuestion);
+    actionMap.set(ASK_QUESTION_ACTION, askQuestion);
 
     app.handleRequest(actionMap);
 });
