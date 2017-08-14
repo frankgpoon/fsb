@@ -202,7 +202,8 @@ restService.post('/', function(request, response) {
     function finishedSet(app) {
         var decision = app.getArgument(DECISION_ARGUMENT);
         if (decision == 'yes') {
-            askFirstQuestion(app);
+            app.setContext(ASK_FOR_SET_CONTEXT);
+            app.ask('Alright. What set would you like to be tested on?')
         } else {
             app.tell('This was a fun study session! Goodbye.');
         }
