@@ -87,61 +87,80 @@ restService.post('/', function(request, response) {
      */
     function findUserSet(app) {
         // get user arg and string arg from intent
-        var set_name = app.getArgument(SET_ARGUMENT).replace(/\s/g,'').toLowerCase();
         var user_name = app.getArgument(USER_ARGUMENT).replace(/\s/g,'').toLowerCase();
+        var set_name;
 
-        // parameters for get request
-        var options = {
-            host: 'api.quizlet.com',
-            path: '/2.0/users/' + user_name + '/sets',
-            client_id: 'yfX2Tq7BtT',
-            headers: {'Authorization': 'Bearer ' + app.getUser().accessToken}
-        };
+        /* if (user_name === '') { // no username is given by user
+            set_name = app.getArgument(SET_ARGUMENT);
 
-        // callback - aka what to do with the response
-         https.get(options, (res) => {
-            var raw_data = ''; // empty JSON
-            res.on('data', (chunk) => {
-                raw_data += chunk; // data arrives chunk by chunk so we put all processing stuff at the end
-            });
-            // once response data stops coming the request ends and we parse the JSON
-            res.on('end', () => {
-                var user = JSON.parse(raw_data); // all sets by user here into a JS object
-                var user_set_found = true;
-                var set;
 
-                if ('http_code' in user) {
-                    user_set_found = false; // check user 404
-                } else {
-                    for (var i in user) {
-                        var modified_title = user[i].title.replace(/\s/g,'').toLowerCase();
-                        if (modified_title === set_name) {
-                            set = user[i]; // finds first matching set by username, sets it to a var and breaks
-                            break;
+            var options = {
+                host: 'api.quizlet.com',
+                path: '/2.0/search/sets?q=' + set_name,
+                client_id: 'yfX2Tq7BtT',
+                headers: {'Authorization': 'Bearer ' + app.getUser().accessToken}
+            };
+
+
+        } */ if (true)  { // both username and set name are given
+            set_name = app.getArgument(SET_ARGUMENT).replace(/\s/g,'').toLowerCase();
+
+            // parameters for get request
+            var options = {
+                host: 'api.quizlet.com',
+                path: '/2.0/users/' + user_name + '/sets',
+                //client_id: 'yfX2Tq7BtT',
+                headers: {'Authorization': 'Bearer ' + app.getUser().accessToken}
+            };
+
+            // callback - aka what to do with the response
+             https.get(options, (res) => {
+                var raw_data = ''; // empty JSON
+                res.on('data', (chunk) => {
+                    raw_data += chunk; // data arrives chunk by chunk so we put all processing stuff at the end
+                });
+                // once response data stops coming the request ends and we parse the JSON
+                res.on('end', () => {
+                    var user = JSON.parse(raw_data); // all sets by user here into a JS object
+                    var user_set_found = true;
+                    var set;
+
+                    if ('http_code' in user) {
+                        user_set_found = false; // check user 404
+                    } else {
+                        for (var i in user) {
+                            var modified_title = user[i].title.replace(/\s/g,'').toLowerCase();
+                            if (modified_title === set_name) {
+                                set = user[i]; // finds first matching set by username, sets it to a var and breaks
+                                break;
+                            }
+                        }
+                        if (typeof set !== 'object') {
+                            user_set_found = false;
                         }
                     }
-                    if (typeof set !== 'object') {
-                        user_set_found = false;
+                    if (user_set_found) {
+                        app.data.current_set = set;
+                        app.data.ask_if_shuffled = false;
+                        app.setContext(SHUFFLE_CONTEXT);
+                        console.log('current set has ' + app.data.current_set.terms.length + ' terms');
+                        // verifys that the set works
+                        app.ask('Okay. Do you want me to shuffle the cards in the set?');
+                        // saves the found set as current set
+                    } else {
+                        app.setContext(ASK_FOR_SET_CONTEXT);
+                        app.ask('I couldn\'t find the set you were looking for. Could you say it again?');
                     }
-                }
-                if (user_set_found) {
-                    app.data.current_set = set;
-                    app.data.ask_if_shuffled = false;
-                    app.setContext(SHUFFLE_CONTEXT);
-                    console.log('current set has ' + app.data.current_set.terms.length + ' terms');
-                    // verifys that the set works
-                    app.ask('Okay. Do you want me to shuffle the cards in the set?');
-                    // saves the found set as current set
-                } else {
-                    app.setContext(ASK_FOR_SET_CONTEXT);
-                    app.ask('I couldn\'t find the set you were looking for. Could you say it again?');
-                }
-            })
-        }).on('error', (e) => {
-            app.tell('Unable to find set because of ' + e.message);
-            console.log('Error: ' + e.message);
-            // possibly unused
-        });
+                })
+            }).on('error', (e) => {
+                app.tell('Unable to find set because of ' + e.message);
+                console.log('Error: ' + e.message);
+                // possibly unused
+            });
+        }
+
+
+
     }
 
     /*
