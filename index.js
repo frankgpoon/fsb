@@ -101,12 +101,13 @@ restService.post('/', function(request, response) {
                     app.setContext(SHUFFLE_CONTEXT);
                     console.log('current set has ' + app.data.current_set.terms.length + ' terms');
                     // verifys that the set works
-                    app.ask('I\'ll be testing you on ' + set.title + ' by ' + set.created_by + '. Should I shuffle the cards?');
+                    app.ask('Okay. Do you want me to shuffle the cards in the set?');
                     // TODO: possibly implement shuffling array of terms, and work on quizzing aspect
                     // saves the found set as current set
                 } else {
                     // TODO: handle set not found with context/action that goes back to query_for_set intent
-                    app.ask('I couldn\'t find the set you were looking for.What Quizlet set would you like to be tested on?');
+                    app.ask('I couldn\'t find the set you were looking for. Could you say it again?');
+                    app.ask('Try it again?');
                     app.setContext(ASK_FOR_SET_CONTEXT);
                 }
             })
