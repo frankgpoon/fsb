@@ -18,7 +18,6 @@ const dialogState = {};
 // Actions
 const FIND_USER_SET_ACTION = 'find_user_set';
 const WELCOME_ACTION = 'input.welcome';
-const SIGN_IN = 'sign.in';
 
 // Arguments
 const SET_ARGUMENT = 'set';
@@ -47,10 +46,6 @@ restService.post('/', function(request, response) {
         } else {
             app.askForSignIn(dialogState); // uses phone for oauth linking
         }
-    }
-
-    function askForSet(app) {
-        app.ask('What Quizlet set would you like to be tested on?');
     }
 
     /*
@@ -111,7 +106,7 @@ restService.post('/', function(request, response) {
                     // saves the found set as current set
                 } else {
                     // TODO: handle set not found with context/action that goes back to query_for_set intent
-                    app.tell('I couldn\'t find the set you were looking for.');
+                    app.ask('I couldn\'t find the set you were looking for.What Quizlet set would you like to be tested on?');
                     app.setContext(ASK_FOR_SET_CONTEXT);
                 }
             })
