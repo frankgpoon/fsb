@@ -64,6 +64,15 @@ function shuffle(array) {
     }
 }
 
+function getHttpRequestOptions(app, path) {
+    var options = {
+        host: 'api.quizlet.com',
+        path: path,
+        headers: {'Authorization': 'Bearer ' + app.getUser().accessToken}
+    };
+    return options;
+}
+
 /* Main Function - includes all fulfillment for actions */
 // Express handling the POST endpoint
 restService.post('/', function(request, response) {
@@ -91,25 +100,64 @@ restService.post('/', function(request, response) {
         var set_name;
 
         if (user_name === '') { // no username is given by user
+            // TODO: implement history/data collection and smart finding sets
             set_name = app.getArgument(SET_ARGUMENT);
 
-            var options = {
-                host: 'api.quizlet.com',
-                path: '/2.0/search/sets?q=' + set_name,
-                headers: {'Authorization': 'Bearer ' + app.getUser().accessToken}
-            };
+            var options = getHttpRequestOptions(app, '/2.0/search/sets?q=' + set_name);
 
+            https.get(options, (res) => {
+                    var raw_data = ''; // empty JSON
+                    res.on('data', (chunk) => {
+                        raw_data += chunk; // data arrives chunk by chunk so we put all processing stuff at the end
+                    });
+                    // once response data stops coming the request ends and we parse the JSON
+                    res.on('end', () => {
+                        var query = JSON.parse(raw_data); // all sets by user here into a JS object
+                        var set_found = true;
+                        var set_id;
+
+                        if (query.total_results !== 0) {
+                                set_id = query.sets[0].id;
+                                // ANOTHER HTTP REQUEST
+                                var set_options = getHttpRequestOptions(app, '/2.0/sets/' + set_id);
+
+                                https.get(options, (res) => {
+                                    var raw_data = ''; // empty JSON
+                                    res.on('data', (chunk) => {
+                                        raw_data += chunk; // data arrives chunk by chunk so we put all processing stuff at the end
+                                    });
+                                    res.on('end', () => {
+                                        var set = JSON.parse(raw_data);
+                                        app.data.current_set = set;
+                                        app.data.ask_if_shuffled = false;
+                                        app.setContext(SHUFFLE_CONTEXT);
+                                        console.log('current set has ' + app.data.current_set.terms.length + ' terms');
+                                        // verifys that the set works
+                                        app.ask('Okay. Do you want me to shuffle the cards in the set?');
+                                        // saves the found set as current set
+                                    });
+                                }).on('error', (e) => {
+                                    app.tell('Unable to find set because of ' + e.message);
+                                    console.log('Error: ' + e.message);
+                                    // possibly unused
+                                });
+                        } else {
+                            app.setContext(ASK_FOR_SET_CONTEXT);
+                            app.ask('I couldn\'t find the set you were looking for. Could you say it again?');
+                        }
+                    });
+                    }).on('error', (e) => {
+                        app.tell('Unable to find set because of ' + e.message);
+                        console.log('Error: ' + e.message);
+                        // possibly unused
+                   });
             // TODO: sort out result and find first matching set
             app.tell('Finding a set without a user is in testing');
         } else  { // both username and set name are given
             set_name = app.getArgument(SET_ARGUMENT).replace(/\s/g,'').toLowerCase();
 
             // parameters for get request
-            var options = {
-                host: 'api.quizlet.com',
-                path: '/2.0/users/' + user_name + '/sets',
-                headers: {'Authorization': 'Bearer ' + app.getUser().accessToken}
-            };
+            var options = getHttpRequestOptions(app, '/2.0/users/' + user_name + '/sets')
 
             // callback - aka what to do with the response
              https.get(options, (res) => {
@@ -120,11 +168,11 @@ restService.post('/', function(request, response) {
                 // once response data stops coming the request ends and we parse the JSON
                 res.on('end', () => {
                     var user = JSON.parse(raw_data); // all sets by user here into a JS object
-                    var user_set_found = true;
+                    var set_found = true;
                     var set;
 
                     if ('http_code' in user) {
-                        user_set_found = false; // check user 404
+                        set_found = false; // check user 404
                     } else {
                         for (var i in user) {
                             var modified_title = user[i].title.replace(/\s/g,'').toLowerCase();
@@ -134,10 +182,10 @@ restService.post('/', function(request, response) {
                             }
                         }
                         if (typeof set !== 'object') {
-                            user_set_found = false;
+                            set_found = false;
                         }
                     }
-                    if (user_set_found) {
+                    if (set_found) {
                         app.data.current_set = set;
                         app.data.ask_if_shuffled = false;
                         app.setContext(SHUFFLE_CONTEXT);
@@ -149,7 +197,7 @@ restService.post('/', function(request, response) {
                         app.setContext(ASK_FOR_SET_CONTEXT);
                         app.ask('I couldn\'t find the set you were looking for. Could you say it again?');
                     }
-                })
+                });
             }).on('error', (e) => {
                 app.tell('Unable to find set because of ' + e.message);
                 console.log('Error: ' + e.message);
