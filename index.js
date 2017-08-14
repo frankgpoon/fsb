@@ -182,7 +182,7 @@ restService.post('/', function(request, response) {
         app.data.position++;
         if (app.data.position == app.data.current_set.terms.length) {
             app.setContext(FINISHED_SET_CONTEXT);
-            app.ask('The correct definition is: + ' + correct_answer + ' We are done with the set. Would you like to be tested again?');
+            app.ask('The correct definition is: ' + correct_answer + ' We are done with the set. Would you like to be tested again?');
         } else {
             var term = app.data.current_set.terms[app.data.card_order[app.data.position]].term;
             app.setContext(QUESTION_ASKED_CONTEXT);
