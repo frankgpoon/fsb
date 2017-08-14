@@ -18,7 +18,7 @@ restService.use(bodyParser.json());
 const WELCOME_ACTION = 'input.welcome';
 const FIND_USER_SET_ACTION = 'find_user_set';
 const ASK_FIRST_QUESTION_ACTION = 'ask_first_question';
-const ASK_QUESTION_ACTION = 'ask_question';
+const GIVE_ANSWER_ACTION = 'give_answer';
 
 // Arguments
 const SET_ARGUMENT = 'set';
@@ -89,7 +89,6 @@ restService.post('/', function(request, response) {
             headers: {'Authorization': 'Bearer ' + app.getUser().accessToken}
         };
 
-        // TODO: Handle 404 errors with user
         // callback - aka what to do with the response
          https.get(options, (res) => {
             var raw_data = ''; // empty JSON
@@ -123,7 +122,6 @@ restService.post('/', function(request, response) {
                     console.log('current set has ' + app.data.current_set.terms.length + ' terms');
                     // verifys that the set works
                     app.ask('Okay. Do you want me to shuffle the cards in the set?');
-                    // TODO: possibly implement shuffling array of terms, and work on quizzing aspect
                     // saves the found set as current set
                 } else {
                     app.setContext(ASK_FOR_SET_CONTEXT);
@@ -160,12 +158,13 @@ restService.post('/', function(request, response) {
         app.ask('The first term is: ' + term + '.');
     }
 
-    function askQuestion(app) {
+    function giveAnswer(app) {
         // take in last user answer
         // tell correct answer
         // increment index in position array
         // say next term and set context to wait for answer intent
 
+        // TODO: verify user answer and compare with Quizlet answer
 
     }
 
@@ -174,7 +173,7 @@ restService.post('/', function(request, response) {
     actionMap.set(FIND_USER_SET_ACTION, findUserSet);
     actionMap.set(WELCOME_ACTION, welcomeMessage);
     actionMap.set(ASK_FIRST_QUESTION_ACTION, askFirstQuestion);
-    // actionMap.set(ASK_QUESTION_ACTION, askQuestion);
+    actionMap.set(GIVE_ANSWER_ACTION, giveAnswer);
 
     app.handleRequest(actionMap);
 });
