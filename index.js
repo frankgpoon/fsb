@@ -17,6 +17,7 @@ const dialogState = {};
 // Actions
 const FIND_USER_SET_ACTION = 'find_user_set';
 const WELCOME_ACTION = 'input.welcome';
+const ASK_QUESTION_ACTION = 'ask_question';
 
 // Arguments
 const SET_ARGUMENT = 'set';
@@ -120,6 +121,13 @@ restService.post('/', function(request, response) {
         // make position array with terms length
         // randomize values if shuffle, put it in order if not
         // say first term and set context to lead to wait for answer intent
+        var needShuffle = app.getArgument(DECISION_ARGUMENT);
+        app.data.position = 0;
+        if (needShuffle === 'yes') {
+            app.data.position = 0;
+
+        }
+
     }
 
     function askQuestion(app) {
@@ -127,12 +135,15 @@ restService.post('/', function(request, response) {
         // tell correct answer
         // increment index in position array
         // say next term and set context to wait for answer intent
+
+
     }
 
     const actionMap = new Map();
     //map functions to actions - .set(ACTION, FUNCTION)
     actionMap.set(FIND_USER_SET_ACTION, findUserSet);
     actionMap.set(WELCOME_ACTION, welcomeMessage);
+    actionMap.set(ASK_QUESTION_ACTION, firstQuestion);
 
     app.handleRequest(actionMap);
 });
