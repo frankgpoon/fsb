@@ -19,6 +19,7 @@ const WELCOME_ACTION = 'input.welcome';
 const FIND_USER_SET_ACTION = 'find_user_set';
 const ASK_FIRST_QUESTION_ACTION = 'ask_first_question';
 const GIVE_ANSWER_ACTION = 'give_answer';
+const FINISHED_SET_ACTION = 'finished_set';
 
 // Arguments
 const SET_ARGUMENT = 'set';
@@ -29,7 +30,7 @@ const DECISION_ARGUMENT = 'decision';
 const ASK_FOR_SET_CONTEXT = 'ask_for_set';
 const SHUFFLE_CONTEXT = 'shuffle';
 const QUESTION_ASKED_CONTEXT = 'question_asked';
-const FINISHED_SET_CONTEXT = 'finishe_set';
+const FINISHED_SET_CONTEXT = 'finished_set';
 
 // Lines
 
