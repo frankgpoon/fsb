@@ -29,6 +29,7 @@ const DECISION_ARGUMENT = 'decision';
 const ASK_FOR_SET_CONTEXT = 'ask_for_set';
 const SHUFFLE_CONTEXT = 'shuffle';
 const QUESTION_ASKED_CONTEXT = 'question_asked';
+const FINISHED_SET_CONTEXT = 'finishe_set';
 
 // Lines
 
@@ -173,6 +174,14 @@ restService.post('/', function(request, response) {
         // tell correct answer
         // increment index in position array
         // say next term and set context to wait for answer intent
+        var correct_answer = app.data.current_set.terms[app.data.card_order[app.data.position]].definition;
+        app.data.position++;
+        if (app.data.position == app.data.current_set.terms.length) {
+            app.setContext(FINISHED_SET_CONTEXT);
+            app.ask('The correct definition is + ' + correct_answer + '. We are done with the set. Would you like to be tested again?');
+        } else {
+            app.ask('The correct definition is ' + correct_answer);
+
 
         // TODO: verify user answer and compare with Quizlet answer
 
