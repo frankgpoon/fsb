@@ -104,8 +104,8 @@ restService.post('/', function(request, response) {
                     // TODO: possibly implement shuffling array of terms, and work on quizzing aspect
                     // saves the found set as current set
                 } else {
-                    app.ask('I couldn\'t find the set you were looking for. Could you say it again?');
                     app.setContext(ASK_FOR_SET_CONTEXT);
+                    app.ask('I couldn\'t find the set you were looking for. Could you say it again?');
                 }
             })
         }).on('error', (e) => {
@@ -115,8 +115,18 @@ restService.post('/', function(request, response) {
         });
     }
 
+    function askFirstQuestion(app) {
+        // take in user input to shuffle set or not
+        // make position array with terms length
+        // randomize values if shuffle, put it in order if not
+        // say first term and set context to lead to wait for answer intent
+    }
+
     function askQuestion(app) {
-        
+        // take in last user answer
+        // tell correct answer
+        // increment index in position array
+        // say next term and set context to wait for answer intent
     }
 
     const actionMap = new Map();
