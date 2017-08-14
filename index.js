@@ -19,11 +19,15 @@ const dialogState = {};
 const FIND_USER_SET_ACTION = 'find_user_set';
 const WELCOME_ACTION = 'input.welcome';
 const SIGN_IN = 'sign.in';
+
 // Arguments
 const SET_ARGUMENT = 'set';
 const USER_ARGUMENT = 'user';
+const DECISION_ARGUMENT = 'decision';
 
 // Contexts
+const ASK_FOR_SET_CONTEXT = 'ask_for_set';
+const SHUFFLE_CONTEXT = 'shuffle';
 
 // Lines
 
@@ -42,12 +46,14 @@ restService.post('/', function(request, response) {
             app.ask('Hi, welcome to Flash Cards. What Quizlet set would you like to be tested on?');
         } else {
             app.askForSignIn(dialogState); // uses phone for oauth linking
-            console.log(dialogState);
         }
     }
 
+    function askForSet(app) {
+        app.ask('What Quizlet set would you like to be tested on?');
+    }
+
     /*
-     * TODO: find how to get access token and test either public or private calls
      * GET requests for a user's sets and finds the matching set to user input via HTTP request
      * to Quizlet API. Asks user if cards in set should be shuffled. If unable to find user or set,
      * tells user.
@@ -97,6 +103,7 @@ restService.post('/', function(request, response) {
                 if (user_set_found) {
                     app.data.current_set = set;
                     app.data.ask_if_shuffled = false;
+                    app.setContext(SHUFFLE_CONTEXT);
                     console.log('current set has ' + app.data.current_set.terms.length + ' terms');
                     // verifys that the set works
                     app.ask('I\'ll be testing you on ' + set.title + ' by ' + set.created_by + '. Should I shuffle the cards?');
@@ -104,7 +111,8 @@ restService.post('/', function(request, response) {
                     // saves the found set as current set
                 } else {
                     // TODO: handle set not found with context/action that goes back to query_for_set intent
-                    app.tell('I couldn\'t find the set you were looking for.')
+                    app.tell('I couldn\'t find the set you were looking for.');
+                    app.setContext(ASK_FOR_SET_CONTEXT);
                 }
             })
         }).on('error', (e) => {
