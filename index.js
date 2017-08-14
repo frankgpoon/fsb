@@ -48,7 +48,9 @@ restService.post('/', function(request, response) {
 
     /*
      * TODO: find how to get access token and test either public or private calls
-     * GET requests for a user's sets and finds the matching set to user input
+     * GET requests for a user's sets and finds the matching set to user input via HTTP request
+     * to Quizlet API. Asks user if cards in set should be shuffled. If unable to find user or set,
+     * tells user.
      */
     function findUserSet(app) {
         // get user arg and string arg from intent
@@ -76,7 +78,7 @@ restService.post('/', function(request, response) {
             res.on('end', () => {
                 var user = JSON.parse(raw_data); // all sets by user here into a JS object
                 // processing through objects
-
+                console.log('user is type ' + typeof user + ' (should be object if user found)'); //XXX: testing for 404 user
                 var set;
                 for (var i in user) {
                     var modified_title = user[i].title.replace(/\s/g,'').toLowerCase();
@@ -86,11 +88,14 @@ restService.post('/', function(request, response) {
                     }
                 }
                 if (typeof set === 'object') {
+                    app.data.current_set = set;
+                    app.data.ask_if_shuffled = false;
+                    console.log('current set has ' + app.data.current_set.terms.length + ' terms');
+                    console.log('verifying if shuffling state works: type should be boolean - ' + typeof app.data.ask_if_shuffled);
                     // verifys that the set works
-                    app.ask('I found ' + set.title + ' by ' + set.created_by + '. Should I shuffle the cards?');
+                    app.ask('I\'ll be testing you on ' + set.title + ' by ' + set.created_by + '. Should I shuffle the cards?');
                     // TODO: possibly implement shuffling array of terms, and work on quizzing aspect
                     // saves the found set as current set
-                    app.data.current_set = set;
                 } else {
                     // TODO: handle set not found with context/action that goes back to query_for_set intent
                     app.tell('I couldn\'t find the set you were looking for.')
@@ -99,9 +104,12 @@ restService.post('/', function(request, response) {
         }).on('error', (e) => {
             app.tell('Unable to find set because of ' + e.message);
             console.log('Error: ' + e.message);
+            // possibly unused
         });
         // handle flow to various intents
     }
+
+
 
     const actionMap = new Map();
     //map functions to actions - .set(ACTION, FUNCTION)
