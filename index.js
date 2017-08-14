@@ -90,26 +90,24 @@ restService.post('/', function(request, response) {
         var user_name = app.getArgument(USER_ARGUMENT).replace(/\s/g,'').toLowerCase();
         var set_name;
 
-        /* if (user_name === '') { // no username is given by user
+        if (user_name === '') { // no username is given by user
             set_name = app.getArgument(SET_ARGUMENT);
-
 
             var options = {
                 host: 'api.quizlet.com',
                 path: '/2.0/search/sets?q=' + set_name,
-                client_id: 'yfX2Tq7BtT',
                 headers: {'Authorization': 'Bearer ' + app.getUser().accessToken}
             };
 
-
-        } */ if (true)  { // both username and set name are given
+            // TODO: sort out result and find first matching set
+            app.tell('Finding a set without a user is in testing');
+        } else  { // both username and set name are given
             set_name = app.getArgument(SET_ARGUMENT).replace(/\s/g,'').toLowerCase();
 
             // parameters for get request
             var options = {
                 host: 'api.quizlet.com',
                 path: '/2.0/users/' + user_name + '/sets',
-                //client_id: 'yfX2Tq7BtT',
                 headers: {'Authorization': 'Bearer ' + app.getUser().accessToken}
             };
 
