@@ -121,10 +121,13 @@ restService.post('/', function(request, response) {
         // make position array with terms length
         // randomize values if shuffle, put it in order if not
         // say first term and set context to lead to wait for answer intent
-        var needShuffle = app.getArgument(DECISION_ARGUMENT);
         app.data.position = 0;
-        if (needShuffle === 'yes') {
-            app.data.position = 0;
+        console.log('current set terms length is ' + app.data.current_set.terms.length);
+        var card_order = [];
+
+        var need_shuffle = app.getArgument(DECISION_ARGUMENT);
+        console.log(need_shuffle);
+        if (need_shuffle === 'yes') {
 
         }
 

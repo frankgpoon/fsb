@@ -1,0 +1,77 @@
+{
+    "id": 214241846,
+    "url": "/214241846/cse-terms-flash-cards/",
+    "title": "CSE terms",
+    "created_by": "frankpoon",
+    "term_count": 6,
+    "created_date": 1497506204,
+    "modified_date": 1497506547,
+    "published_date": 1497506547,
+    "has_images": false,
+    "subjects": [],
+    "visibility": "public",
+    "editable": "only_me",
+    "has_access": true,
+    "can_edit": true,
+    "description": "",
+    "lang_terms": "en",
+    "lang_definitions": "es",
+    "password_use": 0,
+    "password_edit": 0,
+    "access_type": 2,
+    "creator_id": 62218514,
+    "creator": {
+        "username": "frankpoon",
+        "account_type": "free",
+        "profile_image": "https://gimg.quizlet.com/-LvytNeZn8bo/AAAAAAAAAAI/AAAAAAAAJDA/if_mpWfKSZo/photo.jpg?sz=256",
+        "id": 62218514
+    },
+    "class_ids": [
+        4758845
+    ],
+    "terms": [
+        {
+            "id": 7050073775,
+            "term": "Hash Table",
+            "definition": "Data is matched to a hash, can retrieve instantaneously",
+            "image": null,
+            "rank": 0
+        },
+        {
+            "id": 7050074410,
+            "term": "Binary Tree",
+            "definition": "Each node has a left and a right linking to another node each, forming a tree with two children",
+            "image": null,
+            "rank": 1
+        },
+        {
+            "id": 7050076003,
+            "term": "Linked List",
+            "definition": "Each nodes has a next linking to another node, forming a linear list. Fast write times, slow read times.",
+            "image": null,
+            "rank": 2
+        },
+        {
+            "id": 7050080679,
+            "term": "Array List",
+            "definition": "A dynamically sized data structure using an array that is resized behind the scenes. Fast read times, slow ride times.",
+            "image": null,
+            "rank": 3
+        },
+        {
+            "id": 7050083393,
+            "term": "Set",
+            "definition": "A data structure without a particular order; data is not repeated and every object in the set is unique.",
+            "image": null,
+            "rank": 4
+        },
+        {
+            "id": 7050084039,
+            "term": "Map",
+            "definition": "Has a key that is connected to corresponding data; a key may be assigned to multiple data in the case of the data being a structure.",
+            "image": null,
+            "rank": 5
+        }
+    ],
+    "display_timestamp": false
+}
