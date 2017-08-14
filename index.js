@@ -125,13 +125,17 @@ restService.post('/', function(request, response) {
         app.data.position = 0;
         console.log('current set terms length is ' + app.data.current_set.terms.length);
         var card_order = [];
-
+        // populates the array with 0 - length.
+        for (var i = 0; i < app.data.current_set.terms.length; i++) {
+            card_order.push(i);
+        }
         var need_shuffle = app.getArgument(DECISION_ARGUMENT);
         console.log(need_shuffle);
         if (need_shuffle === 'yes') {
-
+            shuffle(card_order);
         }
-        app.tell('Still in testing');
+        var term = app.data.current_set.terms[position].term;
+        app.ask('The term is: ' + term) 
     }
 
     function askQuestion(app) {
@@ -148,7 +152,7 @@ restService.post('/', function(request, response) {
     actionMap.set(FIND_USER_SET_ACTION, findUserSet);
     actionMap.set(WELCOME_ACTION, welcomeMessage);
     actionMap.set(ASK_FIRST_QUESTION_ACTION, askFirstQuestion);
-    actionMap.set(ASK_QUESTION_ACTION, askQuestion);
+    // actionMap.set(ASK_QUESTION_ACTION, askQuestion);
 
     app.handleRequest(actionMap);
 });
