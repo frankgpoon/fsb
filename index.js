@@ -33,11 +33,14 @@ const FINISHED_SET_CONTEXT = 'finishe_set';
 
 // Lines
 
+// Other Useful Constants
+const SSML_START = '<speak>';
+const SSML_END = '</speak>';
+
 /* Helper Functions */
 
 /*
- * Knuth shuffle: https://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array
- * Uniformly shuffles the elements of an array.
+ * Knuth shuffle: Uniformly shuffles the elements of an array.
 */
 function shuffle(array) {
     let counter = array.length;
@@ -67,7 +70,7 @@ restService.post('/', function(request, response) {
 
     function welcomeMessage(app) {
         if (typeof app.getUser().accessToken === 'string') {
-            app.ask('Hi, welcome to Flash Cards. What Quizlet set would you like to be tested on?');
+            app.ask('Hi, welcome to Flash Cards! I can test you on Quizlet sets. What would you like to be tested on?');
         } else {
             app.askForSignIn(dialogState); // uses phone for oauth linking
         }
@@ -82,8 +85,6 @@ restService.post('/', function(request, response) {
         // get user arg and string arg from intent
         var set_name = app.getArgument(SET_ARGUMENT).replace(/\s/g,'').toLowerCase();
         var user_name = app.getArgument(USER_ARGUMENT).replace(/\s/g,'').toLowerCase();
-        console.log('set: ' + set_name);
-        console.log('user_name: ' + user_name);
 
         // parameters for get request
         var options = {
@@ -163,7 +164,9 @@ restService.post('/', function(request, response) {
         // asks first terms and waits for answer
         var term = app.data.current_set.terms[app.data.card_order[app.data.position]].term;
         app.setContext(QUESTION_ASKED_CONTEXT);
-        app.ask('The first term is ' + term + '.');
+        app.ask(SSML_START + 'Awesome. I\'ll list a term, and then you can answer.'
+        + ' Afterwards, I\'ll say the correct answer for you to check. <break time="3s"/>'
+        + '<p><s>The first term is ' + term + '.</s></p>' + SSML_END);
     }
 
     /*
@@ -182,11 +185,14 @@ restService.post('/', function(request, response) {
         app.data.position++;
         if (app.data.position == app.data.current_set.terms.length) {
             app.setContext(FINISHED_SET_CONTEXT);
-            app.ask('The correct definition is: ' + correct_answer + ' We are done with the set. Would you like to be tested again?');
+            app.ask(SSML_START + 'The correct answer is: <break time="2s"/>' + correct_answer
+            + '<break time="3s"/> <p><s>We are finished with this set.'
+            + ' Would you like to be tested again?</s></p>' + SSML_END);
         } else {
             var term = app.data.current_set.terms[app.data.card_order[app.data.position]].term;
             app.setContext(QUESTION_ASKED_CONTEXT);
-            app.ask('The correct definition is: ' + correct_answer + ' The next term is ' + term + '.');
+            app.ask(SSML_START + 'The correct answer is: <break time="2s"/>' + correct_answer
+            + '<break time="3s"/> <p><s>The next term is ' + term + '.</s></p>' + SSML_END);
         }
         // TODO: verify user answer and compare with Quizlet answer
 
