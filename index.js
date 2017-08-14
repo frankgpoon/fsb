@@ -152,3 +152,24 @@ restService.post('/', function(request, response) {
 restService.listen((process.env.PORT || 5000), function () {
     console.log('Server listening');
 });
+
+
+// Knuth shuffle: https://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array
+// Uniformly shuffles the elements of an array.
+function shuffle(array) {
+    let counter = array.length;
+
+    // While there are elements in the array
+    while (counter > 0) {
+        // Pick a random index
+        let index = Math.floor(Math.random() * counter);
+
+        // Decrease counter by 1
+        counter--;
+
+        // And swap the last element with it
+        let temp = array[counter];
+        array[counter] = array[index];
+        array[index] = temp;
+    }
+}
