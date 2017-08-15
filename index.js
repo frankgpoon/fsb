@@ -38,6 +38,7 @@ const FINISHED_SET_CONTEXT = 'finished_set';
 // Lines
 const ACKNOWLEDGEMENT_LINE = ['Okay. ', 'Alright. ', 'Sounds good. ', 'Awesome. ', 'Cool. '];
 const QUERY_FOR_SET_LINE = 'What set would you like to be tested on? '
+const ANSWER_SIMPLE_RESPONSE_LINE = 
 
 const EXIT_LINE_1 = ['I hope you enjoyed studying with me. ', 'Thanks for studying with me. '
                     , 'This was a fun study session. ']
@@ -95,6 +96,10 @@ function getRandomLine(line) {
         return line;
     }
 }
+
+/*
+ * Asks the 
+ */
 
 // Response Functions
 
@@ -299,19 +304,37 @@ restService.post('/', function(request, response) {
         if (correct_answer.charAt(correct_answer.length - 1) !== '.') {
             correct_answer = correct_answer + '.';
         }
-
         app.data.position++;
+        var ANSWER_SIMPLE_RESPONSE_LINE = SSML_START + 'The correct answer is: <break time="1s"/>' + correct_answer+ '<break time="2s"/>';
+
         if (app.data.position == app.data.current_set.terms.length) {
             app.setContext(FINISHED_SET_CONTEXT);
-            app.ask(SSML_START + 'The correct answer is: <break time="1s"/>' + correct_answer
-            + '<break time="2s"/> We are finished with this set. Would you like to be tested again?'
-            + SSML_END);
+            if (app.hasSurfaceCapability(app.hasSurfaceCapabilities.SCREEN_OUTPUT)) { // if the device can display images
+                app.ask(app.buildRichResponse()
+                    .addSimpleResponse(ANSWER_SIMPLE_RESPONSE_LINE  + 'We are finished with this set. Would you like to be tested again?'
+                                        + SSML_END)
+                    .addBasicCard(app.buildBasicCard(correct_answer)
+                        .setTitle('Answer')
+                    )
+                )
+            } else {
+                app.ask(ANSWER_SIMPLE_RESPONSE_LINE + 'We are finished with this set. Would you like to be tested again?'
+                + SSML_END);
+            }
         } else {
             var term = app.data.current_set.terms[app.data.card_order[app.data.position]].term;
             app.setContext(QUESTION_ASKED_CONTEXT);
-            app.ask(SSML_START + 'The correct answer is: <break time="1s"/>' + correct_answer
-            + '<break time="2s"/> The next term is ' + term + '.' + SSML_END);
-        }
+            if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
+                app.ask(app.buildRichResponse()
+                    .addSimpleResponse(
+                        ANSWER_SIMPLE_RESPONSE_LINE + 'The next term is ' + term + '.' + SSML_END)
+                    .addBasicCard(app.buildBasicCard(correct_answer)
+                        .setTitle('Answer')
+                    )
+
+            ) else {
+                app.ask(ANSWER_SIMPLE_RESPONSE_LINE + 'The next term is ' + term + '.' + SSML_END);
+            }
     }
 
     /*
