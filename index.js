@@ -87,8 +87,7 @@ function getHttpRequestOptions(app, path) {
  * Retrieves a random line from arrays of lines above.
  */
 function getRandomLine(line) {
-    console.log('line is type' + typeof line);
-    if (typeof line === 'array') {
+    if (typeof line === 'object') {
         let index = Math.floor(Math.random() * line.length);
         return line[index];
     } else {
@@ -106,7 +105,7 @@ function assignSet(app, set) {
     app.data.current_set = set;
     app.data.ask_if_shuffled = false;
     app.setContext(SHUFFLE_CONTEXT);
-    app.ask('' + getRandomLine(ACKNOWLEDGEMENT_LINE)
+    app.ask(getRandomLine(ACKNOWLEDGEMENT_LINE)
     + 'Do you want me to shuffle the cards in the set?');
 }
 
@@ -128,7 +127,7 @@ restService.post('/', function(request, response) {
     const app = new ApiAiApp({request: request, response: response});
 
     function exit(app) {
-        app.tell('' + getRandomLine(EXIT_LINE_1) + getRandomLine(EXIT_LINE_2));
+        app.tell(getRandomLine(EXIT_LINE_1) + getRandomLine(EXIT_LINE_2));
     }
 
     /*
@@ -304,10 +303,10 @@ restService.post('/', function(request, response) {
         var decision = app.getArgument(DECISION_ARGUMENT);
         if (decision == 'yes') {
             app.setContext(ASK_FOR_SET_CONTEXT);
-            app.ask('' + getRandomLine(ACKNOWLEDGEMENT_LINE)
+            app.ask(getRandomLine(ACKNOWLEDGEMENT_LINE)
             + QUERY_FOR_SET_LINE);
         } else {
-            app.tell('' + getRandomLine(EXIT_LINE_1) + getRandomLine(EXIT_LINE_2));
+            app.tell(getRandomLine(EXIT_LINE_1) + getRandomLine(EXIT_LINE_2));
         }
     }
 
