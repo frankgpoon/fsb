@@ -10,25 +10,16 @@ A Quizlet app for Google Assistant.
 
 Basic App Deployment   - https://developers.google.com/actions/apiai/
 
-Node.js Client Library - https://developers.google.com/actions/reference/nodejs/AssistantApp
+~~Node.js~~ Literal Cancer Client Library - https://developers.google.com/actions/reference/nodejs/AssistantApp
 
 ---
 
-# General Notes
-
-- Messages and speech are all handled through fulfillment functions.
-
-- Don't worry about making a fulfillment server, write some code first and deploy it slowly. Focus on a good conversational flow.
-
-- Checking consistency between API.AI and our functions will be a pain in the ass.
-
----
 
 # App Flow
 
 Google Assistant apps operate on a cycle between a function (fullfillment) and an intent (agent).
 
-Intents/Agent --> (through Actions) --> Functions/Fullfullment --> (through Contexts) --> Intents/Agent
+Intents/Agent (user says something )--> (through Actions) --> Functions/Fullfullment (app says something) --> (through Contexts) --> Intents/Agent
 
 Intents are basically when the app waits for the user to respond. Functions handle all the logic behind the app.
 
@@ -51,37 +42,19 @@ Data is stored between intents as ApiAiApp.data.* which is useful for storing se
 
 ## Notes
 
-- ~~Using ApiAiApp to link with API.AI~~
-
-- ~~An object is needed to store set data, but how much metadata should we store?~~ All metadata for future compatibility
-
 - Roadblock - No way to get user id. (Quizlet sends the user id with the access token in JSON format, but that is completely handled by Google. We need to find a loophole in the API to retrieve the current user id)
-
-## Intents Needed
-
-- ~~ask for Quizlet user and set~~
-
-- ~~ask for answer to read flash card~~
-
-- ~~basic yes/no (potentially more than two intents needed for different contexts)~~
-
-## Functions Needed
-
-- ~~find user and set~~
-
-- ~~find flash card and read it~~
-
-- ~~determine if user wants to play again~~
 
 ## To Do
 
 - Add rich responses for phones and other devices with screens
 
-- Work on fallback to be smoother
+- Give more personality
 
-- Work on finding sets without username
+    - Work on fallback to be smoother
 
-- Give more personality (add more lines and randomize them, add contextual lines, etc)
+    - Add help intent and fulfillment
+
+    - Build lines with arrays of sentences expressing something separate. (somewhat done)
 
 ## Future Work
 

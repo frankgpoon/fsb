@@ -21,6 +21,7 @@ const FIND_SET_ONLY_ACTION = 'find_set_only';
 const ASK_FIRST_QUESTION_ACTION = 'ask_first_question';
 const GIVE_ANSWER_ACTION = 'give_answer';
 const FINISHED_SET_ACTION = 'finished_set';
+const EXIT_ACTION = 'exit';
 
 // Arguments
 const SET_ARGUMENT = 'set';
@@ -34,12 +35,20 @@ const QUESTION_ASKED_CONTEXT = 'question_asked';
 const FINISHED_SET_CONTEXT = 'finished_set';
 
 // Lines
+const ACKNOWLEDGEMENT_LINE = ['Okay. ', 'Alright. ', 'Sounds good. ', 'Awesome. ', 'Cool. '];
+const QUERY_FOR_SET_LINE = 'What set would you like to be tested on? '
+
+const EXIT_LINE_1 = ['I hope you enjoyed studying with me. ', 'Thanks for studying with me. '
+                    , 'This was a fun study session. ']
+const EXIT_LINE_2 = ['Goodbye! ', 'Talk to you later! ', 'Until next time! ', 'See you soon! '];
 
 // Other Useful Constants
 const SSML_START = '<speak>';
 const SSML_END = '</speak>';
 
 /* Helper Functions */
+
+// Utility Functions
 
 /*
  * Knuth shuffle: Uniformly shuffles the elements of an array.
@@ -75,17 +84,29 @@ function getHttpRequestOptions(app, path) {
 }
 
 /*
+ * Retrieves a random line from arrays of lines above.
+ */
+function getRandomLine(line) {
+    if (typeof line === 'array') {
+        let index = Math.floor(Math.random() * line.length);
+        return line[index];
+    } else {
+        return line;
+    }
+}
+
+// Response Functions
+
+/*
  * Assigns given set to app.data for retrieval, sets the context for shuffling and asks user if
  * cards should be shuffled.
  */
 function assignSet(app, set) {
     app.data.current_set = set;
-    console.log('set is typeof ' + typeof set);
-    console.log('current set is typeof' + typeof app.data.current_set);
     app.data.ask_if_shuffled = false;
     app.setContext(SHUFFLE_CONTEXT);
-    console.log('current set has ' + app.data.current_set.terms.length + ' terms');
-    app.ask('Okay. Do you want me to shuffle the cards in the set?');
+    app.ask(getRandomLine(ACKNOWLEDGEMENT_LINE)
+    + 'Do you want me to shuffle the cards in the set?');
 }
 
 /*
@@ -105,12 +126,19 @@ restService.post('/', function(request, response) {
 
     const app = new ApiAiApp({request: request, response: response});
 
+    function exit(app) {
+        app.tell(getRandomLine(EXIT_LINE_1) + getRandomLine(EXIT_LINE_2));
+    }
+
+    /*
+     * Greets user and asks for a set, or prompts for sign in.
+     */
     function welcomeMessage(app) {
         if (typeof app.getUser().accessToken === 'string') {
-            app.ask('Hi, welcome to Flash Cards! I can test you on Quizlet sets.'
-            + ' What would you like to be tested on?');
+            app.ask('Welcome to Flash Cards! I can test you on Quizlet sets.'
+            + QUERY_FOR_SET_LINE);
         } else {
-            app.askForSignIn(dialogState); // uses phone for oauth linking
+            app.askForSignIn(); // uses phone for oauth linking
         }
     }
 
@@ -167,6 +195,10 @@ restService.post('/', function(request, response) {
         });
     }
 
+    /*
+     * Finds a set using the search endpoint and uses the first result returned, telling the user
+     * if no sets are found.
+     */
     function findSetOnly(app) {
         set_name = app.getArgument(SET_ARGUMENT).replace(/\s/g,'%20');
 
@@ -225,11 +257,9 @@ restService.post('/', function(request, response) {
         if (need_shuffle === 'yes') {
             shuffle(card_order);
         }
-        console.log(card_order);
 
         app.data.card_order = card_order;
         app.data.position = 0;
-        console.log(app.data.card_order[app.data.position]);
 
         // asks first terms and waits for answer
         var term = app.data.current_set.terms[app.data.card_order[app.data.position]].term;
@@ -266,24 +296,28 @@ restService.post('/', function(request, response) {
         }
     }
 
+    /*
+     * Either ends convo or asks for another set.
+     */
     function finishedSet(app) {
         var decision = app.getArgument(DECISION_ARGUMENT);
         if (decision == 'yes') {
             app.setContext(ASK_FOR_SET_CONTEXT);
-            app.ask('Alright. What set would you like to be tested on?')
+            app.ask(getRandomLine(ACKNOWLEDGEMENT_LINE)
+            + QUERY_FOR_SET_LINE)
         } else {
-            app.tell('This was a fun study session! Goodbye.');
+            app.tell(getRandomLine(EXIT_LINE_1) + getRandomLine(EXIT_LINE_2));
         }
     }
 
     const actionMap = new Map();
-    //map functions to actions - .set(ACTION, FUNCTION)
     actionMap.set(FIND_USER_SET_ACTION, findUserSet);
     actionMap.set(FIND_SET_ONLY_ACTION, findSetOnly);
     actionMap.set(WELCOME_ACTION, welcomeMessage);
     actionMap.set(ASK_FIRST_QUESTION_ACTION, askFirstQuestion);
     actionMap.set(GIVE_ANSWER_ACTION, giveAnswer);
     actionMap.set(FINISHED_SET_ACTION, finishedSet);
+    actionMap.set(EXIT_ACTION, exit);
 
     app.handleRequest(actionMap);
 });
