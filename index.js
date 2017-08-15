@@ -41,6 +41,7 @@ const QUERY_FOR_SET_LINE = 'What set would you like to be tested on? '
 const EXIT_LINE_1 = ['I hope you enjoyed studying with me. ', 'Thanks for studying with me. '
                     , 'This was a fun study session. ']
 const EXIT_LINE_2 = ['Goodbye! ', 'Talk to you later! ', 'Until next time! ', 'See you soon! '];
+const END_OF_SET_LINE = 'We are finished with this set. Would you like to be tested again?';
 
 // Other Useful Constants
 const SSML_START = '<speak>';
@@ -96,8 +97,18 @@ function getRandomLine(line) {
 }
 
 /*
- * Asks the
+ * Formats the correct amswer to a SimpleResponse.
  */
+function simpleResponseAnswer(correct_answer) {
+    return 'The correct answer is: <break time="1s"/>' + correct_answer + ' <break time="2s"/>';
+}
+
+/*
+ * Formats the next term into a statement.
+ */
+function nextTerm(term) {
+    return 'The next term is ' + term + '.';
+}
 
 // Response Functions
 
@@ -284,9 +295,8 @@ restService.post('/', function(request, response) {
         // asks first terms and waits for answer
         var term = app.data.current_set.terms[app.data.card_order[app.data.position]].term;
         app.setContext(QUESTION_ASKED_CONTEXT);
-        app.ask(SSML_START + 'Awesome. I\'ll list a term, and then you can answer.'
-        + ' Afterwards, I\'ll say the correct answer for you to check. <break time="2s"/>'
-        + 'The first term is ' + term + '.' + SSML_END);
+        app.ask(SSML_START + ACKNOWLEDGEMENT_LINE + 'I\'ll list a term, and then you can answer. '
+                + 'The first term is ' + term + '.' + SSML_END);
     }
 
     /*
@@ -304,37 +314,37 @@ restService.post('/', function(request, response) {
             correct_answer = correct_answer + '.';
         }
         app.data.position++;
-        var ANSWER_SIMPLE_RESPONSE_LINE = SSML_START + 'The correct answer is: <break time="1s"/>' + correct_answer+ '<break time="2s"/>';
 
         if (app.data.position == app.data.current_set.terms.length) {
             app.setContext(FINISHED_SET_CONTEXT);
-            if (app.hasSurfaceCapability(app.hasSurfaceCapabilities.SCREEN_OUTPUT)) { // if the device can display images
-                app.ask(app.buildRichResponse()
-                    .addSimpleResponse(ANSWER_SIMPLE_RESPONSE_LINE  + 'We are finished with this set. Would you like to be tested again?'
-                                        + SSML_END)
-                    .addBasicCard(app.buildBasicCard(correct_answer)
-                        .setTitle(old_term)
+            if (app.hasSurfaceCapability(app.hasSurfaceCapabilities.SCREEN_OUTPUT)) { // if screen
+                app.ask(app.buildRichResponse().addSimpleResponse(
+                    'Here is the answer.' // first chat bubble
+                ).addBasicCard(
+                    app.buildBasicCard(correct_answer).setTitle(old_term) // card
+                ).addSimpleResponse(
+                    END_OF_SET_LINE// second chat bubble
                     )
                 )
             } else {
-                app.ask(ANSWER_SIMPLE_RESPONSE_LINE + 'We are finished with this set. Would you like to be tested again?'
-                + SSML_END);
+                app.ask(SSML_START + simpleResponseAnswer(correct_answer)
+                        + END_OF_SET_LINE + SSML_END);
             }
         } else {
             var term = app.data.current_set.terms[app.data.card_order[app.data.position]].term;
             app.setContext(QUESTION_ASKED_CONTEXT);
             if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
-                app.ask(app.buildRichResponse()
-                    .addSimpleResponse(
-                        'Here is the answer.'
+                app.ask(app.buildRichResponse().addSimpleResponse(
+                        'Here is the answer.' // first chat bubble
                     ).addBasicCard(
-                        app.buildBasicCard(correct_answer).setTitle(old_term)
+                        app.buildBasicCard(correct_answer).setTitle(old_term) // card
                     ).addSimpleResponse(
-                        'The next term is' + term + '.'
+                        nextTerm(term) // second chat bubble
                     )
                 )
             } else {
-                app.ask(ANSWER_SIMPLE_RESPONSE_LINE + 'The next term is ' + term + '.' + SSML_END);
+                app.ask(SSML_START + simpleResponseAnswer(correct_answer) + nextTerm(term)
+                        + SSML_END);
             }
         }
     }

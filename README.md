@@ -46,7 +46,7 @@ Data is stored between intents as ApiAiApp.data.* which is useful for storing se
 
 ## To Do
 
-- Add rich responses for phones and other devices with screens
+- Add rich responses for phones and other devices with screens (basically done)
 
 - Give more personality
 
