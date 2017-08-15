@@ -329,8 +329,8 @@ restService.post('/', function(request, response) {
                     .addBasicCard(app.buildBasicCard(correct_answer)
                         .setTitle('Answer')
                     )
-
-            ) else {
+                ) 
+            } else {
                 app.ask(ANSWER_SIMPLE_RESPONSE_LINE + 'The next term is ' + term + '.' + SSML_END);
             }
     }
