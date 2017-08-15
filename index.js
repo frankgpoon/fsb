@@ -100,8 +100,9 @@ function getRandomLine(line) {
 /*
  * Formats the correct amswer to a SimpleResponse.
  */
-function formatAnswer(correct_answer) {
-    return 'The correct answer is: <break time="1s"/>' + correct_answer + ' <break time="2s"/>';
+function formatAnswer(term, correct_answer) {
+    return 'Here is the answer for ' + term + ': <break time="1s"/>' + correct_answer
+    + ' <break time="2s"/>';
 }
 
 /*
@@ -334,15 +335,13 @@ restService.post('/', function(request, response) {
             app.setContext(NO_MORE_TERMS_CONTEXT);
             if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) { // if screen
                 app.ask(app.buildRichResponse().addSimpleResponse(
-                    SSML_START + 'Here is the answer. <break time="2s"/>' + SSML_END // bubble
-                ).addBasicCard(
-                    app.buildBasicCard(correct_answer).setTitle(old_term) // card
+                    SSML_START + formatAnswer(term, correct_answer) + SSML_END // bubble
                 ).addSimpleResponse(
                     END_OF_SET_LINE// second bubble
                     )
                 )
             } else {
-                app.ask(SSML_START + formatAnswer(correct_answer)
+                app.ask(SSML_START + formatAnswer(term, correct_answer)
                         + END_OF_SET_LINE + SSML_END);
             }
         } else {
@@ -350,15 +349,13 @@ restService.post('/', function(request, response) {
             app.setContext(QUESTION_ASKED_CONTEXT);
             if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
                 app.ask(app.buildRichResponse().addSimpleResponse(
-                        SSML_START + 'Here is the answer. <break time="2s"/>' + SSML_END // bubble
-                    ).addBasicCard(
-                        app.buildBasicCard(correct_answer).setTitle(old_term) // card
+                        SSML_START + formatAnswer(term, correct_answer) + SSML_END // bubble
                     ).addSimpleResponse(
                         formatTerm(term, false) // second bubble
                     )
                 )
             } else {
-                app.ask(SSML_START + formatAnswer(correct_answer) + formatTerm(term, false)
+                app.ask(SSML_START + formatAnswer(term, correct_answer) + formatTerm(term, false)
                         + SSML_END);
             }
         }
