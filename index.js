@@ -333,6 +333,7 @@ restService.post('/', function(request, response) {
             } else {
                 app.ask(ANSWER_SIMPLE_RESPONSE_LINE + 'The next term is ' + term + '.' + SSML_END);
             }
+        }
     }
 
     /*
