@@ -320,9 +320,9 @@ restService.post('/', function(request, response) {
         }
         app.data.position++;
 
-        if (app.data.position == app.data.current_set.terms.length) {
+        if (app.data.position === app.data.current_set.terms.length) {
             app.setContext(NO_MORE_TERMS_CONTEXT);
-            if (app.hasSurfaceCapability(app.hasSurfaceCapabilities.SCREEN_OUTPUT)) { // if screen
+            if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) { // if screen
                 app.ask(app.buildRichResponse().addSimpleResponse(
                     SSML_START + 'Here is the answer. <break time="2s"/>' + SSML_END // bubble
                 ).addBasicCard(
