@@ -53,6 +53,8 @@ Data is stored between intents as ApiAiApp.data.* which is useful for storing se
     - Work on fallback to be smoother
 
     - Build lines with arrays of sentences expressing something separate. (somewhat done)
+   
+- Migrate to Google Cloud for that sweet $700 credit baby
 
 ## Future Work
 
