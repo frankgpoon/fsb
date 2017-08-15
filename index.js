@@ -80,6 +80,8 @@ function getHttpRequestOptions(app, path) {
  */
 function assignSet(app, set) {
     app.data.current_set = set;
+    console.log('set is typeof ' + typeof set);
+    console.log('current set is typeof' + typeof app.data.current_set);
     app.data.ask_if_shuffled = false;
     app.setContext(SHUFFLE_CONTEXT);
     console.log('current set has ' + app.data.current_set.terms.length + ' terms');
@@ -167,7 +169,7 @@ restService.post('/', function(request, response) {
 
     function findSetOnly(app) {
         set_name = app.getArgument(SET_ARGUMENT).replace(/\s/g,'%20');
-        
+
         var options = getHttpRequestOptions(app, '/2.0/search/sets?q=' + set_name);
 
         https.get(options, (res) => {
@@ -178,10 +180,10 @@ restService.post('/', function(request, response) {
             // once response data stops coming the request ends and we parse the JSON
             res.on('end', () => {
                 var query = JSON.parse(raw_data); // processes data received from query
-                var set_id; // assigned if matching set is found
 
                 if (query.total_results !== 0) {
-                        set_id = query.sets[0].id;
+                        var set_id = query.sets[0].id;
+                        console.log('set id is ' + set_id);
                         var set_options = getHttpRequestOptions(app, '/2.0/sets/' + set_id);
 
                         https.get(options, (res) => {
@@ -190,7 +192,10 @@ restService.post('/', function(request, response) {
                                 raw_data += chunk;
                             });
                             res.on('end', () => {
+                                console.log('found raw data');
                                 var set = JSON.parse(raw_data);
+                                console.log('var set is typeof ' + typeof set);
+                                console.log(set);
                                 assignSet(app, set);
                             });
                         }).on('error', (e) => {
