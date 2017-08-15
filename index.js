@@ -18,6 +18,7 @@ restService.use(bodyParser.json());
 const WELCOME_ACTION = 'input.welcome';
 const FIND_USER_SET_ACTION = 'find_user_set';
 const FIND_SET_ONLY_ACTION = 'find_set_only';
+const RELOAD_SET_ACTION = 'reload_set';
 const ASK_FIRST_QUESTION_ACTION = 'ask_first_question';
 const GIVE_ANSWER_ACTION = 'give_answer';
 const FINISHED_SET_ACTION = 'finished_set';
@@ -167,6 +168,7 @@ restService.post('/', function(request, response) {
      */
     function welcomeMessage(app) {
         if (typeof app.getUser().accessToken === 'string') {
+            console.log('current set loaded is ' + app.data.current_set);
             app.ask('Welcome to Flash Cards! I can test you on Quizlet sets. '
             + QUERY_FOR_SET_LINE);
         } else {
@@ -277,6 +279,14 @@ restService.post('/', function(request, response) {
        });
     }
 
+    function reloadSet(app) {
+        if (typeof app.data.current_set === 'object') {
+            assignSet(app, app.data.current_set);
+        } else {
+            setNotFound(app);
+        }
+    }
+
     /*
      * Takes the set of terms and gives an order to them to stimulate shuffling if needed.
      * Asks the first question/reads the first term in the set.
@@ -371,6 +381,7 @@ restService.post('/', function(request, response) {
     const actionMap = new Map();
     actionMap.set(FIND_USER_SET_ACTION, findUserSet);
     actionMap.set(FIND_SET_ONLY_ACTION, findSetOnly);
+    actionMap.set(RELOAD_SET_ACTION, reloadSet);
     actionMap.set(WELCOME_ACTION, welcomeMessage);
     actionMap.set(ASK_FIRST_QUESTION_ACTION, askFirstQuestion);
     actionMap.set(GIVE_ANSWER_ACTION, giveAnswer);
