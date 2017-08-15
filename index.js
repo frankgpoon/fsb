@@ -183,19 +183,15 @@ restService.post('/', function(request, response) {
 
                 if (query.total_results !== 0) {
                         var set_id = query.sets[0].id;
-                        console.log('set id is ' + set_id);
                         var set_options = getHttpRequestOptions(app, '/2.0/sets/' + set_id);
 
-                        https.get(options, (res) => {
+                        https.get(set_options, (res) => {
                             var raw_data = '';
                             res.on('data', (chunk) => {
                                 raw_data += chunk;
                             });
                             res.on('end', () => {
-                                console.log('found raw data');
                                 var set = JSON.parse(raw_data);
-                                console.log('var set is typeof ' + typeof set);
-                                console.log(set);
                                 assignSet(app, set);
                             });
                         }).on('error', (e) => {
