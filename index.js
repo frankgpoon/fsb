@@ -139,11 +139,9 @@ restService.post('/', function(request, response) {
      */
     function help(app) {
         app.setContext(ASK_FOR_SET_CONTEXT);
-        app.ask('I can test you on Quizlet sets. '
-        + 'All you have to do is tell me the name of the set you want, and I can try to find it.'
-        + 'I find sets more easily if you tell me the username as well though.'
-        + 'After I find your set, I can shuffle it if you want. Then, I\'ll list terms, ' 
-        + 'which you can answer. Afterwards, I\'ll say the correct answer for you to check.');
+        app.ask('I can find Quizlet sets using a set name, but giving me a username helps a lot. '
+        + 'After I find your set, I can shuffle it if you want. Then, I can read terms, '
+        + 'After you answer, I can read the correct answer for you to check.');
     }
 
     /*
@@ -154,6 +152,7 @@ restService.post('/', function(request, response) {
             app.ask('Welcome to Flash Cards! I can test you on Quizlet sets. '
             + QUERY_FOR_SET_LINE);
         } else {
+            app.tell('Sign in on your phone or another device to continue.');
             app.askForSignIn(); // uses phone for oauth linking
         }
     }
