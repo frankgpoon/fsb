@@ -17,6 +17,7 @@ restService.use(bodyParser.json());
 // Actions
 const WELCOME_ACTION = 'input.welcome';
 const FIND_USER_SET_ACTION = 'find_user_set';
+const FIND_SET_ONLY_ACTION = 'find_set_only';
 const ASK_FIRST_QUESTION_ACTION = 'ask_first_question';
 const GIVE_ANSWER_ACTION = 'give_answer';
 const FINISHED_SET_ACTION = 'finished_set';
@@ -119,101 +120,94 @@ restService.post('/', function(request, response) {
     function findUserSet(app) {
         // get user arg and string arg from intent
         var user_name = app.getArgument(USER_ARGUMENT).replace(/\s/g,'').toLowerCase();
-        var set_name;
+        var set_name = app.getArgument(SET_ARGUMENT).replace(/\s/g,'').toLowerCase();
 
-        console.log('user is ' + user_name);
+        // parameters for get request
+        var options = getHttpRequestOptions(app, '/2.0/users/' + user_name + '/sets')
 
-        if (user_name === '') { // no username is given by user
-            set_name = app.getArgument(SET_ARGUMENT);
-            console.log('set is ' + set_name);
-
-            var options = getHttpRequestOptions(app, '/2.0/search/sets?q=' + set_name);
-
-            https.get(options, (res) => {
-                    var raw_data = ''; // empty JSON
-                    res.on('data', (chunk) => {
-                        raw_data += chunk;
-                    });
-                    // once response data stops coming the request ends and we parse the JSON
-                    res.on('end', () => {
-                        var query = JSON.parse(raw_data); // processes data received from query
-                        var set_id; // assigned if matching set is found
-
-                        if (query.total_results !== 0) {
-                                set_id = query.sets[0].id;
-                                var set_options = getHttpRequestOptions(app, '/2.0/sets/' + set_id);
-
-                                https.get(options, (res) => {
-                                    var raw_data = '';
-                                    res.on('data', (chunk) => {
-                                        raw_data += chunk;
-                                    });
-                                    res.on('end', () => {
-                                        var set = JSON.parse(raw_data);
-                                        assignSet(app, set);
-                                    });
-                                }).on('error', (e) => {
-                                    app.tell('Unable to find set because of ' + e.message);
-                                    console.log('Error: ' + e.message);
-                                    // possibly unused
-                                });
-                        } else {
-                            setNotFound(app);
-                        }
-                    });
-                    }).on('error', (e) => {
-                        app.tell('Unable to find set because of ' + e.message);
-                        console.log('Error: ' + e.message);
-                        // possibly unused
-                   });
-        } else  { // both username and set name are given
-            set_name = app.getArgument(SET_ARGUMENT).replace(/\s/g,'').toLowerCase();
-
-            // parameters for get request
-            var options = getHttpRequestOptions(app, '/2.0/users/' + user_name + '/sets')
-
-            // callback - aka what to do with the response
-             https.get(options, (res) => {
-                var raw_data = ''; // empty JSON
-                res.on('data', (chunk) => {
-                    raw_data += chunk; // data arrives chunk by chunk
-                });
-                // once response data stops coming the request ends and we parse the JSON
-                res.on('end', () => {
-                    var user = JSON.parse(raw_data); // all sets by user here into a JS object
-                    var set_found = true;
-                    var set;
-
-                    if ('http_code' in user) {
-                        set_found = false; // check user 404
-                    } else {
-                        for (var i in user) {
-                            var modified_title = user[i].title.replace(/\s/g,'').toLowerCase();
-                            if (modified_title === set_name) {
-                                set = user[i]; // finds first matching set by username and breaks
-                                break;
-                            }
-                        }
-                        if (typeof set !== 'object') {
-                            set_found = false;
-                        }
-                    }
-                    if (set_found) {
-                        app.data.current_set = set;
-                        assignSet(app, set);
-                    } else {
-                        setNotFound(app);
-                    }
-                });
-            }).on('error', (e) => {
-                app.tell('Unable to find set because of ' + e.message);
-                console.log('Error: ' + e.message);
-                // possibly unused
+        // callback - aka what to do with the response
+         https.get(options, (res) => {
+            var raw_data = ''; // empty JSON
+            res.on('data', (chunk) => {
+                raw_data += chunk; // data arrives chunk by chunk
             });
-        }
+            // once response data stops coming the request ends and we parse the JSON
+            res.on('end', () => {
+                var user = JSON.parse(raw_data); // all sets by user here into a JS object
+                var set_found = true;
+                var set;
 
+                if ('http_code' in user) {
+                    set_found = false; // check user 404
+                } else {
+                    for (var i in user) {
+                        var modified_title = user[i].title.replace(/\s/g,'').toLowerCase();
+                        if (modified_title === set_name) {
+                            set = user[i]; // finds first matching set by username and breaks
+                            break;
+                        }
+                    }
+                    if (typeof set !== 'object') {
+                        set_found = false;
+                    }
+                }
+                if (set_found) {
+                    app.data.current_set = set;
+                    assignSet(app, set);
+                } else {
+                    setNotFound(app);
+                }
+            });
+        }).on('error', (e) => {
+            app.tell('Unable to find set because of ' + e.message);
+            console.log('Error: ' + e.message);
+            // possibly unused
+        });
+    }
 
+    function findSetOnly(app) {
+        set_name = app.getArgument(SET_ARGUMENT);
+        console.log('set is ' + set_name);
 
+        var options = getHttpRequestOptions(app, '/2.0/search/sets?q=' + set_name);
+
+        https.get(options, (res) => {
+            var raw_data = ''; // empty JSON
+            res.on('data', (chunk) => {
+                raw_data += chunk;
+            });
+            // once response data stops coming the request ends and we parse the JSON
+            res.on('end', () => {
+                var query = JSON.parse(raw_data); // processes data received from query
+                var set_id; // assigned if matching set is found
+
+                if (query.total_results !== 0) {
+                        set_id = query.sets[0].id;
+                        var set_options = getHttpRequestOptions(app, '/2.0/sets/' + set_id);
+
+                        https.get(options, (res) => {
+                            var raw_data = '';
+                            res.on('data', (chunk) => {
+                                raw_data += chunk;
+                            });
+                            res.on('end', () => {
+                                var set = JSON.parse(raw_data);
+                                assignSet(app, set);
+                            });
+                        }).on('error', (e) => {
+                            app.tell('Unable to find set because of ' + e.message);
+                            console.log('Error: ' + e.message);
+                            // possibly unused
+                        });
+                } else {
+                    setNotFound(app);
+                }
+            });
+        }).on('error', (e) => {
+            app.tell('Unable to find set because of ' + e.message);
+            console.log('Error: ' + e.message);
+            // possibly unused
+       });
     }
 
     /*
@@ -285,6 +279,7 @@ restService.post('/', function(request, response) {
     const actionMap = new Map();
     //map functions to actions - .set(ACTION, FUNCTION)
     actionMap.set(FIND_USER_SET_ACTION, findUserSet);
+    actionMap.set(FIND_SET_ONLY_ACTION, findSetOnly);
     actionMap.set(WELCOME_ACTION, welcomeMessage);
     actionMap.set(ASK_FIRST_QUESTION_ACTION, askFirstQuestion);
     actionMap.set(GIVE_ANSWER_ACTION, giveAnswer);
