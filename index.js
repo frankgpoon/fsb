@@ -22,6 +22,7 @@ const ASK_FIRST_QUESTION_ACTION = 'ask_first_question';
 const GIVE_ANSWER_ACTION = 'give_answer';
 const FINISHED_SET_ACTION = 'finished_set';
 const EXIT_ACTION = 'exit';
+const HELP_ACTION = 'help';
 
 // Arguments
 const SET_ARGUMENT = 'set';
@@ -126,8 +127,23 @@ restService.post('/', function(request, response) {
 
     const app = new ApiAiApp({request: request, response: response});
 
+    /*
+     * Exits the app.
+     */
     function exit(app) {
         app.tell(getRandomLine(EXIT_LINE_1) + getRandomLine(EXIT_LINE_2));
+    }
+
+    /*
+     * Explains to the user what flash cards can do.
+     */
+    function help(app) {
+        app.setContext(ASK_FOR_SET_CONTEXT);
+        app.ask('I can test you on Quizlet sets. '
+        + 'All you have to do is tell me the name of the set you want, and I can try to find it.'
+        + 'I find sets more easily if you tell me the username as well though.'
+        + 'After I find your set, I can shuffle it if you want. Then, I\'ll list terms, ' 
+        + 'which you can answer. Afterwards, I\'ll say the correct answer for you to check.');
     }
 
     /*
@@ -277,7 +293,8 @@ restService.post('/', function(request, response) {
         // tell correct answer
         // increment index in position array
         // say next term and set context to wait for answer intent
-        var correct_answer = app.data.current_set.terms[app.data.card_order[app.data.position]].definition;
+        var correct_answer =
+            app.data.current_set.terms[app.data.card_order[app.data.position]].definition;
         if (correct_answer.charAt(correct_answer.length - 1) !== '.') {
             correct_answer = correct_answer + '.';
         }
@@ -318,6 +335,7 @@ restService.post('/', function(request, response) {
     actionMap.set(GIVE_ANSWER_ACTION, giveAnswer);
     actionMap.set(FINISHED_SET_ACTION, finishedSet);
     actionMap.set(EXIT_ACTION, exit);
+    actionMap.set(HELP_ACTION, help)
 
     app.handleRequest(actionMap);
 });

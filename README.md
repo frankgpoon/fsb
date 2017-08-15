@@ -52,8 +52,6 @@ Data is stored between intents as ApiAiApp.data.* which is useful for storing se
 
     - Work on fallback to be smoother
 
-    - Add help intent and fulfillment
-
     - Build lines with arrays of sentences expressing something separate. (somewhat done)
 
 ## Future Work
