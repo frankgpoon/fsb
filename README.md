@@ -51,26 +51,40 @@ Data is stored between intents as ApiAiApp.data.* which is useful for storing se
 
 ## Notes
 
-- Using ApiAiApp to link with API.AI
+- ~~Using ApiAiApp to link with API.AI~~
 
-- An object is needed to store set data, but how much metadata should we store?
+- ~~An object is needed to store set data, but how much metadata should we store?~~ All metadata for future compatibility
 
 - Roadblock - No way to get user id. (Quizlet sends the user id with the access token in JSON format, but that is completely handled by Google. We need to find a loophole in the API to retrieve the current user id)
 
 ## Intents Needed
 
-- ask for Quizlet user and set
+- ~~ask for Quizlet user and set~~
 
-- ask for answer to read flash card
+- ~~ask for answer to read flash card~~
 
-- basic yes/no (potentially more than two intents needed for different contexts)
+- ~~basic yes/no (potentially more than two intents needed for different contexts)~~
 
 ## Functions Needed
 
-- find user and set
+- ~~find user and set~~
 
-- find flash card and read it
+- ~~find flash card and read it~~
 
-- check answer (optional)
+- ~~determine if user wants to play again~~
 
-- determine if user wants to play again
+## To Do
+
+- Add rich responses for phones and other devices with screens
+
+- Work on fallback to be smoother
+
+- Work on finding sets without username
+
+- Give more personality (add more lines and randomize them, add contextual lines, etc)
+
+## Future Work
+
+- Answer checking (may be hard)
+
+- Collect limited user data and keep a history of tested sets by user for faster set retrieval/more personalized experience

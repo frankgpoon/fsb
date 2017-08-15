@@ -1,8 +1,5 @@
 /*
  * Main node.js functions for Flash Cards
- * TODO: add rich responses for phones
- * work on fallback
- * give flash cards personality (add more prompt/line variation)
  */
 
 // Starting the app
@@ -64,6 +61,9 @@ function shuffle(array) {
     }
 }
 
+/*
+ * Uses given path/API call and returns an object with headers for Quizlet HTTP requests.
+ */
 function getHttpRequestOptions(app, path) {
     var options = {
         host: 'api.quizlet.com',
@@ -71,6 +71,27 @@ function getHttpRequestOptions(app, path) {
         headers: {'Authorization': 'Bearer ' + app.getUser().accessToken}
     };
     return options;
+}
+
+/*
+ * Assigns given set to app.data for retrieval, sets the context for shuffling and asks user if
+ * cards should be shuffled.
+ */
+function assignSet(app, set) {
+    app.data.current_set = set;
+    app.data.ask_if_shuffled = false;
+    app.setContext(SHUFFLE_CONTEXT);
+    console.log('current set has ' + app.data.current_set.terms.length + ' terms');
+    app.ask('Okay. Do you want me to shuffle the cards in the set?');
+}
+
+/*
+ * Tells the user that the set was not found and sets context to ask for another set,
+ */
+function setNotFound(app) {
+    app.setContext(ASK_FOR_SET_CONTEXT);
+    app.ask('I couldn\'t find the set you were looking for.'
+    + ' Could you say it again?');
 }
 
 /* Main Function - includes all fulfillment for actions */
@@ -83,7 +104,8 @@ restService.post('/', function(request, response) {
 
     function welcomeMessage(app) {
         if (typeof app.getUser().accessToken === 'string') {
-            app.ask('Hi, welcome to Flash Cards! I can test you on Quizlet sets. What would you like to be tested on?');
+            app.ask('Hi, welcome to Flash Cards! I can test you on Quizlet sets.'
+            + ' What would you like to be tested on?');
         } else {
             app.askForSignIn(dialogState); // uses phone for oauth linking
         }
@@ -100,7 +122,6 @@ restService.post('/', function(request, response) {
         var set_name;
 
         if (user_name === '') { // no username is given by user
-            // TODO: implement history/data collection and smart finding sets
             set_name = app.getArgument(SET_ARGUMENT);
 
             var options = getHttpRequestOptions(app, '/2.0/search/sets?q=' + set_name);
@@ -108,33 +129,25 @@ restService.post('/', function(request, response) {
             https.get(options, (res) => {
                     var raw_data = ''; // empty JSON
                     res.on('data', (chunk) => {
-                        raw_data += chunk; // data arrives chunk by chunk so we put all processing stuff at the end
+                        raw_data += chunk;
                     });
                     // once response data stops coming the request ends and we parse the JSON
                     res.on('end', () => {
-                        var query = JSON.parse(raw_data); // all sets by user here into a JS object
-                        var set_found = true;
-                        var set_id;
+                        var query = JSON.parse(raw_data); // processes data received from query
+                        var set_id; // assigned if matching set is found
 
                         if (query.total_results !== 0) {
                                 set_id = query.sets[0].id;
-                                // ANOTHER HTTP REQUEST
                                 var set_options = getHttpRequestOptions(app, '/2.0/sets/' + set_id);
 
                                 https.get(options, (res) => {
-                                    var raw_data = ''; // empty JSON
+                                    var raw_data = '';
                                     res.on('data', (chunk) => {
-                                        raw_data += chunk; // data arrives chunk by chunk so we put all processing stuff at the end
+                                        raw_data += chunk;
                                     });
                                     res.on('end', () => {
                                         var set = JSON.parse(raw_data);
-                                        app.data.current_set = set;
-                                        app.data.ask_if_shuffled = false;
-                                        app.setContext(SHUFFLE_CONTEXT);
-                                        console.log('current set has ' + app.data.current_set.terms.length + ' terms');
-                                        // verifys that the set works
-                                        app.ask('Okay. Do you want me to shuffle the cards in the set?');
-                                        // saves the found set as current set
+                                        assignSet(app, set);
                                     });
                                 }).on('error', (e) => {
                                     app.tell('Unable to find set because of ' + e.message);
@@ -142,8 +155,7 @@ restService.post('/', function(request, response) {
                                     // possibly unused
                                 });
                         } else {
-                            app.setContext(ASK_FOR_SET_CONTEXT);
-                            app.ask('I couldn\'t find the set you were looking for. Could you say it again?');
+                            setNotFound(app);
                         }
                     });
                     }).on('error', (e) => {
@@ -151,8 +163,6 @@ restService.post('/', function(request, response) {
                         console.log('Error: ' + e.message);
                         // possibly unused
                    });
-            // TODO: sort out result and find first matching set
-            app.tell('Finding a set without a user is in testing');
         } else  { // both username and set name are given
             set_name = app.getArgument(SET_ARGUMENT).replace(/\s/g,'').toLowerCase();
 
@@ -163,7 +173,7 @@ restService.post('/', function(request, response) {
              https.get(options, (res) => {
                 var raw_data = ''; // empty JSON
                 res.on('data', (chunk) => {
-                    raw_data += chunk; // data arrives chunk by chunk so we put all processing stuff at the end
+                    raw_data += chunk; // data arrives chunk by chunk
                 });
                 // once response data stops coming the request ends and we parse the JSON
                 res.on('end', () => {
@@ -177,7 +187,7 @@ restService.post('/', function(request, response) {
                         for (var i in user) {
                             var modified_title = user[i].title.replace(/\s/g,'').toLowerCase();
                             if (modified_title === set_name) {
-                                set = user[i]; // finds first matching set by username, sets it to a var and breaks
+                                set = user[i]; // finds first matching set by username and breaks
                                 break;
                             }
                         }
@@ -187,15 +197,9 @@ restService.post('/', function(request, response) {
                     }
                     if (set_found) {
                         app.data.current_set = set;
-                        app.data.ask_if_shuffled = false;
-                        app.setContext(SHUFFLE_CONTEXT);
-                        console.log('current set has ' + app.data.current_set.terms.length + ' terms');
-                        // verifys that the set works
-                        app.ask('Okay. Do you want me to shuffle the cards in the set?');
-                        // saves the found set as current set
+                        assignSet(app, set);
                     } else {
-                        app.setContext(ASK_FOR_SET_CONTEXT);
-                        app.ask('I couldn\'t find the set you were looking for. Could you say it again?');
+                        setNotFound(app);
                     }
                 });
             }).on('error', (e) => {
@@ -263,8 +267,6 @@ restService.post('/', function(request, response) {
             app.ask(SSML_START + 'The correct answer is: <break time="1s"/>' + correct_answer
             + '<break time="2s"/> The next term is ' + term + '.' + SSML_END);
         }
-        // TODO: verify user answer and compare with Quizlet answer
-
     }
 
     function finishedSet(app) {
