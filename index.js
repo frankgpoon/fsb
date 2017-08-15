@@ -33,7 +33,7 @@ const DECISION_ARGUMENT = 'decision';
 const ASK_FOR_SET_CONTEXT = 'ask_for_set';
 const SHUFFLE_CONTEXT = 'shuffle';
 const QUESTION_ASKED_CONTEXT = 'question_asked';
-const FINISHED_SET_CONTEXT = 'finished_set';
+const NO_MORE_TERMS_CONTEXT = 'no_more_terms';
 
 // Lines
 const ACKNOWLEDGEMENT_LINE = ['Okay. ', 'Alright. ', 'Sounds good. ', 'Awesome. ', 'Cool. '];
@@ -300,7 +300,7 @@ restService.post('/', function(request, response) {
         var term = app.data.current_set.terms[app.data.card_order[app.data.position]].term;
         app.setContext(QUESTION_ASKED_CONTEXT);
         app.ask(SSML_START + getRandomLine(ACKNOWLEDGEMENT_LINE)
-                + 'I\'ll list a term, and then you can answer. <break time="2s"/>'
+                + 'I\'ll list a term, and then you can answer. <break time="1s"/>'
                 + formatTerm(term, true) + SSML_END)
     }
 
@@ -321,7 +321,7 @@ restService.post('/', function(request, response) {
         app.data.position++;
 
         if (app.data.position == app.data.current_set.terms.length) {
-            app.setContext(FINISHED_SET_CONTEXT);
+            app.setContext(NO_MORE_TERMS_CONTEXT);
             if (app.hasSurfaceCapability(app.hasSurfaceCapabilities.SCREEN_OUTPUT)) { // if screen
                 app.ask(app.buildRichResponse().addSimpleResponse(
                     SSML_START + 'Here is the answer. <break time="2s"/>' + SSML_END // bubble
