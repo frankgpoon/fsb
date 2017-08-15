@@ -121,8 +121,11 @@ restService.post('/', function(request, response) {
         var user_name = app.getArgument(USER_ARGUMENT).replace(/\s/g,'').toLowerCase();
         var set_name;
 
+        console.log('user is ' + user_name);
+
         if (user_name === '') { // no username is given by user
             set_name = app.getArgument(SET_ARGUMENT);
+            console.log('set is ' + set_name);
 
             var options = getHttpRequestOptions(app, '/2.0/search/sets?q=' + set_name);
 
