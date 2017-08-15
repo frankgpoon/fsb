@@ -300,7 +300,7 @@ restService.post('/', function(request, response) {
         var term = app.data.current_set.terms[app.data.card_order[app.data.position]].term;
         app.setContext(QUESTION_ASKED_CONTEXT);
         app.ask(SSML_START + getRandomLine(ACKNOWLEDGEMENT_LINE)
-                + 'I\'ll list a term, and then you can answer. <break time="2s">'
+                + 'I\'ll list a term, and then you can answer. <break time="2s"/>'
                 + formatTerm(term, true))
     }
 
@@ -324,7 +324,7 @@ restService.post('/', function(request, response) {
             app.setContext(FINISHED_SET_CONTEXT);
             if (app.hasSurfaceCapability(app.hasSurfaceCapabilities.SCREEN_OUTPUT)) { // if screen
                 app.ask(app.buildRichResponse().addSimpleResponse(
-                    'Here is the answer.' // first chat bubble
+                    'Here is the answer. <break time="2s/>"' // first chat bubble
                 ).addBasicCard(
                     app.buildBasicCard(correct_answer).setTitle(old_term) // card
                 ).addSimpleResponse(
@@ -340,7 +340,7 @@ restService.post('/', function(request, response) {
             app.setContext(QUESTION_ASKED_CONTEXT);
             if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
                 app.ask(app.buildRichResponse().addSimpleResponse(
-                        'Here is the answer.' // first chat bubble
+                        'Here is the answer. <break time="2s/>"' // first chat bubble
                     ).addBasicCard(
                         app.buildBasicCard(correct_answer).setTitle(old_term) // card
                     ).addSimpleResponse(
