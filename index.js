@@ -152,7 +152,9 @@ restService.post('/', function(request, response) {
             app.ask('Welcome to Flash Cards! I can test you on Quizlet sets. '
             + QUERY_FOR_SET_LINE);
         } else {
-            app.tell('Sign in on your phone or another device to continue.');
+            if (!app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
+                app.tell('Sign in to your Quizlet account on another device to continue.');
+            }
             app.askForSignIn(); // uses phone for oauth linking
         }
     }
