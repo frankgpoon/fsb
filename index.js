@@ -38,8 +38,6 @@ const FINISHED_SET_CONTEXT = 'finished_set';
 // Lines
 const ACKNOWLEDGEMENT_LINE = ['Okay. ', 'Alright. ', 'Sounds good. ', 'Awesome. ', 'Cool. '];
 const QUERY_FOR_SET_LINE = 'What set would you like to be tested on? '
-const ANSWER_SIMPLE_RESPONSE_LINE = 
-
 const EXIT_LINE_1 = ['I hope you enjoyed studying with me. ', 'Thanks for studying with me. '
                     , 'This was a fun study session. ']
 const EXIT_LINE_2 = ['Goodbye! ', 'Talk to you later! ', 'Until next time! ', 'See you soon! '];
