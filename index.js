@@ -99,15 +99,19 @@ function getRandomLine(line) {
 /*
  * Formats the correct amswer to a SimpleResponse.
  */
-function simpleResponseAnswer(correct_answer) {
+function formatAnswer(correct_answer) {
     return 'The correct answer is: <break time="1s"/>' + correct_answer + ' <break time="2s"/>';
 }
 
 /*
  * Formats the next term into a statement.
  */
-function nextTerm(term) {
-    return 'The next term is ' + term + '.';
+function formatTerm(term, first) {
+    if (first) {
+        return 'The first term is ' + term + '.';
+    } else {
+        return 'The next term is ' + term + '.';
+    }
 }
 
 // Response Functions
@@ -295,8 +299,9 @@ restService.post('/', function(request, response) {
         // asks first terms and waits for answer
         var term = app.data.current_set.terms[app.data.card_order[app.data.position]].term;
         app.setContext(QUESTION_ASKED_CONTEXT);
-        app.ask(SSML_START + ACKNOWLEDGEMENT_LINE + 'I\'ll list a term, and then you can answer. '
-                + 'The first term is ' + term + '.' + SSML_END);
+        app.ask(SSML_START + getRandomLine(ACKNOWLEDGEMENT_LINE)
+                + 'I\'ll list a term, and then you can answer. <break time="2s">'
+                + formatTerm(term, true))
     }
 
     /*
@@ -327,7 +332,7 @@ restService.post('/', function(request, response) {
                     )
                 )
             } else {
-                app.ask(SSML_START + simpleResponseAnswer(correct_answer)
+                app.ask(SSML_START + formatAnswer(correct_answer)
                         + END_OF_SET_LINE + SSML_END);
             }
         } else {
@@ -339,11 +344,11 @@ restService.post('/', function(request, response) {
                     ).addBasicCard(
                         app.buildBasicCard(correct_answer).setTitle(old_term) // card
                     ).addSimpleResponse(
-                        nextTerm(term) // second chat bubble
+                        formatTerm(term, false) // second chat bubble
                     )
                 )
             } else {
-                app.ask(SSML_START + simpleResponseAnswer(correct_answer) + nextTerm(term)
+                app.ask(SSML_START + formatAnswer(correct_answer) + formatTerm(term, false)
                         + SSML_END);
             }
         }
