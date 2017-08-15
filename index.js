@@ -326,9 +326,11 @@ restService.post('/', function(request, response) {
             if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
                 app.ask(app.buildRichResponse()
                     .addSimpleResponse(
-                        'Here is the answer.')
-                    .addBasicCard(app.buildBasicCard(correct_answer)
-                        .setTitle(old_term)
+                        'Here is the answer.'
+                    ).addBasicCard(
+                        app.buildBasicCard(correct_answer).setTitle(old_term)
+                    ).addSimpleResponse(
+                        'The next term is' + term + '.'
                     )
                 )
             } else {
