@@ -166,9 +166,8 @@ restService.post('/', function(request, response) {
     }
 
     function findSetOnly(app) {
-        set_name = app.getArgument(SET_ARGUMENT);
-        console.log('set is ' + set_name);
-
+        set_name = app.getArgument(SET_ARGUMENT).replace(/\s/g,'%20');
+        
         var options = getHttpRequestOptions(app, '/2.0/search/sets?q=' + set_name);
 
         https.get(options, (res) => {
