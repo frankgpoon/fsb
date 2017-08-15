@@ -96,7 +96,7 @@ function getRandomLine(line) {
 }
 
 /*
- * Asks the 
+ * Asks the
  */
 
 // Response Functions
@@ -297,6 +297,7 @@ restService.post('/', function(request, response) {
         // tell correct answer
         // increment index in position array
         // say next term and set context to wait for answer intent
+        var old_term = app.data.current_set.terms[app.data.card_order[app.data.position]].term;
         var correct_answer =
             app.data.current_set.terms[app.data.card_order[app.data.position]].definition;
         if (correct_answer.charAt(correct_answer.length - 1) !== '.') {
@@ -312,7 +313,7 @@ restService.post('/', function(request, response) {
                     .addSimpleResponse(ANSWER_SIMPLE_RESPONSE_LINE  + 'We are finished with this set. Would you like to be tested again?'
                                         + SSML_END)
                     .addBasicCard(app.buildBasicCard(correct_answer)
-                        .setTitle('Answer')
+                        .setTitle(old_term)
                     )
                 )
             } else {
@@ -325,11 +326,11 @@ restService.post('/', function(request, response) {
             if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
                 app.ask(app.buildRichResponse()
                     .addSimpleResponse(
-                        ANSWER_SIMPLE_RESPONSE_LINE + 'The next term is ' + term + '.' + SSML_END)
+                        'Here is the answer.')
                     .addBasicCard(app.buildBasicCard(correct_answer)
-                        .setTitle('Answer')
+                        .setTitle(old_term)
                     )
-                ) 
+                )
             } else {
                 app.ask(ANSWER_SIMPLE_RESPONSE_LINE + 'The next term is ' + term + '.' + SSML_END);
             }
