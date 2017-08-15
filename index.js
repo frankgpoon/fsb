@@ -301,7 +301,7 @@ restService.post('/', function(request, response) {
         app.setContext(QUESTION_ASKED_CONTEXT);
         app.ask(SSML_START + getRandomLine(ACKNOWLEDGEMENT_LINE)
                 + 'I\'ll list a term, and then you can answer. <break time="2s"/>'
-                + formatTerm(term, true))
+                + formatTerm(term, true) + SSML_END)
     }
 
     /*
@@ -324,11 +324,11 @@ restService.post('/', function(request, response) {
             app.setContext(FINISHED_SET_CONTEXT);
             if (app.hasSurfaceCapability(app.hasSurfaceCapabilities.SCREEN_OUTPUT)) { // if screen
                 app.ask(app.buildRichResponse().addSimpleResponse(
-                    'Here is the answer. <break time="2s/>"' // first chat bubble
+                    SSML_START + 'Here is the answer. <break time="2s"/>' + SSML_END // bubble
                 ).addBasicCard(
                     app.buildBasicCard(correct_answer).setTitle(old_term) // card
                 ).addSimpleResponse(
-                    END_OF_SET_LINE// second chat bubble
+                    END_OF_SET_LINE// second bubble
                     )
                 )
             } else {
@@ -340,11 +340,11 @@ restService.post('/', function(request, response) {
             app.setContext(QUESTION_ASKED_CONTEXT);
             if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
                 app.ask(app.buildRichResponse().addSimpleResponse(
-                        'Here is the answer. <break time="2s/>"' // first chat bubble
+                        SSML_START + 'Here is the answer. <break time="2s"/>' + SSML_END // bubble
                     ).addBasicCard(
                         app.buildBasicCard(correct_answer).setTitle(old_term) // card
                     ).addSimpleResponse(
-                        formatTerm(term, false) // second chat bubble
+                        formatTerm(term, false) // second bubble
                     )
                 )
             } else {
