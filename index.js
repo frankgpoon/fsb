@@ -169,7 +169,6 @@ restService.post('/', function(request, response) {
      */
     function welcomeMessage(app) {
         if (typeof app.getUser().accessToken === 'string') {
-            console.log('current set loaded is ' + app.data.current_set);
             app.ask('Welcome to Flash Cards! I can test you on Quizlet sets. '
             + QUERY_FOR_SET_LINE);
         } else {
@@ -310,9 +309,11 @@ restService.post('/', function(request, response) {
         // asks first terms and waits for answer
         var term = app.data.current_set.terms[app.data.card_order[app.data.position]].term;
         app.setContext(QUESTION_ASKED_CONTEXT);
-        app.ask(SSML_START + getRandomLine(ACKNOWLEDGEMENT_LINE)
+        app.ask(
+            SSML_START + getRandomLine(ACKNOWLEDGEMENT_LINE)
                 + 'I\'ll list a term, and then you can answer. <break time="1s"/>'
-                + formatTerm(term, true) + SSML_END)
+                + formatTerm(term, true) + SSML_END
+            )
     }
 
     /*
@@ -335,28 +336,32 @@ restService.post('/', function(request, response) {
             app.setContext(NO_MORE_TERMS_CONTEXT);
             if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) { // if screen
                 app.ask(app.buildRichResponse().addSimpleResponse(
-                    SSML_START + formatAnswer(term, correct_answer) + SSML_END // bubble
+                    SSML_START + formatAnswer(old_term, correct_answer) + SSML_END // bubble
                 ).addSimpleResponse(
                     END_OF_SET_LINE// second bubble
                     )
                 )
             } else {
-                app.ask(SSML_START + formatAnswer(term, correct_answer)
-                        + END_OF_SET_LINE + SSML_END);
+                app.ask(
+                    SSML_START + formatAnswer(old_term, correct_answer) + END_OF_SET_LINE
+                    + SSML_END
+                    );
             }
         } else {
             var term = app.data.current_set.terms[app.data.card_order[app.data.position]].term;
             app.setContext(QUESTION_ASKED_CONTEXT);
             if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
                 app.ask(app.buildRichResponse().addSimpleResponse(
-                        SSML_START + formatAnswer(term, correct_answer) + SSML_END // bubble
+                        SSML_START + formatAnswer(old_term, correct_answer) + SSML_END // bubble
                     ).addSimpleResponse(
                         formatTerm(term, false) // second bubble
                     )
                 )
             } else {
-                app.ask(SSML_START + formatAnswer(term, correct_answer) + formatTerm(term, false)
-                        + SSML_END);
+                app.ask(
+                    SSML_START + formatAnswer(old_term, correct_answer) + formatTerm(term, false)
+                    + SSML_END
+                    );
             }
         }
     }
@@ -368,8 +373,7 @@ restService.post('/', function(request, response) {
         var decision = app.getArgument(DECISION_ARGUMENT);
         if (decision == 'yes') {
             app.setContext(ASK_FOR_SET_CONTEXT);
-            app.ask(getRandomLine(ACKNOWLEDGEMENT_LINE)
-            + QUERY_FOR_SET_LINE);
+            app.ask(getRandomLine(ACKNOWLEDGEMENT_LINE) + QUERY_FOR_SET_LINE);
         } else {
             app.tell(getRandomLine(EXIT_LINE_1) + getRandomLine(EXIT_LINE_2));
         }
