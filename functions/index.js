@@ -445,11 +445,13 @@ exports.flashcards = functions.https.onRequest((request, response) => {
     }
 
     function shuffleFallback(app) {
+    	console.log('This is in the shuffle fallback')
     	app.setContext(SHUFFLE_CONTEXT);
     	fallbackEscalation(app);
     }
 
     function finishedSetFallback(app) {
+    	console.log('this is in the finished set fallback')
     	app.setContext(NO_MORE_TERMS_CONTEXT);
     	fallbackEscalation(app);
     }
