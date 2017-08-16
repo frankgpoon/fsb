@@ -47,6 +47,7 @@ const END_OF_SET_LINE = 'We are finished with this set. Would you like to be tes
 // Other Useful Constants
 const SSML_START = '<speak>';
 const SSML_END = '</speak>';
+const YES_NO_CHOICES = ['Yes', 'No'];
 
 /* Helper Functions */
 
@@ -102,7 +103,7 @@ function getRandomLine(line) {
  */
 function formatAnswer(term, correct_answer) {
     return 'Here is the answer for ' + term + ': <break time="1s"/>' + correct_answer
-    + ' <break time="2s"/>';
+    + ' <break time="1s"/>';
 }
 
 /*
@@ -126,8 +127,15 @@ function assignSet(app, set) {
     app.data.current_set = set;
     app.data.ask_if_shuffled = false;
     app.setContext(SHUFFLE_CONTEXT);
-    app.ask(getRandomLine(ACKNOWLEDGEMENT_LINE)
-    + 'Do you want me to shuffle the cards in the set?');
+    if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
+        app.buildRichResponse().addSimpleResponse(
+            getRandomLine(ACKNOWLEDGEMENT_LINE)
+            + 'Do you want me to shuffle the cards in the set?'
+        ).addSuggestions(YES_NO_CHOICES);
+    } else {
+        app.ask(getRandomLine(ACKNOWLEDGEMENT_LINE)
+        + 'Do you want me to shuffle the cards in the set?');
+    }
 }
 
 /*
@@ -344,7 +352,7 @@ restService.post('/', function(request, response) {
                         app.buildBasicCard(correct_answer).setTitle(old_term)
                     ).addSimpleResponse(
                     END_OF_SET_LINE// second bubble
-                    )
+                    ).addSuggestions(YES_NO_CHOICES)
                 )
             } else {
                 app.ask(
@@ -383,7 +391,13 @@ restService.post('/', function(request, response) {
         var decision = app.getArgument(DECISION_ARGUMENT);
         if (decision == 'yes') {
             app.setContext(ASK_FOR_SET_CONTEXT);
-            app.ask(getRandomLine(ACKNOWLEDGEMENT_LINE) + QUERY_FOR_SET_LINE);
+            if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
+                app.buildRichResponse().addSimpleResponse(
+                    getRandomLine(ACKNOWLEDGEMENT_LINE) + QUERY_FOR_SET_LINE
+                ).addSuggestions('Redo last set');
+            } else {
+                app.ask(getRandomLine(ACKNOWLEDGEMENT_LINE) + QUERY_FOR_SET_LINE);
+            }
         } else {
             app.tell(getRandomLine(EXIT_LINE_1) + getRandomLine(EXIT_LINE_2));
         }
