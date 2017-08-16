@@ -50,6 +50,8 @@ Data is stored between intents as ApiAiApp.data.* which is useful for storing se
 
 ## Future Work
 
-- Answer checking (may be hard)
+- Answer checking (may be hard) and maybe multiple choice parsing
 
-- Collect limited user data and keep a history of tested sets by user for faster set retrieval/more personalized experience (somewhat done)
+- Collect limited user data and keep a history of tested sets by user for faster set retrieval/more personalized experience
+
+- Searching your own user's set 
