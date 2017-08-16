@@ -427,6 +427,7 @@ exports.flashcards = functions.https.onRequest((request, response) => {
      * Either ends convo or asks for another set.
      */
     function finishedSet(app) {
+    	app.data.fallbackCount = 0;
         var decision = app.getArgument(DECISION_ARGUMENT);
         if (decision == 'yes') {
             app.setContext(ASK_FOR_SET_CONTEXT);
@@ -446,13 +447,11 @@ exports.flashcards = functions.https.onRequest((request, response) => {
 
     function shuffleFallback(app) {
     	console.log('This is in the shuffle fallback')
-    	app.setContext(SHUFFLE_CONTEXT);
     	fallbackEscalation(app);
     }
 
     function finishedSetFallback(app) {
     	console.log('this is in the finished set fallback')
-    	app.setContext(NO_MORE_TERMS_CONTEXT);
     	fallbackEscalation(app);
     }
 
