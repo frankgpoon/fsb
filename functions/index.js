@@ -46,7 +46,7 @@ const EXIT_LINE_2 = ['Goodbye! ', 'Talk to you later! ', 'Until next time! ', 'S
 const END_OF_SET_LINE = 'We are finished with this set. Would you like to be tested again?';
 const YES_NO_FALLBACK_LINES = ['Sorry, what was that?',
 								'I didn\'t quite get that. Did you say yes or no?',
-								'I\'m really sorry, I can\'t understand. Did you say yes or no?'];
+								'I\'m really sorry, I can\'t understand. Was that yes or no?'];
 
 // Other Useful Constants
 const SSML_START = '<speak>';
@@ -159,10 +159,10 @@ function setNotFound(app) {
  * exit.
  */
 function fallbackEscalation(app) {
-	console.log('the fallback level is ' + app.data.fallback_count);
-    var fallback_count = parseInt(app.data.fallback_count, 10);
+	var fallback_count = parseInt(app.data.fallback_count, 10);
 	if (fallback_count === 3) { // 3 maximum escalation levels
-		app.tell('I\'m sorry I\'m having trouble here. Maybe try again later.');
+		app.tell('It looks like I\'m not working properly right now. '
+            + 'Maybe we should try again later.');
 	} else {
 		fallback_count++;
         app.data.fallback_count = fallback_count;
@@ -280,7 +280,6 @@ exports.flashcards = functions.https.onRequest((request, response) => {
      */
     function findSetOnly(app) {
         set_name = app.getArgument(SET_ARGUMENT).replace(/\s/g,'%20');
-        console.log(set_name + ' @ findSetOnly')
 
         var options = getHttpRequestOptions(app, '/2.0/search/sets?q=' + set_name);
 
@@ -342,7 +341,6 @@ exports.flashcards = functions.https.onRequest((request, response) => {
         app.data.fallback_count = 0; // resets the fallback escalation count.
         // shuffles if needed
         var need_shuffle = app.getArgument(DECISION_ARGUMENT);
-        console.log(need_shuffle + ' @ askFirstQuestion');
         if (need_shuffle === 'yes') {
             shuffle(card_order);
         }
@@ -436,7 +434,6 @@ exports.flashcards = functions.https.onRequest((request, response) => {
     function finishedSet(app) {
     	app.data.fallback_count = 0;
         var decision = app.getArgument(DECISION_ARGUMENT);
-        console.log(decision + ' @ finishedSet');
         if (decision == 'yes') {
             app.setContext(ASK_FOR_SET_CONTEXT, 1);
             if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
@@ -453,14 +450,18 @@ exports.flashcards = functions.https.onRequest((request, response) => {
         }
     }
 
+    /*
+     * Fallback function for shuffle intent
+     */
     function shuffleFallback(app) {
-    	console.log('This is in the shuffle fallback')
     	app.setContext(SHUFFLE_CONTEXT, 1);
     	fallbackEscalation(app);
     }
 
+    /*
+     * Fallback function for finished set
+     */
     function finishedSetFallback(app) {
-    	console.log('this is in the finished set fallback')
     	app.setContext(NO_MORE_TERMS_CONTEXT, 1);
     	fallbackEscalation(app);
     }

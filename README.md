@@ -46,9 +46,7 @@ Data is stored between intents as ApiAiApp.data.* which is useful for storing se
 
 ## To Do
 
-- Give more personality
-
-    - Work on fallback to be smoother
+- Give more personality (if applicable)
 
 ## Future Work
 
