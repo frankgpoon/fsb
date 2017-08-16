@@ -44,8 +44,8 @@ const EXIT_LINE_1 = ['I hope you enjoyed studying with me. ', 'Thanks for studyi
                     , 'This was a fun study session. ']
 const EXIT_LINE_2 = ['Goodbye! ', 'Talk to you later! ', 'Until next time! ', 'See you soon! '];
 const END_OF_SET_LINE = 'We are finished with this set. Would you like to be tested again?';
-const YES_NO_FALLBACK_LINES = ['Sorry, what was that?', 
-								'I didn\'t quite get that. Did you say yes or no?', 
+const YES_NO_FALLBACK_LINES = ['Sorry, what was that?',
+								'I didn\'t quite get that. Did you say yes or no?',
 								'I\'m really sorry, I can\'t understand. Did you say yes or no?'];
 
 // Other Useful Constants
@@ -154,18 +154,19 @@ function setNotFound(app) {
     + ' Could you say it again?');
 }
 /*
- * Prompts the user a fallback line, escalating in urgency each time a fallback is 
+ * Prompts the user a fallback line, escalating in urgency each time a fallback is
  * triggered. At the 4 escalation, or 4th time a fallback is triggered, the convo will
  * exit.
  */
 function fallbackEscalation(app) {
-	console.log(app.data.fallbackCount)
-	app.data.fallbackCount = parseInt(app.data.fallbackCount, 10);
-	if (app.data.fallbackCount === 3) { // 3 maximum escalation levels
+	console.log(app.data.fallback_count);
+    var fallback_count = parseInt(app.data.fallback_count, 10);
+	if (fallback_count === 3) { // 3 maximum escalation levels
 		app.tell('I\'m sorry I\'m having trouble here. Maybe try again later.');
 	} else {
-    	app.ask(YES_NO_FALLBACK_LINES[app.data.fallbackCount]);
-    	app.data.fallbackCount++;
+    	app.ask(YES_NO_FALLBACK_LINES[fallback_count]);
+    	fallback_count++;
+        app.data.fallback_count = fallback_count;
     }
 }
 
@@ -176,13 +177,13 @@ exports.flashcards = functions.https.onRequest((request, response) => {
     console.log('body: ' + JSON.stringify(request.body));
 
     const app = new ApiAiApp({request, response});
-    app.data.fallbackCount = 0;
+    app.data.fallback_count = 0;
 
     /*
      * Greets user and asks for a set, or prompts for sign in.
      */
     function welcomeMessage(app) {
-    	app.data.fallbackCOunt = 0;
+    	app.data.fallback_count = 0;
         if (typeof app.getUser().accessToken === 'string') {
             if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
                 app.ask(
@@ -232,7 +233,7 @@ exports.flashcards = functions.https.onRequest((request, response) => {
 
         // parameters for get request
         var options = getHttpRequestOptions(app, '/2.0/users/' + user_name + '/sets')
-        app.data.fallbackCount = 0;
+        app.data.fallback_count = 0;
         // callback - aka what to do with the response
          https.get(options, (res) => {
             var raw_data = ''; // empty JSON
@@ -338,7 +339,7 @@ exports.flashcards = functions.https.onRequest((request, response) => {
         for (var i = 0; i < app.data.current_set.terms.length; i++) {
             card_order.push(i);
         }
-        app.data.fallbackCount = 0; // resets the fallback escalation count.
+        app.data.fallback_count = 0; // resets the fallback escalation count.
         // shuffles if needed
         var need_shuffle = app.getArgument(DECISION_ARGUMENT);
         console.log(need_shuffle + ' @ askFirstQuestion');
@@ -433,7 +434,7 @@ exports.flashcards = functions.https.onRequest((request, response) => {
      * Either ends convo or asks for another set.
      */
     function finishedSet(app) {
-    	app.data.fallbackCount = 0;
+    	app.data.fallback_count = 0;
         var decision = app.getArgument(DECISION_ARGUMENT);
         console.log(decision + ' @ finishedSet');
         if (decision == 'yes') {
