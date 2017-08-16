@@ -2,7 +2,14 @@
   "name": "google-assistant-flashcards",
   "description": "Intelligent voice-interactive flash card quizzing",
   "version": "0.0.1",
-  "contributors": [{"name": "Michael Suliistio"}, {"name": "Frank Poon"}],
+  "contributors": [
+    {
+      "name": "Michael Suliistio"
+    },
+    {
+      "name": "Frank Poon"
+    }
+  ],
   "engines": {
     "node": "6.11.0"
   },

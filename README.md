@@ -46,18 +46,12 @@ Data is stored between intents as ApiAiApp.data.* which is useful for storing se
 
 ## To Do
 
-- Add rich responses for phones and other devices with screens (basically done)
-
 - Give more personality
 
     - Work on fallback to be smoother
-
-    - Build lines with arrays of sentences expressing something separate. (somewhat done)
-   
-- Migrate to Google Cloud for that sweet $700 credit baby
 
 ## Future Work
 
 - Answer checking (may be hard)
 
-- Collect limited user data and keep a history of tested sets by user for faster set retrieval/more personalized experience
+- Collect limited user data and keep a history of tested sets by user for faster set retrieval/more personalized experience (somewhat done)

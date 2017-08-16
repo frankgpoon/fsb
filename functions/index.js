@@ -46,7 +46,8 @@ const END_OF_SET_LINE = 'We are finished with this set. Would you like to be tes
 // Other Useful Constants
 const SSML_START = '<speak>';
 const SSML_END = '</speak>';
-const YES_NO_CHOICES = ['Yes', 'No'];
+const YES_NO_SUGGESTION = ['Yes', 'No'];
+const NO_ANSWER_SUGGESTION = 'I don\'t know the answer.';
 
 /* Helper Functions */
 
@@ -110,9 +111,9 @@ function formatAnswer(term, correct_answer) {
  */
 function formatTerm(term, first) {
     if (first) {
-        return 'The first term is ' + term + '.';
+        return 'The first card says ' + term + '.';
     } else {
-        return 'The next term is ' + term + '.';
+        return 'The next card says ' + term + '.';
     }
 }
 
@@ -131,7 +132,7 @@ function assignSet(app, set) {
             app.buildRichResponse().addSimpleResponse(
                 getRandomLine(ACKNOWLEDGEMENT_LINE)
                 + 'Do you want me to shuffle the cards in the set?'
-            ).addSuggestions(YES_NO_CHOICES)
+            ).addSuggestions(YES_NO_SUGGESTION)
         );
     } else {
         app.ask(getRandomLine(ACKNOWLEDGEMENT_LINE)
@@ -193,7 +194,7 @@ exports.flashcards = functions.https.onRequest((request, response) => {
     function help(app) {
         app.setContext(ASK_FOR_SET_CONTEXT);
         app.ask('I can find Quizlet sets to test you with if you tell me the name of the set. '
-        + 'Or, you can give me a set name and a username and I can find a specific set to use.'
+        + 'Or, you can give me a set name and a username and I can find a specific set to use. '
         + 'Try something like, "test me on set name", or "test me on set name by username".');
     }
 
@@ -327,11 +328,21 @@ exports.flashcards = functions.https.onRequest((request, response) => {
         // asks first terms and waits for answer
         var term = app.data.current_set.terms[app.data.card_order[app.data.position]].term;
         app.setContext(QUESTION_ASKED_CONTEXT);
-        app.ask(
-            SSML_START + getRandomLine(ACKNOWLEDGEMENT_LINE)
-                + 'I\'ll list a term, and then you can answer. <break time="1s"/>'
-                + formatTerm(term, true) + SSML_END
-            )
+        if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
+            app.ask(
+                app.buildRichResponse().addSimpleResponse(
+                    SSML_START + getRandomLine(ACKNOWLEDGEMENT_LINE)
+                        + 'I\'ll read a card, and then you can answer. <break time="1s"/>'
+                        + formatTerm(term, true) + SSML_END
+                ).addSuggestions(NO_ANSWER_SUGGESTION)
+            );
+        } else {
+            app.ask(
+                SSML_START + getRandomLine(ACKNOWLEDGEMENT_LINE)
+                    + 'I\'ll read a card, and then you can answer. <break time="1s"/>'
+                    + formatTerm(term, true) + SSML_END
+                );
+        }
     }
 
     /*
@@ -362,7 +373,7 @@ exports.flashcards = functions.https.onRequest((request, response) => {
                         app.buildBasicCard(correct_answer).setTitle(old_term)
                     ).addSimpleResponse(
                     END_OF_SET_LINE// second bubble
-                    ).addSuggestions(YES_NO_CHOICES)
+                    ).addSuggestions(YES_NO_SUGGESTION)
                 )
             } else {
                 app.ask(
@@ -383,7 +394,7 @@ exports.flashcards = functions.https.onRequest((request, response) => {
                         app.buildBasicCard(correct_answer).setTitle(old_term)
                     ).addSimpleResponse(
                         formatTerm(term, false) // second bubble
-                    )
+                    ).addSuggestions(NO_ANSWER_SUGGESTION)
                 )
             } else {
                 app.ask(
