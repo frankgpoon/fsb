@@ -54,4 +54,8 @@ Data is stored between intents as ApiAiApp.data.* which is useful for storing se
 
 - Collect limited user data and keep a history of tested sets by user for faster set retrieval/more personalized experience
 
-- Searching your own user's set 
+- Searching your own user's set
+
+- Better search option to match sets better using Quizlet's API
+
+- Repeating stuff when reading flash cards/general ("What did you say?")
