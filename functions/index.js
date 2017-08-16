@@ -24,6 +24,7 @@ const FINISHED_SET_ACTION = 'finished_set';
 const EXIT_ACTION = 'exit';
 const HELP_ACTION = 'help';
 const SHUFFLE_FALLBACK_ACTION = 'shuffle_fallback';
+const FINISHED_SET_FALLBACK_ACTION = 'finished_set_fallback';
 
 // Arguments
 const SET_ARGUMENT = 'set';
@@ -465,6 +466,7 @@ exports.flashcards = functions.https.onRequest((request, response) => {
     actionMap.set(EXIT_ACTION, exit);
     actionMap.set(HELP_ACTION, help)
     actionMap.set(SHUFFLE_FALLBACK_ACTION, shuffleFallback);
+    actionMap.set(FINISHED_SET_FALLBACK_ACTION, finishedSetFallback);
 
     app.handleRequest(actionMap);
 });
