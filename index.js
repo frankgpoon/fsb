@@ -47,6 +47,7 @@ const END_OF_SET_LINE = 'We are finished with this set. Would you like to be tes
 // Other Useful Constants
 const SSML_START = '<speak>';
 const SSML_END = '</speak>';
+const YES_NO_CHOICES = ['Yes', 'No'];
 
 /* Helper Functions */
 
@@ -100,8 +101,9 @@ function getRandomLine(line) {
 /*
  * Formats the correct amswer to a SimpleResponse.
  */
-function formatAnswer(correct_answer) {
-    return 'The correct answer is: <break time="1s"/>' + correct_answer + ' <break time="2s"/>';
+function formatAnswer(term, correct_answer) {
+    return 'Here is the answer for ' + term + ': <break time="1s"/>' + correct_answer
+    + ' <break time="1s"/>';
 }
 
 /*
@@ -125,8 +127,17 @@ function assignSet(app, set) {
     app.data.current_set = set;
     app.data.ask_if_shuffled = false;
     app.setContext(SHUFFLE_CONTEXT);
-    app.ask(getRandomLine(ACKNOWLEDGEMENT_LINE)
-    + 'Do you want me to shuffle the cards in the set?');
+    if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
+        app.ask(
+            app.buildRichResponse().addSimpleResponse(
+                getRandomLine(ACKNOWLEDGEMENT_LINE)
+                + 'Do you want me to shuffle the cards in the set?'
+            ).addSuggestions(YES_NO_CHOICES)
+        );
+    } else {
+        app.ask(getRandomLine(ACKNOWLEDGEMENT_LINE)
+        + 'Do you want me to shuffle the cards in the set?');
+    }
 }
 
 /*
@@ -168,7 +179,6 @@ restService.post('/', function(request, response) {
      */
     function welcomeMessage(app) {
         if (typeof app.getUser().accessToken === 'string') {
-            console.log('current set loaded is ' + app.data.current_set);
             app.ask('Welcome to Flash Cards! I can test you on Quizlet sets. '
             + QUERY_FOR_SET_LINE);
         } else {
@@ -309,9 +319,11 @@ restService.post('/', function(request, response) {
         // asks first terms and waits for answer
         var term = app.data.current_set.terms[app.data.card_order[app.data.position]].term;
         app.setContext(QUESTION_ASKED_CONTEXT);
-        app.ask(SSML_START + getRandomLine(ACKNOWLEDGEMENT_LINE)
+        app.ask(
+            SSML_START + getRandomLine(ACKNOWLEDGEMENT_LINE)
                 + 'I\'ll list a term, and then you can answer. <break time="1s"/>'
-                + formatTerm(term, true) + SSML_END)
+                + formatTerm(term, true) + SSML_END
+            )
     }
 
     /*
@@ -334,32 +346,42 @@ restService.post('/', function(request, response) {
             app.setContext(NO_MORE_TERMS_CONTEXT);
             if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) { // if screen
                 app.ask(app.buildRichResponse().addSimpleResponse(
-                    SSML_START + 'Here is the answer. <break time="2s"/>' + SSML_END // bubble
-                ).addBasicCard(
-                    app.buildBasicCard(correct_answer).setTitle(old_term) // card
-                ).addSimpleResponse(
+                        {
+                            speech: SSML_START + formatAnswer(old_term, correct_answer) + SSML_END,
+                            displayText: 'Here is the answer.'
+                        }
+                    ).addBasicCard(
+                        app.buildBasicCard(correct_answer).setTitle(old_term)
+                    ).addSimpleResponse(
                     END_OF_SET_LINE// second bubble
-                    )
+                    ).addSuggestions(YES_NO_CHOICES)
                 )
             } else {
-                app.ask(SSML_START + formatAnswer(correct_answer)
-                        + END_OF_SET_LINE + SSML_END);
+                app.ask(
+                    SSML_START + formatAnswer(old_term, correct_answer) + END_OF_SET_LINE
+                    + SSML_END
+                    );
             }
         } else {
             var term = app.data.current_set.terms[app.data.card_order[app.data.position]].term;
             app.setContext(QUESTION_ASKED_CONTEXT);
             if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
-                app.ask(app.buildRichResponse().addSimpleResponse(
-                        SSML_START + 'Here is the answer. <break time="2s"/>' + SSML_END // bubble
-                    ).addBasicCard(
-                        app.buildBasicCard(correct_answer).setTitle(old_term) // card
+                app.ask(app.buildRichResponse().addSimpleResponse( // bubble
+                        {
+                            speech: SSML_START + formatAnswer(old_term, correct_answer) + SSML_END,
+                            displayText: 'Here is the answer.'
+                        }
+                    ).addBasicCard( // card
+                        app.buildBasicCard(correct_answer).setTitle(old_term)
                     ).addSimpleResponse(
                         formatTerm(term, false) // second bubble
                     )
                 )
             } else {
-                app.ask(SSML_START + formatAnswer(correct_answer) + formatTerm(term, false)
-                        + SSML_END);
+                app.ask(
+                    SSML_START + formatAnswer(old_term, correct_answer) + formatTerm(term, false)
+                    + SSML_END
+                    );
             }
         }
     }
@@ -371,12 +393,20 @@ restService.post('/', function(request, response) {
         var decision = app.getArgument(DECISION_ARGUMENT);
         if (decision == 'yes') {
             app.setContext(ASK_FOR_SET_CONTEXT);
-            app.ask(getRandomLine(ACKNOWLEDGEMENT_LINE)
-            + QUERY_FOR_SET_LINE);
+            if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
+                app.ask(
+                    app.buildRichResponse().addSimpleResponse(
+                    getRandomLine(ACKNOWLEDGEMENT_LINE) + QUERY_FOR_SET_LINE
+                    ).addSuggestions('Redo last set')
+                );
+            } else {
+                app.ask(getRandomLine(ACKNOWLEDGEMENT_LINE) + QUERY_FOR_SET_LINE);
+            }
         } else {
             app.tell(getRandomLine(EXIT_LINE_1) + getRandomLine(EXIT_LINE_2));
         }
     }
+
 
     const actionMap = new Map();
     actionMap.set(FIND_USER_SET_ACTION, findUserSet);
