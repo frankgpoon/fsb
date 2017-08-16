@@ -157,6 +157,30 @@ exports.flashcards = functions.https.onRequest((request, response) => {
     const app = new ApiAiApp({request, response});
 
     /*
+     * Greets user and asks for a set, or prompts for sign in.
+     */
+    function welcomeMessage(app) {
+        if (typeof app.getUser().accessToken === 'string') {
+            if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
+                app.ask(
+                    app.buildRichResponse().addSimpleResponse(
+                        'Welcome to Flash Cards! I can test you on Quizlet sets. '
+                            + QUERY_FOR_SET_LINE
+                    ).addSuggestions('What can I do?')
+                )
+            } else {
+                app.ask('Welcome to Flash Cards! I can test you on Quizlet sets. '
+                    + QUERY_FOR_SET_LINE);
+            }
+        } else {
+            if (!app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
+                app.tell('Sign in to your Quizlet account on another device to continue.');
+            }
+            app.askForSignIn(); // uses phone for oauth linking
+        }
+    }
+
+    /*
      * Exits the app.
      */
     function exit(app) {
@@ -168,24 +192,9 @@ exports.flashcards = functions.https.onRequest((request, response) => {
      */
     function help(app) {
         app.setContext(ASK_FOR_SET_CONTEXT);
-        app.ask('I can find Quizlet sets using a set name, but giving me a username helps a lot. '
-        + 'After I find your set, I can shuffle it if you want. Then, I can read terms, '
-        + 'After you answer, I can read the correct answer for you to check.');
-    }
-
-    /*
-     * Greets user and asks for a set, or prompts for sign in.
-     */
-    function welcomeMessage(app) {
-        if (typeof app.getUser().accessToken === 'string') {
-            app.ask('Welcome to Flash Cards! I can test you on Quizlet sets. '
-            + QUERY_FOR_SET_LINE);
-        } else {
-            if (!app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
-                app.tell('Sign in to your Quizlet account on another device to continue.');
-            }
-            app.askForSignIn(); // uses phone for oauth linking
-        }
+        app.ask('I can find Quizlet sets to test you with if you tell me the name of the set. '
+        + 'Or, you can give me a set name and a username and I can find a specific set to use.'
+        + 'Try something like, "test me on set name", or "test me on set name by username".');
     }
 
     /*
