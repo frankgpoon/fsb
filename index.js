@@ -336,8 +336,13 @@ restService.post('/', function(request, response) {
             app.setContext(NO_MORE_TERMS_CONTEXT);
             if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) { // if screen
                 app.ask(app.buildRichResponse().addSimpleResponse(
-                    SSML_START + formatAnswer(old_term, correct_answer) + SSML_END // bubble
-                ).addSimpleResponse(
+                        {
+                            speech: SSML_START + formatAnswer(old_term, correct_answer) + SSML_END,
+                            displayText: 'Here is the answer.'
+                        }
+                    ).addBasicCard(
+                        app.buildBasicCard(correct_answer).setTitle(old_term)
+                    ).addSimpleResponse(
                     END_OF_SET_LINE// second bubble
                     )
                 )
@@ -351,8 +356,13 @@ restService.post('/', function(request, response) {
             var term = app.data.current_set.terms[app.data.card_order[app.data.position]].term;
             app.setContext(QUESTION_ASKED_CONTEXT);
             if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
-                app.ask(app.buildRichResponse().addSimpleResponse(
-                        SSML_START + formatAnswer(old_term, correct_answer) + SSML_END // bubble
+                app.ask(app.buildRichResponse().addSimpleResponse( // bubble
+                        {
+                            speech: SSML_START + formatAnswer(old_term, correct_answer) + SSML_END,
+                            displayText: 'Here is the answer.'
+                        }
+                    ).addBasicCard( // card
+                        app.buildBasicCard(correct_answer).setTitle(old_term)
                     ).addSimpleResponse(
                         formatTerm(term, false) // second bubble
                     )
