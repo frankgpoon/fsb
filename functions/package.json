@@ -1,0 +1,22 @@
+{
+  "name": "google-assistant-flashcards",
+  "description": "Intelligent voice-interactive flash card quizzing",
+  "version": "0.0.1",
+  "contributors": [{"name": "Michael Suliistio"}, {"name": "Frank Poon"}],
+  "engines": {
+    "node": "6.11.0"
+  },
+  "scripts": {
+    "start": "firebase serve",
+    "deploy": "firebase deploy"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/frankgpoon/flashcards"
+  },
+  "dependencies": {
+    "actions-on-google": "^1.0.0",
+    "firebase-admin": "^4.2.1",
+    "firebase-functions": "^0.5.7"
+  }
+}
