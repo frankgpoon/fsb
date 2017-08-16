@@ -446,12 +446,12 @@ exports.flashcards = functions.https.onRequest((request, response) => {
 
     function shuffleFallback(app) {
     	app.setContext(SHUFFLE_CONTEXT);
-    	fallbackEscalation();
+    	fallbackEscalation(app);
     }
 
     function finishedSetFallback(app) {
     	app.setContext(NO_MORE_TERMS_CONTEXT);
-    	fallbackEscalation();
+    	fallbackEscalation(app);
     }
 
 
@@ -464,7 +464,7 @@ exports.flashcards = functions.https.onRequest((request, response) => {
     actionMap.set(GIVE_ANSWER_ACTION, giveAnswer);
     actionMap.set(FINISHED_SET_ACTION, finishedSet);
     actionMap.set(EXIT_ACTION, exit);
-    actionMap.set(HELP_ACTION, help)
+    actionMap.set(HELP_ACTION, help);
     actionMap.set(SHUFFLE_FALLBACK_ACTION, shuffleFallback);
     actionMap.set(FINISHED_SET_FALLBACK_ACTION, finishedSetFallback);
 
