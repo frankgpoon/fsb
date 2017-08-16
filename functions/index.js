@@ -159,14 +159,14 @@ function setNotFound(app) {
  * exit.
  */
 function fallbackEscalation(app) {
-	console.log(app.data.fallback_count);
+	console.log('the fallback level is ' + app.data.fallback_count);
     var fallback_count = parseInt(app.data.fallback_count, 10);
 	if (fallback_count === 3) { // 3 maximum escalation levels
 		app.tell('I\'m sorry I\'m having trouble here. Maybe try again later.');
 	} else {
-    	app.ask(YES_NO_FALLBACK_LINES[fallback_count]);
-    	fallback_count++;
+		fallback_count++;
         app.data.fallback_count = fallback_count;
+    	app.ask(YES_NO_FALLBACK_LINES[fallback_count - 1]);
     }
 }
 
