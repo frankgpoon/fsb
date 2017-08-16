@@ -44,7 +44,8 @@ const EXIT_LINE_1 = ['I hope you enjoyed studying with me. ', 'Thanks for studyi
                     , 'This was a fun study session. ']
 const EXIT_LINE_2 = ['Goodbye! ', 'Talk to you later! ', 'Until next time! ', 'See you soon! '];
 const END_OF_SET_LINE = 'We are finished with this set. Would you like to be tested again?';
-const YES_NO_FALLBACK_LINES = ['Sorry, what was that?', 'I didn\'t quite get that. Did you say yes or no?', 
+const YES_NO_FALLBACK_LINES = ['Sorry, what was that?', 
+								'I didn\'t quite get that. Did you say yes or no?', 
 								'I\'m really sorry, I can\'t understand. Did you say yes or no?'];
 
 // Other Useful Constants
@@ -148,7 +149,7 @@ function assignSet(app, set) {
  * Tells the user that the set was not found and sets context to ask for another set,
  */
 function setNotFound(app) {
-    app.setContext(ASK_FOR_SET_CONTEXT);
+    app.setContext(ASK_FOR_SET_CONTEXT, 1);
     app.ask('I couldn\'t find the set you were looking for.'
     + ' Could you say it again?');
 }
@@ -158,8 +159,10 @@ function setNotFound(app) {
  * exit.
  */
 function fallbackEscalation(app) {
-	if (app.data.fallbackCount = 3) { // 3 maximum escalation levels
-		app.tell('I\'m sorry I\'m having trouble here. Maybe try again later');
+	console.log(app.data.fallbackCount)
+	app.data.fallbackCount = parseInt(app.data.fallbackCount, 10);
+	if (app.data.fallbackCount === 3) { // 3 maximum escalation levels
+		app.tell('I\'m sorry I\'m having trouble here. Maybe try again later.');
 	} else {
     	app.ask(YES_NO_FALLBACK_LINES[app.data.fallbackCount]);
     	app.data.fallbackCount++;
@@ -179,6 +182,7 @@ exports.flashcards = functions.https.onRequest((request, response) => {
      * Greets user and asks for a set, or prompts for sign in.
      */
     function welcomeMessage(app) {
+    	app.data.fallbackCOunt = 0;
         if (typeof app.getUser().accessToken === 'string') {
             if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
                 app.ask(
@@ -210,7 +214,7 @@ exports.flashcards = functions.https.onRequest((request, response) => {
      * Explains to the user what flash cards can do.
      */
     function help(app) {
-        app.setContext(ASK_FOR_SET_CONTEXT);
+        app.setContext(ASK_FOR_SET_CONTEXT, 1);
         app.ask('I can find Quizlet sets to test you with if you tell me the name of the set. '
         + 'Or, you can give me a set name and a username and I can find a specific set to use. '
         + 'Try something like, "test me on set name", or "test me on set name by username".');
@@ -275,6 +279,7 @@ exports.flashcards = functions.https.onRequest((request, response) => {
      */
     function findSetOnly(app) {
         set_name = app.getArgument(SET_ARGUMENT).replace(/\s/g,'%20');
+        console.log(set_name + ' @ findSetOnly')
 
         var options = getHttpRequestOptions(app, '/2.0/search/sets?q=' + set_name);
 
@@ -336,6 +341,7 @@ exports.flashcards = functions.https.onRequest((request, response) => {
         app.data.fallbackCount = 0; // resets the fallback escalation count.
         // shuffles if needed
         var need_shuffle = app.getArgument(DECISION_ARGUMENT);
+        console.log(need_shuffle + ' @ askFirstQuestion');
         if (need_shuffle === 'yes') {
             shuffle(card_order);
         }
@@ -429,8 +435,9 @@ exports.flashcards = functions.https.onRequest((request, response) => {
     function finishedSet(app) {
     	app.data.fallbackCount = 0;
         var decision = app.getArgument(DECISION_ARGUMENT);
+        console.log(decision + ' @ finishedSet');
         if (decision == 'yes') {
-            app.setContext(ASK_FOR_SET_CONTEXT);
+            app.setContext(ASK_FOR_SET_CONTEXT, 1);
             if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
                 app.ask(
                     app.buildRichResponse().addSimpleResponse(
@@ -447,11 +454,13 @@ exports.flashcards = functions.https.onRequest((request, response) => {
 
     function shuffleFallback(app) {
     	console.log('This is in the shuffle fallback')
+    	app.setContext(SHUFFLE_CONTEXT, 1);
     	fallbackEscalation(app);
     }
 
     function finishedSetFallback(app) {
     	console.log('this is in the finished set fallback')
+    	app.setContext(NO_MORE_TERMS_CONTEXT, 1);
     	fallbackEscalation(app);
     }
 
