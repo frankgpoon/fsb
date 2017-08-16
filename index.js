@@ -128,10 +128,12 @@ function assignSet(app, set) {
     app.data.ask_if_shuffled = false;
     app.setContext(SHUFFLE_CONTEXT);
     if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
-        app.buildRichResponse().addSimpleResponse(
-            getRandomLine(ACKNOWLEDGEMENT_LINE)
-            + 'Do you want me to shuffle the cards in the set?'
-        ).addSuggestions(YES_NO_CHOICES);
+        app.ask(
+            app.buildRichResponse().addSimpleResponse(
+                getRandomLine(ACKNOWLEDGEMENT_LINE)
+                + 'Do you want me to shuffle the cards in the set?'
+            ).addSuggestions(YES_NO_CHOICES)
+        );
     } else {
         app.ask(getRandomLine(ACKNOWLEDGEMENT_LINE)
         + 'Do you want me to shuffle the cards in the set?');
@@ -392,9 +394,11 @@ restService.post('/', function(request, response) {
         if (decision == 'yes') {
             app.setContext(ASK_FOR_SET_CONTEXT);
             if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
-                app.buildRichResponse().addSimpleResponse(
+                app.ask(
+                    app.buildRichResponse().addSimpleResponse(
                     getRandomLine(ACKNOWLEDGEMENT_LINE) + QUERY_FOR_SET_LINE
-                ).addSuggestions('Redo last set');
+                    ).addSuggestions('Redo last set')
+                );
             } else {
                 app.ask(getRandomLine(ACKNOWLEDGEMENT_LINE) + QUERY_FOR_SET_LINE);
             }
@@ -402,6 +406,7 @@ restService.post('/', function(request, response) {
             app.tell(getRandomLine(EXIT_LINE_1) + getRandomLine(EXIT_LINE_2));
         }
     }
+
 
     const actionMap = new Map();
     actionMap.set(FIND_USER_SET_ACTION, findUserSet);
