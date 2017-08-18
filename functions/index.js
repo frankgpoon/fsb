@@ -1,5 +1,5 @@
 /*
- * Main node.js functions for Flash Cards
+ * Main node.js functions for Flashcard Study Buddy
  */
 
 // Starting the app
@@ -52,7 +52,7 @@ const YES_NO_FALLBACK_LINES = ['Sorry, what was that?',
 const SSML_START = '<speak>';
 const SSML_END = '</speak>';
 const YES_NO_SUGGESTION = ['Yes', 'No'];
-const NO_ANSWER_SUGGESTION = 'I don\'t know the answer.';
+const NO_ANSWER_SUGGESTION = 'I don\'t know the answer';
 
 /* Helper Functions */
 
@@ -89,6 +89,48 @@ function getHttpRequestOptions(app, path) {
         headers: {'Authorization': 'Bearer ' + app.getUser().accessToken}
     };
     return options;
+}
+
+/*
+ * Calls the Quizlet API to find the set given from options
+ */
+function findSet(app, options) {
+    https.get(options, (res) => {
+        var raw_data = ''; // empty JSON
+        res.on('data', (chunk) => {
+            raw_data += chunk;
+        });
+        // once response data stops coming the request ends and we parse the JSON
+        res.on('end', () => {
+            var query = JSON.parse(raw_data); // processes data received from query
+
+            if (query.total_results !== 0) {
+                    var set_id = query.sets[0].id;
+                    var set_options = getHttpRequestOptions(app, '/2.0/sets/' + set_id);
+
+                    https.get(set_options, (res) => {
+                        var raw_data = '';
+                        res.on('data', (chunk) => {
+                            raw_data += chunk;
+                        });
+                        res.on('end', () => {
+                            var set = JSON.parse(raw_data);
+                            assignSet(app, set);
+                        });
+                    }).on('error', (e) => {
+                        app.tell('Unable to find set because of ' + e.message);
+                        console.error('Error: ' + e.message);
+                        // possibly unused
+                    });
+            } else {
+                setNotFound(app);
+            }
+        });
+    }).on('error', (e) => {
+        app.tell('Unable to find set because of ' + e.message);
+        console.error('Error: ' + e.message);
+        // possibly unused
+   });
 }
 
 /*
@@ -183,17 +225,18 @@ exports.flashcards = functions.https.onRequest((request, response) => {
      * Greets user and asks for a set, or prompts for sign in.
      */
     function welcomeMessage(app) {
+        console.log('Calling function welcomeMessage for user ID ' + app.getUser().userId);
     	app.data.fallback_count = 0;
         if (typeof app.getUser().accessToken === 'string') {
             if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
                 app.ask(
                     app.buildRichResponse().addSimpleResponse(
-                        'Welcome to Flash Cards! I can test you on Quizlet sets. '
+                        'Welcome to Flashcard Study Buddy! I can test you on Quizlet sets. '
                             + QUERY_FOR_SET_LINE
-                    ).addSuggestions('What can I do?')
+                    ).addSuggestions('What can you do?')
                 )
             } else {
-                app.ask('Welcome to Flash Cards! I can test you on Quizlet sets. '
+                app.ask('Welcome to Flashcard Study Buddy! I can test you on Quizlet sets. '
                     + QUERY_FOR_SET_LINE);
             }
         } else {
@@ -208,13 +251,15 @@ exports.flashcards = functions.https.onRequest((request, response) => {
      * Exits the app.
      */
     function exit(app) {
+        console.log('Calling function exit for user ID ' + app.getUser().userId);
         app.tell(getRandomLine(EXIT_LINE_1) + getRandomLine(EXIT_LINE_2));
     }
 
     /*
-     * Explains to the user what flash cards can do.
+     * Explains to the user what Flashcard Study Buddy can do.
      */
     function help(app) {
+        console.log('Calling function help for user ID ' + app.getUser().userId);
         app.setContext(ASK_FOR_SET_CONTEXT, 1);
         app.ask('I can find Quizlet sets to test you with if you tell me the name of the set. '
         + 'Or, you can give me a set name and a username and I can find a specific set to use. '
@@ -227,51 +272,17 @@ exports.flashcards = functions.https.onRequest((request, response) => {
      * tells user and prompts for another set.
      */
     function findUserSet(app) {
+        console.log('Calling function findUserSet for user ID ' + app.getUser().userId);
         // get user arg and string arg from intent
         var user_name = app.getArgument(USER_ARGUMENT).replace(/\s/g,'').toLowerCase();
-        var set_name = app.getArgument(SET_ARGUMENT).replace(/\s/g,'').toLowerCase();
+        var set_name = app.getArgument(SET_ARGUMENT).replace(/\s/g,'%20').toLowerCase();
 
         // parameters for get request
-        var options = getHttpRequestOptions(app, '/2.0/users/' + user_name + '/sets')
+        var options = getHttpRequestOptions(app, '/2.0/search/sets?creator=' + user_name
+                                            + '&q=' + set_name);
         app.data.fallback_count = 0;
         // callback - aka what to do with the response
-         https.get(options, (res) => {
-            var raw_data = ''; // empty JSON
-            res.on('data', (chunk) => {
-                raw_data += chunk; // data arrives chunk by chunk
-            });
-            // once response data stops coming the request ends and we parse the JSON
-            res.on('end', () => {
-                var user = JSON.parse(raw_data); // all sets by user here into a JS object
-                var set_found = true;
-                var set;
-
-                if ('http_code' in user) {
-                    set_found = false; // check user 404
-                } else {
-                    for (var i in user) {
-                        var modified_title = user[i].title.replace(/\s/g,'').toLowerCase();
-                        if (modified_title === set_name) {
-                            set = user[i]; // finds first matching set by username and breaks
-                            break;
-                        }
-                    }
-                    if (typeof set !== 'object') {
-                        set_found = false;
-                    }
-                }
-                if (set_found) {
-                    app.data.current_set = set;
-                    assignSet(app, set);
-                } else {
-                    setNotFound(app);
-                }
-            });
-        }).on('error', (e) => {
-            app.tell('Unable to find set because of ' + e.message);
-            console.log('Error: ' + e.message);
-            // possibly unused
-        });
+        findSet(app, options);
     }
 
     /*
@@ -279,49 +290,16 @@ exports.flashcards = functions.https.onRequest((request, response) => {
      * if no sets are found.
      */
     function findSetOnly(app) {
+        console.log('Calling function findSetOnly for user ID ' + app.getUser().userId);
         set_name = app.getArgument(SET_ARGUMENT).replace(/\s/g,'%20');
 
         var options = getHttpRequestOptions(app, '/2.0/search/sets?q=' + set_name);
-
-        https.get(options, (res) => {
-            var raw_data = ''; // empty JSON
-            res.on('data', (chunk) => {
-                raw_data += chunk;
-            });
-            // once response data stops coming the request ends and we parse the JSON
-            res.on('end', () => {
-                var query = JSON.parse(raw_data); // processes data received from query
-
-                if (query.total_results !== 0) {
-                        var set_id = query.sets[0].id;
-                        var set_options = getHttpRequestOptions(app, '/2.0/sets/' + set_id);
-
-                        https.get(set_options, (res) => {
-                            var raw_data = '';
-                            res.on('data', (chunk) => {
-                                raw_data += chunk;
-                            });
-                            res.on('end', () => {
-                                var set = JSON.parse(raw_data);
-                                assignSet(app, set);
-                            });
-                        }).on('error', (e) => {
-                            app.tell('Unable to find set because of ' + e.message);
-                            console.log('Error: ' + e.message);
-                            // possibly unused
-                        });
-                } else {
-                    setNotFound(app);
-                }
-            });
-        }).on('error', (e) => {
-            app.tell('Unable to find set because of ' + e.message);
-            console.log('Error: ' + e.message);
-            // possibly unused
-       });
+        app.data.fallback_count = 0;
+        findSet(app, options);
     }
 
     function reloadSet(app) {
+        console.log('Calling function reloadSet for user ID ' + app.getUser().userId);
         if (typeof app.data.current_set === 'object') {
             assignSet(app, app.data.current_set);
         } else {
@@ -334,6 +312,7 @@ exports.flashcards = functions.https.onRequest((request, response) => {
      * Asks the first question/reads the first term in the set.
      */
     function askFirstQuestion(app) {
+        console.log('Calling function askFirstQuestion for user ID ' + app.getUser().userId);
         var card_order = [];
         for (var i = 0; i < app.data.current_set.terms.length; i++) {
             card_order.push(i);
@@ -372,6 +351,7 @@ exports.flashcards = functions.https.onRequest((request, response) => {
      * Takes in user answer, says the correct answer to the user, then asks the next question.
      */
     function giveAnswer(app) {
+        console.log('Calling function giveAnswer for user ID ' + app.getUser().userId);
         // take in last user answer
         // tell correct answer
         // increment index in position array
@@ -432,6 +412,7 @@ exports.flashcards = functions.https.onRequest((request, response) => {
      * Either ends convo or asks for another set.
      */
     function finishedSet(app) {
+        console.log('Calling function finishedSet for user ID ' + app.getUser().userId);
     	app.data.fallback_count = 0;
         var decision = app.getArgument(DECISION_ARGUMENT);
         if (decision == 'yes') {
@@ -454,6 +435,7 @@ exports.flashcards = functions.https.onRequest((request, response) => {
      * Fallback function for shuffle intent
      */
     function shuffleFallback(app) {
+        console.log('Calling function shuffleFallback for user ID ' + app.getUser().userId);
     	app.setContext(SHUFFLE_CONTEXT, 1);
     	fallbackEscalation(app);
     }
@@ -462,6 +444,7 @@ exports.flashcards = functions.https.onRequest((request, response) => {
      * Fallback function for finished set
      */
     function finishedSetFallback(app) {
+        console.log('Calling function finishedSetFallback for user ID ' + app.getUser().userId);
     	app.setContext(NO_MORE_TERMS_CONTEXT, 1);
     	fallbackEscalation(app);
     }
