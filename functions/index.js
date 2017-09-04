@@ -92,48 +92,6 @@ function getHttpRequestOptions(app, path) {
 }
 
 /*
- * Calls the Quizlet API to find the set given from options
- */
-function findSet(app, options) {
-    https.get(options, (res) => {
-        var raw_data = ''; // empty JSON
-        res.on('data', (chunk) => {
-            raw_data += chunk;
-        });
-        // once response data stops coming the request ends and we parse the JSON
-        res.on('end', () => {
-            var query = JSON.parse(raw_data); // processes data received from query
-
-            if (query.total_results !== 0) {
-                    var set_id = query.sets[0].id;
-                    var set_options = getHttpRequestOptions(app, '/2.0/sets/' + set_id);
-
-                    https.get(set_options, (res) => {
-                        var raw_data = '';
-                        res.on('data', (chunk) => {
-                            raw_data += chunk;
-                        });
-                        res.on('end', () => {
-                            var set = JSON.parse(raw_data);
-                            assignSet(app, set);
-                        });
-                    }).on('error', (e) => {
-                        app.tell('Unable to find set because of ' + e.message);
-                        console.error('Error: ' + e.message);
-                        // possibly unused
-                    });
-            } else {
-                setNotFound(app);
-            }
-        });
-    }).on('error', (e) => {
-        app.tell('Unable to find set because of ' + e.message);
-        console.error('Error: ' + e.message);
-        // possibly unused
-   });
-}
-
-/*
  * Retrieves a random line from arrays of lines above.
  */
 function getRandomLine(line) {
@@ -178,12 +136,14 @@ function assignSet(app, set) {
         app.ask(
             app.buildRichResponse().addSimpleResponse(
                 getRandomLine(ACKNOWLEDGEMENT_LINE)
-                + 'Do you want me to shuffle the cards in the set?'
+                + 'I found ' + app.data.current_set.title + ' by ' +
+                 app.data.current_set.created_by + '. Do you want me to shuffle the cards in the set?'
             ).addSuggestions(YES_NO_SUGGESTION)
         );
     } else {
         app.ask(getRandomLine(ACKNOWLEDGEMENT_LINE)
-        + 'Do you want me to shuffle the cards in the set?');
+        + 'I found ' + app.data.current_set.title + ' by ' +
+         app.data.current_set.created_by + '. Do you want me to shuffle the cards in the set?');
     }
 }
 
@@ -272,17 +232,51 @@ exports.flashcards = functions.https.onRequest((request, response) => {
      * tells user and prompts for another set.
      */
     function findUserSet(app) {
-        console.log('Calling function findUserSet for user ID ' + app.getUser().userId);
         // get user arg and string arg from intent
         var user_name = app.getArgument(USER_ARGUMENT).replace(/\s/g,'').toLowerCase();
-        var set_name = app.getArgument(SET_ARGUMENT).replace(/\s/g,'%20').toLowerCase();
+        var set_name = app.getArgument(SET_ARGUMENT).replace(/\s/g,'').toLowerCase();
 
         // parameters for get request
-        var options = getHttpRequestOptions(app, '/2.0/search/sets?creator=' + user_name
-                                            + '&q=' + set_name);
+        var options = getHttpRequestOptions(app, '/2.0/users/' + user_name + '/sets')
         app.data.fallback_count = 0;
         // callback - aka what to do with the response
-        findSet(app, options);
+         https.get(options, (res) => {
+            var raw_data = ''; // empty JSON
+            res.on('data', (chunk) => {
+                raw_data += chunk; // data arrives chunk by chunk
+            });
+            // once response data stops coming the request ends and we parse the JSON
+            res.on('end', () => {
+                var user = JSON.parse(raw_data); // all sets by user here into a JS object
+                var set_found = true;
+                var set;
+
+                if ('http_code' in user) {
+                    set_found = false; // check user 404
+                } else {
+                    for (var i in user) {
+                        var modified_title = user[i].title.replace(/\s/g,'').toLowerCase();
+                        if (modified_title === set_name) {
+                            set = user[i]; // finds first matching set by username and breaks
+                            break;
+                        }
+                    }
+                    if (typeof set !== 'object') {
+                        set_found = false;
+                    }
+                }
+                if (set_found) {
+                    app.data.current_set = set;
+                    assignSet(app, set);
+                } else {
+                    setNotFound(app);
+                }
+            });
+        }).on('error', (e) => {
+            app.tell('Unable to find set because of ' + e.message);
+            console.log('Error: ' + e.message);
+            // possibly unused
+        });
     }
 
     /*
@@ -290,16 +284,50 @@ exports.flashcards = functions.https.onRequest((request, response) => {
      * if no sets are found.
      */
     function findSetOnly(app) {
-        console.log('Calling function findSetOnly for user ID ' + app.getUser().userId);
-        set_name = app.getArgument(SET_ARGUMENT).replace(/\s/g,'%20');
+       set_name = app.getArgument(SET_ARGUMENT).replace(/\s/g,'%20');
 
         var options = getHttpRequestOptions(app, '/2.0/search/sets?q=' + set_name);
-        app.data.fallback_count = 0;
-        findSet(app, options);
+
+        https.get(options, (res) => {
+            var raw_data = ''; // empty JSON
+            res.on('data', (chunk) => {
+                raw_data += chunk;
+            });
+            // once response data stops coming the request ends and we parse the JSON
+            res.on('end', () => {
+                var query = JSON.parse(raw_data); // processes data received from query
+
+                if (query.total_results !== 0) {
+                        var set_id = query.sets[0].id;
+                        var set_options = getHttpRequestOptions(app, '/2.0/sets/' + set_id);
+
+                        https.get(set_options, (res) => {
+                            var raw_data = '';
+                            res.on('data', (chunk) => {
+                                raw_data += chunk;
+                            });
+                            res.on('end', () => {
+                                var set = JSON.parse(raw_data);
+
+                                assignSet(app, set);
+                            });
+                        }).on('error', (e) => {
+                            app.tell('Unable to find set because of ' + e.message);
+                            console.log('Error: ' + e.message);
+                            // possibly unused
+                        });
+                } else {
+                    setNotFound(app);
+                }
+            });
+        }).on('error', (e) => {
+            app.tell('Unable to find set because of ' + e.message);
+            console.log('Error: ' + e.message);
+            // possibly unused
+       });
     }
 
     function reloadSet(app) {
-        console.log('Calling function reloadSet for user ID ' + app.getUser().userId);
         if (typeof app.data.current_set === 'object') {
             assignSet(app, app.data.current_set);
         } else {
