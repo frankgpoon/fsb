@@ -2,7 +2,7 @@
 
 (Flashcard Study Buddy)
 
-"Okay Google, talk to Flash Cards"
+"Okay Google, talk to Flashcard Study Buddy"
 
 A Quizlet app for Google Assistant.
 
