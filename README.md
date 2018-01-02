@@ -12,7 +12,7 @@ A Quizlet app for Google Assistant.
 
 Basic App Deployment   - https://developers.google.com/actions/apiai/
 
-~~Node.js~~ Literal Cancer Client Library - https://developers.google.com/actions/reference/nodejs/AssistantApp
+Node.js Client Library - https://developers.google.com/actions/reference/nodejs/AssistantApp
 
 ---
 
