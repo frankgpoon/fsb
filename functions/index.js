@@ -443,7 +443,7 @@ exports.flashcards = functions.https.onRequest((request, response) => {
         console.log('Calling function finishedSet for user ID ' + app.getUser().userId);
     	app.data.fallback_count = 0;
         var decision = app.getArgument(DECISION_ARGUMENT);
-        if (decision == 'yes') {
+        if (decision === 'yes') {
             app.setContext(ASK_FOR_SET_CONTEXT, 1);
             if (app.hasSurfaceCapability(app.SurfaceCapabilities.SCREEN_OUTPUT)) {
                 app.ask(
